@@ -1,0 +1,251 @@
+[
+  {
+    "pokemonId": 396,
+    "generation": "FOURTH_GENERATION",
+    "level": 1,
+    "lifePoint": 35,
+    "baseSpeed": 60,
+    "size": 0.3,
+    "weight": 2.0,
+    "type": "NORMAL",
+    "type2": "FLYING",
+    "offensiveAttack": {
+      "type": "FLYING",
+      "power": 20,
+      "precision": 0
+    },
+    "defensiveAttack": {
+      "type": "NORMAL",
+      "effects": [{
+        "type": "PRECISION_MODIFICATION",
+        "trigger": {
+          "action": "ATTACK_RECEIVE",
+          "targets": ["ALLY_OFFENSIVE_COLUMN", "CURRENT_POKEMON"],
+          "duration": "THIS_TURN"
+        },
+        "targets": ["CURRENT_ATTACK"],
+        "level": -1,
+        "duration": "THIS_TURN"
+      }]
+    },
+    "weaknesses": ["ELECTRIC", "ICE", "ROCK"],
+    "resistances": ["GHOST", "GROUND", "BUG", "GRASS"],
+    "evolutions": [{
+      "pokemon": {
+        "pokemonId": 397,
+        "generation": "FOURTH_GENERATION",
+        "level": 4,
+        "lifePoint": 50,
+        "baseSpeed": 80,
+        "size": 0.6,
+        "weight": 15.5,
+        "type": "NORMAL",
+        "type2": "FLYING",
+        "offensiveAttack": {
+          "type": "FLYING",
+          "power": 30,
+          "effects": [{
+            "type": "ATTACK_CANNOT_FAIL",
+            "targets": ["CURRENT_ATTACK"],
+            "duration": "ACTIVE"
+          }]
+        },
+        "defensiveAttack": {
+          "type": "NORMAL",
+          "effects": [{
+            "type": "SWAP_PLACE",
+            "targets": ["ENEMY_OFFENSIVE_COLUMN", "BENCH_POKEMON"],
+            "duration": "ACTIVE"
+          }, {
+            "type": "SWAP_PLACE",
+            "targets": ["ENEMY_DEFENSIVE_COLUMN", "BENCH_POKEMON"],
+            "duration": "ACTIVE"
+          }]
+        },
+        "weaknesses": ["ELECTRIC", "ICE", "ROCK"],
+        "resistances": ["GHOST", "GROUND", "BUG", "GRASS"],
+        "evolutions": [{
+          "pokemon": {
+            "pokemonId": 398,
+            "generation": "FOURTH_GENERATION",
+            "level": 8,
+            "lifePoint": 70,
+            "baseSpeed": 100,
+            "size": 1.2,
+            "weight": 24.9,
+            "type": "NORMAL",
+            "type2": "FLYING",
+            "offensiveAttack": {
+              "type": "FIGHTING",
+              "power": 60,
+              "effects": [{
+                "type": "ATTACK_MODIFICATION",
+                "targets": ["TARGETED_POKEMON"],
+                "level": -20,
+                "duration": "LOSE_ON_BENCH"
+              }, {
+                "type": "DEFENSE_MODIFICATION",
+                "targets": ["TARGETED_POKEMON"],
+                "level": -20,
+                "duration": "LOSE_ON_BENCH"
+              }]
+            },
+            "defensiveAttack": {
+              "type": "NORMAL",
+              "effects": [{
+                "type": "SWAP_PLACE",
+                "targets": ["ENEMY_OFFENSIVE_COLUMN", "BENCH_POKEMON"],
+                "duration": "ACTIVE"
+              }, {
+                "type": "SWAP_PLACE",
+                "targets": ["ENEMY_DEFENSIVE_COLUMN", "BENCH_POKEMON"],
+                "duration": "ACTIVE"
+              }]
+            },
+            "weaknesses": ["ELECTRIC", "ICE", "ROCK"],
+            "resistances": ["GHOST", "GROUND", "BUG", "GRASS"]
+          },
+          "conditions": [{
+            "type": "EXPERIENCE_EQUALS",
+            "target": "CURRENT_POKEMON",
+            "level": 3
+          }]
+        }]
+      },
+      "conditions": [{
+        "type": "EXPERIENCE_EQUALS",
+        "target": "CURRENT_POKEMON",
+        "level": 2
+      }]
+    }]
+  },
+  {
+    "pokemonId": 41,
+    "generation": "FIRST_GENERATION",
+    "level": 1,
+    "lifePoint": 40,
+    "baseSpeed": 55,
+    "size": 0.8,
+    "weight": 7.5,
+    "type": "POISON",
+    "type2": "FLYING",
+    "offensiveAttack": {
+      "type": "BUG",
+      "power": 10,
+      "effects": [{
+        "type": "LIFE_STEAL",
+        "targets": ["CURRENT_ATTACK"],
+        "duration": "THIS_TURN"
+      }]
+    },
+    "defensiveAttack": {
+      "type": "NORMAL",
+      "effects": [{
+        "type": "APPLY_STATUS",
+        "conditions": [{
+          "type": "DICE_ROLL",
+          "successRate": 3
+        }],
+        "targets": ["TARGETED_POKEMON"],
+        "status": "CNF",
+        "duration": "INFINITE"
+      }]
+    },
+    "weaknesses": ["ELECTRIC", "ICE", "ROCK", "PSYCHIC"],
+    "resistances": ["BUG", "FIGHTING", "GRASS", "FAIRY", "POISON"],
+    "evolutions": [{
+      "pokemon": {
+        "pokemonId": 42,
+        "generation": "FIRST_GENERATION",
+        "level": 7,
+        "lifePoint": 75,
+        "baseSpeed": 90,
+        "size": 1.6,
+        "weight": 55.0,
+        "type": "POISON",
+        "type2": "FLYING",
+        "offensiveAttack": {
+          "type": "BUG",
+          "power": 40,
+          "effects": [{
+            "type": "LIFE_STEAL",
+            "targets": ["CURRENT_ATTACK"],
+            "duration": "THIS_TURN"
+          }]
+        },
+        "defensiveAttack": {
+          "type": "GHOST",
+          "effects": [{
+            "type": "APPLY_STATUS",
+            "targets": ["TARGETED_POKEMON"],
+            "status": "CNF",
+            "duration": "INFINITE"
+          }]
+        },
+        "weaknesses": ["ELECTRIC", "ICE", "ROCK", "PSYCHIC"],
+        "resistances": ["BUG", "FIGHTING", "GRASS", "FAIRY", "POISON"],
+        "evolutions": [{
+          "pokemon": {
+            "pokemonId": 169,
+            "generation": "SECOND_GENERATION",
+            "level": 9,
+            "lifePoint": 80,
+            "baseSpeed": 130,
+            "size": 1.8,
+            "weight": 75.0,
+            "type": "POISON",
+            "type2": "FLYING",
+            "offensiveAttack": {
+              "type": "POISON",
+              "power": 40,
+              "effects": [{
+                "type": "ATTACK_MODIFICATION",
+                "conditions": [{
+                  "type": "DICE_ROLL",
+                  "successRate": 2
+                }],
+                "targets": ["CURRENT_ATTACK"],
+                "level": 20,
+                "duration": "THIS_TURN"
+              }, {
+                "type": "APPLY_STATUS",
+                "conditions": [{
+                  "type": "DICE_ROLL",
+                  "successRate": 1
+                }],
+                "targets": ["TARGETED_POKEMON"],
+                "status": "PSN",
+                "duration": "INFINITE"
+              }]
+            },
+            "defensiveAttack": {
+              "type": "GHOST",
+              "effects": [{
+                "type": "APPLY_STATUS",
+                "targets": ["TARGETED_POKEMON"],
+                "status": "CNF",
+                "duration": "INFINITE"
+              }]
+            },
+            "weaknesses": ["ELECTRIC", "ICE", "ROCK", "PSYCHIC"],
+            "resistances": ["BUG", "FIGHTING", "GRASS", "FAIRY", "POISON"]
+          },
+          "conditions": [{
+            "type": "EXPERIENCE_EQUALS",
+            "target": "CURRENT_POKEMON",
+            "level": 4
+          }, {
+            "type": "SYNERGY",
+            "level": 6,
+            "synergy": "POISON"
+          }]
+        }]
+      },
+      "conditions": [{
+        "type": "EXPERIENCE_EQUALS",
+        "target": "CURRENT_POKEMON",
+        "level": 2
+      }]
+    }]
+  }
+]

@@ -1,0 +1,56 @@
+[
+
+  {
+    "id": 1,
+    "outOfCombatEffects": [{
+      "type": "HEALTH_ALTERATION",
+      "targets": ["TARGETED_POKEMON"],
+      "level": 20,
+      "duration": "ACTIVE"
+    }]
+  },
+  {
+    "id": 2,
+    "outOfCombatEffects": [{
+      "type": "CAPTURE",
+      "levels": [1, 2, 3],
+      "duration": "ACTIVE"
+    }]
+  },
+  {
+    "id": 3,
+    "combatEffects": [{
+      "type": "ATTACK_MODIFICATION",
+      "conditions": [{
+        "type": "DICE_ROLL",
+        "successRate": 1
+      }],
+      "trigger": {
+        "action": "OFFENSIVE_ATTACK",
+        "targets": ["CURRENT_POKEMON"],
+        "duration": "INFINITE"
+      },
+      "targets": ["CURRENT_ATTACK"],
+      "level": 20,
+      "duration": "THIS_TURN"
+    }]
+  },
+  {
+    "id": 4,
+    "combatEffects": [{
+      "type": "TYPE_2_MODIFICATION",
+      "conditions": [{
+        "type": "TYPE_NOT_EQUALS",
+        "targets": "CURRENT_POKEMON",
+        "typePokemon": "WATER"
+      }, {
+        "type": "TYPE_2_EQUALS",
+        "targets": "CURRENT_POKEMON",
+        "typePokemon": "NO_TYPE"
+      }],
+      "targets": ["CURRENT_POKEMON"],
+      "typePokemon": "WATER",
+      "duration": "INFINITE"
+    }]
+  }
+]

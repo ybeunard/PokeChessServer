@@ -1,0 +1,11 @@
+[
+  {
+    "id": 1,
+    "effects": [{
+      "type": "COST_REDUCTION",
+      "level": 1,
+      "typePokemon": "ELECTRIC",
+      "duration": "THIS_TURN"
+    }]
+  }
+]
