@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration xmlns="http://logging.apache.org/log4j/2.0/config">
+    <Properties>
+        <Property name="rootLoggerLevel">${bundle:application:logging.level.root}</Property>
+        <Property name="loggerLevel">${bundle:application:logging.level.org.pokechess.server}</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="[LOG] - [%-5level] [%d] : %msg %throwable%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="org.pokechess.server" level="${loggerLevel}" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Root level="${rootLoggerLevel}">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>

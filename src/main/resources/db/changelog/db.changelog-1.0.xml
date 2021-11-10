@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+    <changeSet id="1-0-000001" author="Crizang">
+        <preConditions>
+            <not>
+                <tableExists tableName="user_entity"/>
+            </not>
+        </preConditions>
+        <createTable tableName="user_entity">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="username" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password_hashed" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="trainer_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="access_token_id" type="varchar(255)"/>
+            <column name="refresh_token_id" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1-0-000002" author="Crizang">
+        <preConditions>
+            <not>
+                <indexExists indexName="UNIQUE_CONSTRAINT_USERNAME"/>
+            </not>
+        </preConditions>
+        <addUniqueConstraint constraintName="UNIQUE_CONSTRAINT_USERNAME" tableName="user_entity"
+                             columnNames="username"/>
+    </changeSet>
+    <changeSet id="1-0-000003" author="Crizang">
+        <preConditions>
+            <not>
+                <indexExists indexName="UNIQUE_CONSTRAINT_TRAINER_NAME"/>
+            </not>
+        </preConditions>
+        <addUniqueConstraint constraintName="UNIQUE_CONSTRAINT_TRAINER_NAME" tableName="user_entity"
+                             columnNames="trainer_name"/>
+    </changeSet>
+</databaseChangeLog>
