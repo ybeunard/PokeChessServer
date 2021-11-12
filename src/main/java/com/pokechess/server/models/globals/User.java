@@ -1,6 +1,8 @@
 package com.pokechess.server.models.globals;
 
 import com.pokechess.server.validators.GenericValidator;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
@@ -123,5 +125,21 @@ public class User {
 
     public void setRefreshTokenId(String refreshTokenId) {
         this.refreshTokenId = refreshTokenId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof User && EqualsBuilder.reflectionEquals(this, o);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "User [id=%s, username=%s, passwordHashed=%s, trainerName=%s, accessTokenId=%s, refreshTokenId=%s]", this.id, this.username, this.passwordHashed, this.trainerName, this.accessTokenId, this.refreshTokenId);
     }
 }

@@ -1,5 +1,8 @@
 package com.pokechess.server.datasources.database.user.entity;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import javax.persistence.*;
 
 @Entity(name = "user_entity")
@@ -64,5 +67,21 @@ public class UserEntity {
 
     public void setRefreshTokenId(String refreshTokenId) {
         this.refreshTokenId = refreshTokenId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof UserEntity && EqualsBuilder.reflectionEquals(this, o);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "UserEntity [id=%s, username=%s, passwordHashed=%s, trainerName=%s, accessTokenId=%s, refreshTokenId=%s]", this.id, this.username, this.passwordHashed, this.trainerName, this.accessTokenId, this.refreshTokenId);
     }
 }

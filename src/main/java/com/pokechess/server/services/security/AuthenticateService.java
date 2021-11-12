@@ -6,7 +6,6 @@ import com.pokechess.server.models.globals.User;
 import com.pokechess.server.repositories.user.UserRepository;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.lang.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.function.Function;
 
 @Service
 public class AuthenticateService implements UserDetailsService {
@@ -91,9 +89,9 @@ public class AuthenticateService implements UserDetailsService {
     /**
      *
      * @return True if the refresh token is valid else false,
-     *      check if the access token is the active jwt token
-     *      check if the token is the User token
      *      check if the token is not expired
+     *      check if the token is the User token
+     *      check if the access token is the active jwt token
      * @throws JwtException expired jwt token exception
      * @throws JwtException incorrect jwt token exception
      */
@@ -104,8 +102,8 @@ public class AuthenticateService implements UserDetailsService {
 
         try {
             User user = this.userRepository.getByUsername(claims.getSubject());
-            return (Objects.nonNull(user.getRefreshTokenId()) && user.getRefreshTokenId().equals(claims.getId()) &&
-                    user.getUsername().equals(claims.getSubject()));
+            return (user.getUsername().equals(claims.getSubject()) &&
+                    Objects.nonNull(user.getRefreshTokenId()) && user.getRefreshTokenId().equals(claims.getId()));
         } catch (UserException e) {
             return false;
         }

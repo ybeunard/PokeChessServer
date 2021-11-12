@@ -12,11 +12,10 @@ import com.pokechess.server.services.security.AuthenticateService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import static com.pokechess.server.filter.security.JwtRequestFilter.REFRESH_TOKEN_END_POINT;
 import static com.pokechess.server.filter.security.JwtRequestFilter.REQUEST_USERNAME_ATTRIBUTE;
@@ -56,7 +55,7 @@ public class AuthenticateController {
      * @throws UserException Trainer name already exist exception
      */
     @RequestMapping(value = "/api/v1/register", method = RequestMethod.POST)
-    public ResponseEntity<UserDTO> saveUser(@RequestBody UserRegisterDTO user) {
+    public ResponseEntity<UserDTO> saveUser(@RequestBody @Valid UserRegisterDTO user) {
         User userRegistered = this.authenticateService.registerUser(UserMapper.mapUserFromUserRegisterDTO(user));
         return ResponseEntity.ok(UserMapper.mapUserToUserDTO(userRegistered));
     }

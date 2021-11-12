@@ -1,12 +1,11 @@
 package com.pokechess.server.filter.security;
 
+import com.pokechess.server.exceptions.JwtException;
 import com.pokechess.server.services.security.AuthenticateService;
-import org.springframework.core.annotation.Order;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -30,6 +29,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         this.authenticateService = authenticateService;
     }
 
+    /**
+     *
+     * @throws JwtException expired jwt token exception
+     * @throws JwtException token provided is not a jwt token
+     */
     protected void doFilterInternal(@NonNull HttpServletRequest request,@NonNull HttpServletResponse response,@NonNull FilterChain chain)
             throws ServletException, IOException {
 
