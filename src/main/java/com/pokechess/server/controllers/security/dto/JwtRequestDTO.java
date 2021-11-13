@@ -2,13 +2,11 @@ package com.pokechess.server.controllers.security.dto;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.springframework.lang.Nullable;
 
 public class JwtRequestDTO {
     private String username;
     private String password;
 
-    @Nullable
     public String getUsername() {
         return username;
     }
@@ -17,7 +15,6 @@ public class JwtRequestDTO {
         this.username = username;
     }
 
-    @Nullable
     public String getPassword() {
         return password;
     }

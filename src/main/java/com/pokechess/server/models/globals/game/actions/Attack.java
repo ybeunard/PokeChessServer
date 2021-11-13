@@ -10,7 +10,6 @@ import org.springframework.lang.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 public class Attack {
     private static final Integer DEFAULT_PRECISION = 0;
@@ -88,7 +87,7 @@ public class Attack {
     }
 
     public void setPrecision(Integer precision) {
-        GenericValidator.notNull(precision);
+        GenericValidator.notNull(precision, "precision");
         this.precision = precision;
     }
 

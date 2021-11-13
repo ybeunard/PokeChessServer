@@ -68,7 +68,7 @@ public class Trigger {
     }
 
     public void setAction(TriggerAction action) {
-        GenericValidator.notNull(action);
+        GenericValidator.notNull(action, "action");
         this.action = action;
     }
 
@@ -99,7 +99,7 @@ public class Trigger {
     }
 
     public void setDuration(DurationTime duration) {
-        GenericValidator.notNull(duration);
+        GenericValidator.notNull(duration, "duration");
         this.duration = duration;
     }
 }

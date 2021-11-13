@@ -44,7 +44,7 @@ public class Evolution {
     }
 
     public void setPokemon(Pokemon pokemon) {
-        GenericValidator.notNull(pokemon);
+        GenericValidator.notNull(pokemon, "pokemon");
         this.pokemon = pokemon;
     }
 
@@ -54,7 +54,7 @@ public class Evolution {
     }
 
     public void setConditions(List<Condition> conditions) {
-        GenericValidator.notEmpty(conditions);
+        GenericValidator.notEmpty(conditions, "conditions");
         this.conditions = conditions;
     }
 }

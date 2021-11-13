@@ -44,7 +44,7 @@ public class PokemonTrainer {
     }
 
     public void setId(Integer id) {
-        GenericValidator.notNull(id);
+        GenericValidator.notNull(id, "id");
         this.id = id;
     }
 
@@ -54,7 +54,7 @@ public class PokemonTrainer {
     }
 
     public void setEffects(List<Effect> effects) {
-        GenericValidator.notEmpty(effects);
+        GenericValidator.notEmpty(effects, "effects");
         this.effects = effects;
     }
 }

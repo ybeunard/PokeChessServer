@@ -162,7 +162,7 @@ public class BoardGame {
     }
 
     public void setPokemonCenter(PokemonPlace pokemonCenter) {
-        GenericValidator.notNull(pokemonCenter);
+        GenericValidator.notNull(pokemonCenter, "pokemonCenter");
         this.pokemonCenter = pokemonCenter;
     }
 
@@ -172,7 +172,7 @@ public class BoardGame {
     }
 
     public void setPokemonCenterCounter(Integer pokemonCenterCounter) {
-        GenericValidator.notNull(pokemonCenterCounter);
+        GenericValidator.notNull(pokemonCenterCounter, "pokemonCenterCounter");
         this.pokemonCenterCounter = pokemonCenterCounter;
     }
 }

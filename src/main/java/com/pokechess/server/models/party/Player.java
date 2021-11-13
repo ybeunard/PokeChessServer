@@ -119,7 +119,7 @@ public class Player {
     }
 
     public void setUser(User user) {
-        GenericValidator.notNull(user);
+        GenericValidator.notNull(user, "user");
         this.user = user;
     }
 
@@ -129,7 +129,7 @@ public class Player {
     }
 
     public void setBoardGame(BoardGame boardGame) {
-        GenericValidator.notNull(boardGame);
+        GenericValidator.notNull(boardGame, "boardGame");
         this.boardGame = boardGame;
     }
 
@@ -139,7 +139,7 @@ public class Player {
     }
 
     public void setLevel(Integer level) {
-        GenericValidator.notNull(level);
+        GenericValidator.notNull(level, "level");
         this.level = level;
     }
 
@@ -149,7 +149,7 @@ public class Player {
     }
 
     public void setExperiencePoint(Integer experiencePoint) {
-        GenericValidator.notNull(experiencePoint);
+        GenericValidator.notNull(experiencePoint, "experiencePoint");
         this.experiencePoint = experiencePoint;
     }
 
@@ -159,7 +159,7 @@ public class Player {
     }
 
     public void setLifePoint(Integer lifePoint) {
-        GenericValidator.notNull(lifePoint);
+        GenericValidator.notNull(lifePoint, "lifePoint");
         this.lifePoint = lifePoint;
     }
 
@@ -169,7 +169,7 @@ public class Player {
     }
 
     public void setWinCounter(Integer winCounter) {
-        GenericValidator.notNull(winCounter);
+        GenericValidator.notNull(winCounter, "winCounter");
         this.winCounter = winCounter;
     }
 
@@ -191,7 +191,7 @@ public class Player {
     }
 
     public void setMoney(Integer money) {
-        GenericValidator.notNull(money);
+        GenericValidator.notNull(money, "money");
         this.money = money;
     }
 

@@ -140,7 +140,7 @@ public class Party {
     }
 
     public void setId(UUID id) {
-        GenericValidator.notNull(id);
+        GenericValidator.notNull(id, "id");
         this.id = id;
     }
 
@@ -150,7 +150,7 @@ public class Party {
     }
 
     public void setOwner(User owner) {
-        GenericValidator.notNull(owner);
+        GenericValidator.notNull(owner, "owner");
         this.owner = owner;
     }
 
@@ -160,7 +160,7 @@ public class Party {
     }
 
     public void setName(String name) {
-        GenericValidator.notEmpty(name);
+        GenericValidator.notEmpty(name, "name");
         this.name = name;
     }
 
@@ -170,7 +170,7 @@ public class Party {
     }
 
     public void setPlayers(List<Player> players) {
-        GenericValidator.notEmpty(players);
+        GenericValidator.notEmpty(players, "players");
         this.players = players;
     }
 
@@ -180,7 +180,7 @@ public class Party {
     }
 
     public void setState(PartyState state) {
-        GenericValidator.notNull(state);
+        GenericValidator.notNull(state, "state");
         this.state = state;
     }
 
@@ -190,7 +190,7 @@ public class Party {
     }
 
     public void setCurrentTurnNumber(Integer currentTurnNumber) {
-        GenericValidator.notNull(currentTurnNumber);
+        GenericValidator.notNull(currentTurnNumber, "currentTurnNumber");
         this.currentTurnNumber = currentTurnNumber;
     }
 

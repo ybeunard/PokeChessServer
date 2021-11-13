@@ -149,7 +149,7 @@ public class Pokemon {
     }
 
     public void setPokemonId(Integer pokemonId) {
-        GenericValidator.notNull(pokemonId);
+        GenericValidator.notNull(pokemonId, "pokemonId");
         this.pokemonId = pokemonId;
     }
 
@@ -159,7 +159,7 @@ public class Pokemon {
     }
 
     public void setGeneration(Generation generation) {
-        GenericValidator.notNull(generation);
+        GenericValidator.notNull(generation, "generation");
         this.generation = generation;
     }
 
@@ -169,7 +169,7 @@ public class Pokemon {
     }
 
     public void setLevel(Integer level) {
-        GenericValidator.notNull(level);
+        GenericValidator.notNull(level, "level");
         this.level = level;
     }
 
@@ -179,7 +179,7 @@ public class Pokemon {
     }
 
     public void setLifePoint(Integer lifePoint) {
-        GenericValidator.notNull(lifePoint);
+        GenericValidator.notNull(lifePoint, "lifePoint");
         this.lifePoint = lifePoint;
     }
 
@@ -189,7 +189,7 @@ public class Pokemon {
     }
 
     public void setBaseSpeed(Integer baseSpeed) {
-        GenericValidator.notNull(baseSpeed);
+        GenericValidator.notNull(baseSpeed, "baseSpeed");
         this.baseSpeed = baseSpeed;
     }
 
@@ -199,7 +199,7 @@ public class Pokemon {
     }
 
     public void setSize(Float size) {
-        GenericValidator.notNull(size);
+        GenericValidator.notNull(size, "size");
         this.size = size;
     }
 
@@ -209,7 +209,7 @@ public class Pokemon {
     }
 
     public void setWeight(Float weight) {
-        GenericValidator.notNull(weight);
+        GenericValidator.notNull(weight, "weight");
         this.weight = weight;
     }
 
@@ -229,7 +229,7 @@ public class Pokemon {
     }
 
     public void setType2(Type type2) {
-        GenericValidator.notNull(type2);
+        GenericValidator.notNull(type2, "type2");
         this.type2 = type2;
     }
 
@@ -239,7 +239,7 @@ public class Pokemon {
     }
 
     public void setOffensiveAttack(Attack offensiveAttack) {
-        GenericValidator.notNull(offensiveAttack);
+        GenericValidator.notNull(offensiveAttack, "offensiveAttack");
         this.offensiveAttack = offensiveAttack;
     }
 
@@ -249,7 +249,7 @@ public class Pokemon {
     }
 
     public void setDefensiveAttack(Attack defensiveAttack) {
-        GenericValidator.notNull(defensiveAttack);
+        GenericValidator.notNull(defensiveAttack, "defensiveAttack");
         this.defensiveAttack = defensiveAttack;
     }
 

@@ -46,7 +46,7 @@ public class Weather {
     }
 
     public void setId(Integer id) {
-        GenericValidator.notNull(id);
+        GenericValidator.notNull(id, "id");
         this.id = id;
     }
 

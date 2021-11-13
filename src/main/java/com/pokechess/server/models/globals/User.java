@@ -85,7 +85,8 @@ public class User {
     }
 
     public void setUsername(String username) {
-        GenericValidator.notEmpty(username);
+        GenericValidator.notEmpty(username, "username");
+        GenericValidator.max(username, 50, "username");
         this.username = username;
     }
 
@@ -95,7 +96,8 @@ public class User {
     }
 
     public void setPasswordHashed(String passwordHashed) {
-        GenericValidator.notEmpty(passwordHashed);
+        GenericValidator.notEmpty(passwordHashed, "passwordHashed");
+        GenericValidator.max(passwordHashed, 255, "passwordHashed");
         this.passwordHashed = passwordHashed;
     }
 
@@ -105,7 +107,8 @@ public class User {
     }
 
     public void setTrainerName(String trainerName) {
-        GenericValidator.notEmpty(trainerName);
+        GenericValidator.notEmpty(trainerName, "trainerName");
+        GenericValidator.max(trainerName, 50, "trainerName");
         this.trainerName = trainerName;
     }
 
@@ -115,6 +118,7 @@ public class User {
     }
 
     public void setAccessTokenId(String accessTokenId) {
+        GenericValidator.max(accessTokenId, 255, "accessTokenId");
         this.accessTokenId = accessTokenId;
     }
 
@@ -124,6 +128,7 @@ public class User {
     }
 
     public void setRefreshTokenId(String refreshTokenId) {
+        GenericValidator.max(refreshTokenId, 255, "refreshTokenId");
         this.refreshTokenId = refreshTokenId;
     }
 

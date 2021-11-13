@@ -109,7 +109,7 @@ public class Effect {
     }
 
     public void setType(EffectType type) {
-        GenericValidator.notNull(type);
+        GenericValidator.notNull(type, "type");
         this.type = type;
     }
 
@@ -191,7 +191,7 @@ public class Effect {
     }
 
     public void setDuration(DurationTime duration) {
-        GenericValidator.notNull(duration);
+        GenericValidator.notNull(duration, "duration");
         this.duration = duration;
     }
 }

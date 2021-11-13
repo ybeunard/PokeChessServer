@@ -80,7 +80,7 @@ public class Condition {
     }
 
     public void setType(ConditionType type) {
-        GenericValidator.notNull(type);
+        GenericValidator.notNull(type, "type");
         this.type = type;
     }
 

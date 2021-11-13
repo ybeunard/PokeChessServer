@@ -2,7 +2,6 @@ package com.pokechess.server.controllers.security.dto;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -18,7 +17,6 @@ public class UserRegisterDTO {
     @Size(max = 50, message = "cannot exceeded 50 characters")
     private String trainerName;
 
-    @Nullable
     public String getUsername() {
         return username;
     }
@@ -27,7 +25,6 @@ public class UserRegisterDTO {
         this.username = username;
     }
 
-    @Nullable
     public String getPassword() {
         return password;
     }
@@ -36,7 +33,6 @@ public class UserRegisterDTO {
         this.password = password;
     }
 
-    @Nullable
     public String getTrainerName() {
         return trainerName;
     }
@@ -52,7 +48,7 @@ public class UserRegisterDTO {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(username).append(password).append(trainerName).toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override
