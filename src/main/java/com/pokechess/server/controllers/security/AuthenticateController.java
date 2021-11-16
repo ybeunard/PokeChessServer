@@ -21,7 +21,6 @@ import static com.pokechess.server.filter.security.JwtRequestFilter.REFRESH_TOKE
 import static com.pokechess.server.filter.security.JwtRequestFilter.REQUEST_USERNAME_ATTRIBUTE;
 
 @RestController
-@CrossOrigin
 public class AuthenticateController {
 
     private final AuthenticationManager authenticationManager;
