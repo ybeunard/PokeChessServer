@@ -2,7 +2,8 @@ package com.pokechess.server.services.security;
 
 import com.pokechess.server.exceptions.JwtException;
 import com.pokechess.server.exceptions.UserException;
-import com.pokechess.server.models.globals.User;
+import com.pokechess.server.models.globals.user.User;
+import com.pokechess.server.models.globals.user.UserPrincipal;
 import com.pokechess.server.repositories.user.UserRepository;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,19 +19,19 @@ import java.util.*;
 public class AuthenticateService implements UserDetailsService {
 
     private final String jwtSecret;
-    public final long jwtValidity;
-    public final long refreshExpirationDateInMs;
+    public final long expirationValidity;
+    public final long refreshExpirationValidity;
     private final UserRepository userRepository;
     private final PasswordEncoder bcryptEncoder;
 
     public AuthenticateService(@Value("${jwt.secret}") String jwtSecret,
-                               @Value("${jwt.validity}") long jwtValidity,
-                               @Value("${jwt.refreshExpirationDateInMs}") long refreshExpirationDateInMs,
+                               @Value("${jwt.expirationValidity}") long expirationValidity,
+                               @Value("${jwt.refreshExpirationValidity}") long refreshExpirationValidity,
                                UserRepository userRepository,
                                PasswordEncoder bcryptEncoder) {
         this.jwtSecret = jwtSecret;
-        this.jwtValidity = jwtValidity;
-        this.refreshExpirationDateInMs = refreshExpirationDateInMs;
+        this.expirationValidity = expirationValidity;
+        this.refreshExpirationValidity = refreshExpirationValidity;
         this.userRepository = userRepository;
         this.bcryptEncoder = bcryptEncoder;
     }
@@ -39,18 +40,11 @@ public class AuthenticateService implements UserDetailsService {
      *
      * @throws UserException User not found exception
      */
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = this.userRepository.getByUsername(username);
-        return new org.springframework.security.core.userdetails.User(user.getUsername(),
-                user.getPasswordHashed(), new ArrayList<>());
-    }
-
-    /**
-     *
-     * @throws JwtException incorrect jwt token exception
-     */
-    public String getUsernameFromToken(String token) {
-        return getAllClaimsFromToken(token).getSubject();
+        return UserPrincipal.getBuilder().username(user.getUsername()).password(user.getPasswordHashed())
+                .trainerName(user.getTrainerName()).build();
     }
 
     /**
@@ -65,48 +59,50 @@ public class AuthenticateService implements UserDetailsService {
 
     /**
      *
-     * @return True if the access token is valid else false,
+     * @return The user if the access token is valid else an empty optional,
      *      check if the access token is the active jwt token
      *      check if the token is the User token
      *      check if the token is not expired
      * @throws JwtException expired jwt token exception
      * @throws JwtException incorrect jwt token exception
      */
-    public Boolean validateAccessToken(String accessToken) {
+    public Optional<User> validateAccessToken(String accessToken) {
         Claims claims = getAllClaimsFromToken(accessToken);
         if (isTokenExpired(claims.getExpiration()))
             throw JwtException.of(JwtException.JwtExceptionType.EXPIRED_JWT_TOKEN);
 
         try {
-            User user = this.userRepository.getByUsername(claims.getSubject());
-            return (Objects.nonNull(user.getAccessTokenId()) && user.getAccessTokenId().equals(claims.getId()) &&
-                    user.getUsername().equals(claims.getSubject()));
-        } catch (UserException e) {
-            return false;
-        }
+            User user = this.userRepository.getByTrainerName(claims.getSubject());
+            if (user.getTrainerName().equals(claims.getSubject()) &&
+                    Objects.nonNull(user.getAccessTokenId()) && user.getAccessTokenId().equals(claims.getId())) {
+                return Optional.of(user);
+            }
+        } catch (UserException ignored) { }
+        return Optional.empty();
     }
 
     /**
      *
-     * @return True if the refresh token is valid else false,
+     * @return The user if the refresh token is valid else an empty optional,
      *      check if the token is not expired
      *      check if the token is the User token
      *      check if the access token is the active jwt token
      * @throws JwtException expired jwt token exception
      * @throws JwtException incorrect jwt token exception
      */
-    public Boolean validateRefreshToken(String refreshToken) {
+    public Optional<User> validateRefreshToken(String refreshToken) {
         Claims claims = getAllClaimsFromToken(refreshToken);
         if (isTokenExpired(claims.getExpiration()))
             throw JwtException.of(JwtException.JwtExceptionType.EXPIRED_JWT_TOKEN);
 
         try {
-            User user = this.userRepository.getByUsername(claims.getSubject());
-            return (user.getUsername().equals(claims.getSubject()) &&
-                    Objects.nonNull(user.getRefreshTokenId()) && user.getRefreshTokenId().equals(claims.getId()));
-        } catch (UserException e) {
-            return false;
-        }
+            User user = this.userRepository.getByTrainerName(claims.getSubject());
+            if (user.getTrainerName().equals(claims.getSubject()) &&
+                    Objects.nonNull(user.getRefreshTokenId()) && user.getRefreshTokenId().equals(claims.getId())) {
+                return Optional.of(user);
+            }
+        } catch (UserException ignored) { }
+        return Optional.empty();
     }
 
     /**
@@ -116,13 +112,13 @@ public class AuthenticateService implements UserDetailsService {
      *      Subject is the username
      *      IssueAt is the current date
      *      Expiration configurable in properties
-     *      Signature in HS512 algorythm and secret key configurable in properties
+     *      Signature in HS512 algorithm and secret key configurable in properties
      * @throws UserException User not found exception
      */
-    public String doGenerateAccessToken(String username) {
-        String accessTokenId = this.userRepository.patchAccessTokenId(username, UUID.randomUUID().toString());
-        return Jwts.builder().setClaims(new HashMap<>()).setId(accessTokenId).setSubject(username).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + jwtValidity * 1000))
+    public String doGenerateAccessToken(String trainerName) {
+        String accessTokenId = this.userRepository.patchAccessTokenId(trainerName, UUID.randomUUID().toString());
+        return Jwts.builder().setClaims(new HashMap<>()).setId(accessTokenId).setSubject(trainerName).setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + expirationValidity * 1000))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
     }
 
@@ -133,13 +129,13 @@ public class AuthenticateService implements UserDetailsService {
      *      Subject is the username
      *      IssueAt is the current date
      *      Expiration configurable in properties
-     *      Signature in HS512 algorythm and secret key configurable in properties
+     *      Signature in HS512 algorithm and secret key configurable in properties
      * @throws UserException User not found exception
      */
-    public String doGenerateRefreshToken(String username) {
-        String refreshTokenId = this.userRepository.patchRefreshTokenId(username, UUID.randomUUID().toString());
-        return Jwts.builder().setClaims(new HashMap<>()).setId(refreshTokenId).setSubject(username).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + refreshExpirationDateInMs))
+    public String doGenerateRefreshToken(String trainerName) {
+        String refreshTokenId = this.userRepository.patchRefreshTokenId(trainerName, UUID.randomUUID().toString());
+        return Jwts.builder().setClaims(new HashMap<>()).setId(refreshTokenId).setSubject(trainerName).setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + refreshExpirationValidity * 1000))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
     }
 

@@ -1,9 +1,13 @@
 package com.pokechess.server.repositories.party;
 
+import com.pokechess.server.datasources.database.party.PartyDatasource;
+import com.pokechess.server.datasources.database.party.entity.PartyEntity;
+import com.pokechess.server.datasources.database.party.mapper.PartyEntityMapper;
 import com.pokechess.server.datasources.loader.ElementLoader;
 import com.pokechess.server.datasources.loader.mapper.ObjectMapper;
 import com.pokechess.server.datasources.loader.mapper.PokemonMapper;
 import com.pokechess.server.models.globals.game.cards.*;
+import com.pokechess.server.models.party.Party;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,10 +17,19 @@ import java.util.stream.Collectors;
 
 @Repository
 public class PartyRepository {
+    private final PartyDatasource partyDatasource;
     private final ElementLoader elementLoader;
 
-    public PartyRepository(ElementLoader elementLoader) {
+    public PartyRepository(PartyDatasource partyDatasource,
+                           ElementLoader elementLoader) {
+        this.partyDatasource = partyDatasource;
         this.elementLoader = elementLoader;
+    }
+
+    public Party create(Party party) {
+        PartyEntity partyEntityCreated =
+                this.partyDatasource.save(PartyEntityMapper.mapPartyToPartyEntity(party));
+        return PartyEntityMapper.mapPartyFromPartyEntityWithoutGameObject(partyEntityCreated);
     }
 
     public Map<Integer, List<Pokemon>> loadPokemonDraw() {

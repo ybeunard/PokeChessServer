@@ -1,4 +1,4 @@
-package com.pokechess.server.controllers.security.dto;
+package com.pokechess.server.controllers.security.dto.user.register;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-public class UserRegisterDTO {
+public class UserRegisterRequestDTO {
     @NotEmpty(message = "field cannot be empty")
     @Size(max = 50, message = "cannot exceeded 50 characters")
     private String username;
@@ -43,7 +43,7 @@ public class UserRegisterDTO {
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof UserRegisterDTO && EqualsBuilder.reflectionEquals(this, o);
+        return o instanceof UserRegisterRequestDTO && EqualsBuilder.reflectionEquals(this, o);
     }
 
     @Override

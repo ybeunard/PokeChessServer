@@ -22,16 +22,10 @@ public class EmaWebSocketHandlerDecorator extends WebSocketHandlerDecorator {
 
     @Override
     public void handleMessage(@NonNull WebSocketSession session, @NonNull WebSocketMessage<?> message) throws Exception {
-        // session.sendMessage(message);
-        super.handleMessage(session, updateBodyIfNeeded(message));
+        super.handleMessage(session, updateBody(message));
     }
 
-    /**
-     * Updates the content of the specified message. The message is updated only if it is
-     * a {@link TextMessage text message} and if does not contain the <tt>null</tt> character at the end. If
-     * carriage returns are missing (when the command does not need a body) there are also added.
-     */
-    private WebSocketMessage<?> updateBodyIfNeeded(WebSocketMessage<?> message) {
+    private WebSocketMessage<?> updateBody(WebSocketMessage<?> message) {
         if (!(message instanceof TextMessage) || ((TextMessage) message).getPayload().endsWith(NULL_CHAR)) {
             return message;
         }

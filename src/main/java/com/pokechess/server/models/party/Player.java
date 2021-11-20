@@ -1,9 +1,11 @@
 package com.pokechess.server.models.party;
 
-import com.pokechess.server.models.globals.User;
+import com.pokechess.server.models.globals.user.User;
 import com.pokechess.server.models.globals.game.cards.Pokemon;
 import com.pokechess.server.models.globals.game.cards.PokemonTrainer;
 import com.pokechess.server.validators.GenericValidator;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
@@ -18,6 +20,7 @@ public class Player {
     private static final Integer DEFAULT_WIN_COUNTER = 0;
     private static final Integer DEFAULT_MONEY = 0;
 
+    private Integer id;
     private User user;
     private BoardGame boardGame;
     private Integer level;
@@ -36,6 +39,7 @@ public class Player {
     }
 
     public static class PlayerBuilder {
+        private Integer id;
         private User user;
         private BoardGame boardGame;
         private Integer level;
@@ -46,6 +50,11 @@ public class Player {
         private Integer money;
         private PokemonTrainer pokemonTrainer;
         private Player opponentPlayer;
+
+        public PlayerBuilder id(Integer id) {
+            this.id = id;
+            return this;
+        }
 
         public PlayerBuilder user(User user) {
             this.user = user;
@@ -99,6 +108,7 @@ public class Player {
 
         public Player build() {
             Player player = new Player();
+            player.setId(id);
             player.setUser(user);
             player.setBoardGame(boardGame);
             player.setLevel(Objects.nonNull(level) ? level : DEFAULT_LEVEL);
@@ -111,6 +121,15 @@ public class Player {
             player.setOpponentPlayer(opponentPlayer);
             return player;
         }
+    }
+
+    @Nullable
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     @NonNull
@@ -211,5 +230,21 @@ public class Player {
 
     public void setOpponentPlayer(Player opponentPlayer) {
         this.opponentPlayer = opponentPlayer;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof Player && EqualsBuilder.reflectionEquals(this, o);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "Player [id=%s, user=%s, boardGame=%s, level=%s, experiencePoint=%s, lifePoint=%s, winCounter=%s, hand=%s, money=%s, pokemonTrainer=%s, opponentPlayer=%s]", this.id, this.user, this.boardGame, this.level, this.experiencePoint, this.lifePoint, this.winCounter, this.hand, this.money, this.pokemonTrainer, this.opponentPlayer);
     }
 }

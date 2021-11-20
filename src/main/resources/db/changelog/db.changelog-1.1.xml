@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+    <changeSet id="1-1-000001" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="pokemon_place_entity"/>
+            </not>
+        </preConditions>
+        <createTable tableName="pokemon_place_entity">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="board_game_offensive_line_id" type="int"/>
+            <column name="board_game_defensive_line_id" type="int"/>
+            <column name="board_game_bench_id" type="int"/>
+            <column name="board_game_bench_overload_id" type="int"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1-1-000002" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="board_game_entity"/>
+            </not>
+        </preConditions>
+        <createTable tableName="board_game_entity">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="pokemon_center" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pokemon_center_counter" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1-1-000003" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="POKEMON_PLACE_ENTITY_BOARD_GAME_OFFENSIVE_LINE_ID_FOREIGN_KEY"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint constraintName="POKEMON_PLACE_ENTITY_BOARD_GAME_OFFENSIVE_LINE_ID_FOREIGN_KEY"
+                                 baseTableName="pokemon_place_entity" baseColumnNames="board_game_offensive_line_id"
+                                 referencedTableName="board_game_entity" referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="1-1-000004" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="POKEMON_PLACE_ENTITY_BOARD_GAME_DEFENSIVE_LINE_ID_FOREIGN_KEY"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint constraintName="POKEMON_PLACE_ENTITY_BOARD_GAME_DEFENSIVE_LINE_ID_FOREIGN_KEY"
+                                 baseTableName="pokemon_place_entity" baseColumnNames="board_game_defensive_line_id"
+                                 referencedTableName="board_game_entity" referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="1-1-000005" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="POKEMON_PLACE_ENTITY_BOARD_GAME_BENCH_ID_FOREIGN_KEY"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint constraintName="POKEMON_PLACE_ENTITY_BOARD_GAME_BENCH_ID_FOREIGN_KEY"
+                                 baseTableName="pokemon_place_entity" baseColumnNames="board_game_bench_id"
+                                 referencedTableName="board_game_entity" referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="1-1-000006" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="POKEMON_PLACE_ENTITY_BOARD_GAME_BENCH_OVERLOAD_ID_FOREIGN_KEY"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint constraintName="POKEMON_PLACE_ENTITY_BOARD_GAME_BENCH_OVERLOAD_ID_FOREIGN_KEY"
+                                 baseTableName="pokemon_place_entity" baseColumnNames="board_game_bench_overload_id"
+                                 referencedTableName="board_game_entity" referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="1-1-000007" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="BOARD_GAME_ENTITY_POKEMON_CENTER_FOREIGN_KEY"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint constraintName="BOARD_GAME_ENTITY_POKEMON_CENTER_FOREIGN_KEY"
+                                 baseTableName="board_game_entity" baseColumnNames="pokemon_center"
+                                 referencedTableName="pokemon_place_entity" referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="1-1-000008" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="player_entity"/>
+            </not>
+        </preConditions>
+        <createTable tableName="player_entity">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="party_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="player_user" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="board_game" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="level" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="experience_point" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="life_point" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="win_counter" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="money" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1-1-000009" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="UNIQUE_CONSTRAINT_PLAYER_ENTITY_PLAYER_USER"/>
+            </not>
+        </preConditions>
+        <addUniqueConstraint constraintName="UNIQUE_CONSTRAINT_PLAYER_ENTITY_PLAYER_USER" tableName="player_entity"
+                             columnNames="player_user"/>
+    </changeSet>
+    <changeSet id="1-1-000010" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="PLAYER_ENTITY_PLAYER_USER_FOREIGN_KEY"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint constraintName="PLAYER_ENTITY_PLAYER_USER_FOREIGN_KEY"
+                                 baseTableName="player_entity" baseColumnNames="player_user"
+                                 referencedTableName="user_entity" referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="1-1-000011" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="UNIQUE_CONSTRAINT_PLAYER_ENTITY_BOARD_GAME"/>
+            </not>
+        </preConditions>
+        <addUniqueConstraint constraintName="UNIQUE_CONSTRAINT_PLAYER_ENTITY_BOARD_GAME" tableName="player_entity"
+                             columnNames="board_game"/>
+    </changeSet>
+    <changeSet id="1-1-000012" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="PLAYER_ENTITY_BOARD_GAME_FOREIGN_KEY"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint constraintName="PLAYER_ENTITY_BOARD_GAME_FOREIGN_KEY"
+                                 baseTableName="player_entity" baseColumnNames="board_game"
+                                 referencedTableName="board_game_entity" referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="1-1-000013" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="party_entity"/>
+            </not>
+        </preConditions>
+        <createTable tableName="party_entity">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="owner" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(255)"/>
+            <column name="state" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="current_turn_number" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1-1-000014" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="UNIQUE_CONSTRAINT_PARTY_ENTITY_OWNER"/>
+            </not>
+        </preConditions>
+        <addUniqueConstraint constraintName="UNIQUE_CONSTRAINT_PARTY_ENTITY_OWNER" tableName="party_entity"
+                             columnNames="owner"/>
+    </changeSet>
+    <changeSet id="1-1-000015" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="PARTY_ENTITY_OWNER_FOREIGN_KEY"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint constraintName="PARTY_ENTITY_OWNER_FOREIGN_KEY"
+                                 baseTableName="party_entity" baseColumnNames="owner"
+                                 referencedTableName="user_entity" referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="1-1-000016" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="UNIQUE_CONSTRAINT_PARTY_ENTITY_NAME"/>
+            </not>
+        </preConditions>
+        <addUniqueConstraint constraintName="UNIQUE_CONSTRAINT_PARTY_ENTITY_NAME" tableName="party_entity"
+                             columnNames="name"/>
+    </changeSet>
+    <changeSet id="1-1-000017" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="PLAYER_ENTITY_PARTY_ID_FOREIGN_KEY"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint constraintName="PLAYER_ENTITY_PARTY_ID_FOREIGN_KEY"
+                                 baseTableName="player_entity" baseColumnNames="party_id"
+                                 referencedTableName="party_entity" referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>

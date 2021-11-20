@@ -1,4 +1,4 @@
-package com.pokechess.server.models.globals;
+package com.pokechess.server.models.globals.user;
 
 import com.pokechess.server.validators.GenericValidator;
 import org.apache.commons.lang3.builder.EqualsBuilder;

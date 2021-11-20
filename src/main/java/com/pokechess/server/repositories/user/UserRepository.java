@@ -4,11 +4,8 @@ import com.pokechess.server.datasources.database.user.UserDatasource;
 import com.pokechess.server.datasources.database.user.entity.UserEntity;
 import com.pokechess.server.datasources.database.user.mapper.UserEntityMapper;
 import com.pokechess.server.exceptions.UserException;
-import com.pokechess.server.models.globals.User;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import com.pokechess.server.models.globals.user.User;
 import org.springframework.stereotype.Repository;
-
-import java.util.UUID;
 
 @Repository
 public class UserRepository {
@@ -30,6 +27,16 @@ public class UserRepository {
 
     /**
      *
+     * @throws UserException User not found exception
+     */
+    public User getByTrainerName(String trainerName) {
+        return this.userDatasource.findByTrainerName(trainerName)
+                .map(UserEntityMapper::mapUserFromUserEntity)
+                .orElseThrow(() -> UserException.of(UserException.UserExceptionType.USER_NOT_FOUND));
+    }
+
+    /**
+     *
      * @throws UserException Username already exist exception
      * @throws UserException Trainer name already exist exception
      */
@@ -42,15 +49,15 @@ public class UserRepository {
         return UserEntityMapper.mapUserFromUserEntity(newUserEntity);
     }
 
-    public String patchAccessTokenId(String username, String accessTokenId) {
-        UserEntity userEntity = this.userDatasource.findByUsername(username)
+    public String patchAccessTokenId(String trainerName, String accessTokenId) {
+        UserEntity userEntity = this.userDatasource.findByTrainerName(trainerName)
                 .orElseThrow(() -> UserException.of(UserException.UserExceptionType.USER_NOT_FOUND));
         userEntity.setAccessTokenId(accessTokenId);
         return this.userDatasource.save(userEntity).getAccessTokenId();
     }
 
-    public String patchRefreshTokenId(String username, String refreshTokenId) {
-        UserEntity userEntity = this.userDatasource.findByUsername(username)
+    public String patchRefreshTokenId(String trainerName, String refreshTokenId) {
+        UserEntity userEntity = this.userDatasource.findByTrainerName(trainerName)
                 .orElseThrow(() -> UserException.of(UserException.UserExceptionType.USER_NOT_FOUND));
         userEntity.setRefreshTokenId(refreshTokenId);
         return this.userDatasource.save(userEntity).getRefreshTokenId();

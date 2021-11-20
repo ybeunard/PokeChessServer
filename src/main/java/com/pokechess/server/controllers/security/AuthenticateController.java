@@ -1,24 +1,24 @@
 package com.pokechess.server.controllers.security;
 
-import com.pokechess.server.controllers.security.dto.JwtRequestDTO;
-import com.pokechess.server.controllers.security.dto.JwtResponseDTO;
-import com.pokechess.server.controllers.security.dto.UserDTO;
-import com.pokechess.server.controllers.security.dto.UserRegisterDTO;
+import com.pokechess.server.controllers.security.dto.jwt.JwtRequestDTO;
+import com.pokechess.server.controllers.security.dto.jwt.JwtResponseDTO;
+import com.pokechess.server.controllers.security.dto.user.register.UserRegisterResponseDTO;
+import com.pokechess.server.controllers.security.dto.user.register.UserRegisterRequestDTO;
 import com.pokechess.server.controllers.security.mapper.UserMapper;
 import com.pokechess.server.exceptions.JwtException;
 import com.pokechess.server.exceptions.UserException;
-import com.pokechess.server.models.globals.User;
+import com.pokechess.server.models.globals.user.User;
+import com.pokechess.server.models.globals.user.UserPrincipal;
 import com.pokechess.server.services.security.AuthenticateService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static com.pokechess.server.filter.security.JwtRequestFilter.REFRESH_TOKEN_END_POINT;
-import static com.pokechess.server.filter.security.JwtRequestFilter.REQUEST_USERNAME_ATTRIBUTE;
+import static com.pokechess.server.filter.security.JwtRequestFilter.*;
 
 @RestController
 public class AuthenticateController {
@@ -35,14 +35,15 @@ public class AuthenticateController {
      *
      * @throws UserException Bad credentials
      */
-    @RequestMapping(value = "/api/v1/authenticate", method = RequestMethod.POST)
+    @PostMapping(value = "/api/v1/authenticate")
     public ResponseEntity<JwtResponseDTO> createAuthenticationToken(@RequestBody JwtRequestDTO authenticationRequest) {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword()));
-            final UserDetails userDetails = authenticateService.loadUserByUsername(authenticationRequest.getUsername());
-            final String accessToken = authenticateService.doGenerateAccessToken(userDetails.getUsername());
-            final String refreshToken = authenticateService.doGenerateRefreshToken(userDetails.getUsername());
-            return ResponseEntity.ok(new JwtResponseDTO(accessToken, authenticateService.jwtValidity, refreshToken));
+            Authentication authUser = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword()));
+            UserPrincipal user = (UserPrincipal) authUser.getPrincipal();
+            final String accessToken = authenticateService.doGenerateAccessToken(user.getTrainerName());
+            final String refreshToken = authenticateService.doGenerateRefreshToken(user.getTrainerName());
+            return ResponseEntity.ok(new JwtResponseDTO(accessToken, authenticateService.expirationValidity, refreshToken));
         } catch (Exception e) {
             throw JwtException.of(JwtException.JwtExceptionType.BAD_CREDENTIALS);
         }
@@ -53,20 +54,20 @@ public class AuthenticateController {
      * @throws UserException Username already exist exception
      * @throws UserException Trainer name already exist exception
      */
-    @RequestMapping(value = "/api/v1/register", method = RequestMethod.POST)
-    public ResponseEntity<UserDTO> saveUser(@RequestBody @Valid UserRegisterDTO user) {
-        User userRegistered = this.authenticateService.registerUser(UserMapper.mapUserFromUserRegisterDTO(user));
-        return ResponseEntity.ok(UserMapper.mapUserToUserDTO(userRegistered));
+    @PostMapping(value = "/api/v1/register")
+    public ResponseEntity<UserRegisterResponseDTO> saveUser(@RequestBody @Valid UserRegisterRequestDTO user) {
+        User userRegistered = this.authenticateService.registerUser(UserMapper.mapUserFromUserRegisterRequestDTO(user));
+        return ResponseEntity.ok(UserMapper.mapUserToUserRegisterResponseDTO(userRegistered));
     }
 
     /**
      *
      * @throws UserException User not found exception
      */
-    @RequestMapping(value = REFRESH_TOKEN_END_POINT, method = RequestMethod.GET)
-    public ResponseEntity<?> refreshToken(@RequestAttribute(name = REQUEST_USERNAME_ATTRIBUTE) String username) {
-        final String accessToken = authenticateService.doGenerateAccessToken(username);
-        final String refreshToken = authenticateService.doGenerateRefreshToken(username);
-        return ResponseEntity.ok(new JwtResponseDTO(accessToken, authenticateService.refreshExpirationDateInMs, refreshToken));
+    @GetMapping(value = REFRESH_TOKEN_END_POINT)
+    public ResponseEntity<?> refreshToken(@RequestAttribute(name = REQUEST_TRAINER_ATTRIBUTE) String trainerName) {
+        final String accessToken = authenticateService.doGenerateAccessToken(trainerName);
+        final String refreshToken = authenticateService.doGenerateRefreshToken(trainerName);
+        return ResponseEntity.ok(new JwtResponseDTO(accessToken, authenticateService.refreshExpirationValidity, refreshToken));
     }
 }

@@ -1,4 +1,4 @@
-package com.pokechess.server.controllers.security.dto;
+package com.pokechess.server.controllers.security.dto.jwt;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;

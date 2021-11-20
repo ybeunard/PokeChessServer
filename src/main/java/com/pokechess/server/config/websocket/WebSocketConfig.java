@@ -11,6 +11,9 @@ import org.springframework.web.socket.config.annotation.WebSocketTransportRegist
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig extends AbstractSecurityWebSocketMessageBrokerConfigurer {
+    public static final String SIMPLE_BROKER_PARTY = "/party";
+    public static final String USER_DESTINATION_PREFIX = "/trainer";
+
     @Override
     protected void configureInbound(MessageSecurityMetadataSourceRegistry messages) {
         messages.anyMessage().authenticated();
@@ -18,8 +21,9 @@ public class WebSocketConfig extends AbstractSecurityWebSocketMessageBrokerConfi
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
+        config.enableSimpleBroker(SIMPLE_BROKER_PARTY);
         config.setApplicationDestinationPrefixes("/game");
-        config.setUserDestinationPrefix("/trainer");
+        config.setUserDestinationPrefix(USER_DESTINATION_PREFIX);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.pokechess.server.datasources.database.user.mapper;
 
 import com.pokechess.server.datasources.database.user.entity.UserEntity;
-import com.pokechess.server.models.globals.User;
+import com.pokechess.server.models.globals.user.User;
 
 public class UserEntityMapper {
     public static User mapUserFromUserEntity(UserEntity entity) {

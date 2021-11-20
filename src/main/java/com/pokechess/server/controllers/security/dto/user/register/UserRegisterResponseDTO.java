@@ -1,9 +1,9 @@
-package com.pokechess.server.controllers.security.dto;
+package com.pokechess.server.controllers.security.dto.user.register;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class UserDTO {
+public class UserRegisterResponseDTO {
     private String username;
     private String trainerName;
 
@@ -25,7 +25,7 @@ public class UserDTO {
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof UserDTO && EqualsBuilder.reflectionEquals(this, o);
+        return o instanceof UserRegisterResponseDTO && EqualsBuilder.reflectionEquals(this, o);
     }
 
     @Override

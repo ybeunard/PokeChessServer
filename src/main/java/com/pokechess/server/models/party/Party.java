@@ -1,12 +1,14 @@
 package com.pokechess.server.models.party;
 
 import com.pokechess.server.models.enumerations.PartyState;
-import com.pokechess.server.models.globals.User;
+import com.pokechess.server.models.globals.user.User;
 import com.pokechess.server.models.globals.game.cards.Berry;
 import com.pokechess.server.models.globals.game.cards.Pokemon;
 import com.pokechess.server.models.globals.game.cards.TrainerObject;
 import com.pokechess.server.models.globals.game.cards.Weather;
 import com.pokechess.server.validators.GenericValidator;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
@@ -15,9 +17,10 @@ import java.util.*;
 public class Party {
     private static final Integer DEFAULT_CURRENT_TURN_NUMBER = 0;
 
-    private UUID id;
+    private Integer id;
     private User owner;
     private String name;
+    private String password;
     private List<Player> players;
     private PartyState state;
     private Integer currentTurnNumber;
@@ -27,7 +30,7 @@ public class Party {
     private List<Weather> weatherCardDraw;
     private List<Pokemon> carousel;
     private List<TrainerObject> shop;
-    private Weather currentWeather;
+    private List<Weather> currentWeather;
 
     private Party() { }
 
@@ -36,9 +39,10 @@ public class Party {
     }
 
     public static class PartyBuilder {
-        private UUID id;
+        private Integer id;
         private User owner;
         private String name;
+        private String password;
         private List<Player> players;
         private PartyState state;
         private Integer currentTurnNumber;
@@ -48,9 +52,9 @@ public class Party {
         private List<Weather> weatherCardDraw;
         private List<Pokemon> carousel;
         private List<TrainerObject> shop;
-        private Weather currentWeather;
+        private List<Weather> currentWeather;
 
-        public PartyBuilder id(UUID id) {
+        public PartyBuilder id(Integer id) {
             this.id = id;
             return this;
         }
@@ -62,6 +66,11 @@ public class Party {
 
         public PartyBuilder name(String name) {
             this.name = name;
+            return this;
+        }
+
+        public PartyBuilder password(String password) {
+            this.password = password;
             return this;
         }
 
@@ -110,7 +119,7 @@ public class Party {
             return this;
         }
 
-        public PartyBuilder currentWeather(Weather currentWeather) {
+        public PartyBuilder currentWeather(List<Weather> currentWeather) {
             this.currentWeather = currentWeather;
             return this;
         }
@@ -120,6 +129,7 @@ public class Party {
             party.setId(id);
             party.setOwner(owner);
             party.setName(name);
+            party.setPassword(password);
             party.setPlayers(players);
             party.setState(state);
             party.setCurrentTurnNumber(Objects.nonNull(currentTurnNumber) ? currentTurnNumber : DEFAULT_CURRENT_TURN_NUMBER);
@@ -134,13 +144,12 @@ public class Party {
         }
     }
 
-    @NonNull
-    public UUID getId() {
+    @Nullable
+    public Integer getId() {
         return id;
     }
 
-    public void setId(UUID id) {
-        GenericValidator.notNull(id, "id");
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -161,7 +170,21 @@ public class Party {
 
     public void setName(String name) {
         GenericValidator.notEmpty(name, "name");
+        GenericValidator.max(name, 50, "name");
         this.name = name;
+    }
+
+    @Nullable
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        if (Objects.nonNull(password)) {
+            GenericValidator.notEmpty(password, "password");
+            GenericValidator.max(password, 255, "password");
+        }
+        this.password = password;
     }
 
     @NonNull
@@ -266,12 +289,31 @@ public class Party {
         this.shop = shop;
     }
 
-    @Nullable
-    public Weather getCurrentWeather() {
+    @NonNull
+    public List<Weather> getCurrentWeather() {
         return currentWeather;
     }
 
-    public void setCurrentWeather(Weather currentWeather) {
+    public void setCurrentWeather(List<Weather> currentWeather) {
+        if (Objects.isNull(currentWeather)) {
+            currentWeather = new ArrayList<>();
+        }
         this.currentWeather = currentWeather;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof Party && EqualsBuilder.reflectionEquals(this, o);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "Party [id=%s, owner=%s, name=%s, password=%s, players=%s, state=%s, currentTurnNumber=%s, pokemonCardDraw=%s, objectCardDraw=%s, berryCardDraw=%s, weatherCardDraw=%s, carousel=%s, shop=%s, currentWeather=%s]", this.id, this.owner, this.name, this.password, this.players, this.state, this.currentTurnNumber, this.pokemonCardDraw, this.objectCardDraw, this.berryCardDraw, this.weatherCardDraw, this.carousel, this.shop, this.currentWeather);
     }
 }

@@ -6,15 +6,18 @@ public class UserException extends ApiException {
     private static final String DEFAULT_USER_NOT_FOUND_MESSAGE = "User not found";
     private static final String DEFAULT_USERNAME_ALREADY_EXIST_MESSAGE = "Username already exist";
     private static final String DEFAULT_TRAINER_NAME_ALREADY_EXIST_MESSAGE = "Trainer name already exist";
+    private static final String DEFAULT_USER_ALREADY_IN_GAME_MESSAGE = "User already in game";
 
-    public enum UserExceptionType { USER_NOT_FOUND, USERNAME_ALREADY_EXIST, TRAINER_NAME_ALREADY_EXIST }
+    public enum UserExceptionType { USER_NOT_FOUND, USERNAME_ALREADY_EXIST, TRAINER_NAME_ALREADY_EXIST,
+        USER_ALREADY_IN_GAME }
 
     private final UserExceptionType type;
 
     public static UserException of(UserExceptionType type) {
         return switch (type) {
             case USER_NOT_FOUND -> new UserException(HttpStatus.NOT_FOUND, DEFAULT_USER_NOT_FOUND_MESSAGE, type);
-            case USERNAME_ALREADY_EXIST, TRAINER_NAME_ALREADY_EXIST -> new UserException(HttpStatus.CONFLICT, type);
+            case USERNAME_ALREADY_EXIST, TRAINER_NAME_ALREADY_EXIST,
+                    USER_ALREADY_IN_GAME -> new UserException(HttpStatus.CONFLICT, type);
         };
     }
 
@@ -36,6 +39,7 @@ public class UserException extends ApiException {
         return switch (type) {
             case USERNAME_ALREADY_EXIST -> DEFAULT_USERNAME_ALREADY_EXIST_MESSAGE;
             case TRAINER_NAME_ALREADY_EXIST -> DEFAULT_TRAINER_NAME_ALREADY_EXIST_MESSAGE;
+            case USER_ALREADY_IN_GAME -> DEFAULT_USER_ALREADY_IN_GAME_MESSAGE;
             default -> super.getMessage();
         };
     }

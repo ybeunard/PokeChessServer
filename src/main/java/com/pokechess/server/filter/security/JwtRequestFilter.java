@@ -1,11 +1,12 @@
 package com.pokechess.server.filter.security;
 
 import com.pokechess.server.exceptions.JwtException;
+import com.pokechess.server.models.globals.user.User;
+import com.pokechess.server.models.globals.user.UserPrincipal;
 import com.pokechess.server.services.security.AuthenticateService;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -15,13 +16,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String BEARER_TOKEN_START = "Bearer ";
-    public static final String REFRESH_TOKEN_END_POINT = "/api/v1/refreshtoken";
+
     public static final String REQUEST_USERNAME_ATTRIBUTE = "username";
+    public static final String REQUEST_TRAINER_ATTRIBUTE = "trainerName";
+    public static final String REFRESH_TOKEN_END_POINT = "/api/v1/refreshtoken";
 
     private final AuthenticateService authenticateService;
 
@@ -46,14 +50,18 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().getAuthentication() == null) {
             String jwtToken = requestTokenHeader.substring(7);
 
-            if ((REFRESH_TOKEN_END_POINT.equals(request.getRequestURI()) && authenticateService.validateRefreshToken(jwtToken))
-                    || authenticateService.validateAccessToken(jwtToken)) {
-                UserDetails userDetails = authenticateService.loadUserByUsername(authenticateService.getUsernameFromToken(jwtToken));
+            Optional<User> userOpt = REFRESH_TOKEN_END_POINT.equals(request.getRequestURI()) ?
+                    authenticateService.validateRefreshToken(jwtToken) :
+                    authenticateService.validateAccessToken(jwtToken);
+            userOpt.ifPresent(user-> {
+                UserPrincipal userPrincipal = UserPrincipal.getBuilder().username(user.getUsername())
+                        .password(user.getPasswordHashed()).trainerName(user.getTrainerName()).build();
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
+                        userPrincipal, null, userPrincipal.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-                request.setAttribute(REQUEST_USERNAME_ATTRIBUTE, userDetails.getUsername());
-            }
+                request.setAttribute(REQUEST_USERNAME_ATTRIBUTE, user.getUsername());
+                request.setAttribute(REQUEST_TRAINER_ATTRIBUTE, user.getTrainerName());
+            });
         }
         chain.doFilter(request, response);
     }

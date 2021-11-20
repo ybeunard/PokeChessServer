@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
     <changeSet id="1-0-000001" author="Crizang">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="user_entity"/>
             </not>
@@ -27,7 +27,7 @@
         </createTable>
     </changeSet>
     <changeSet id="1-0-000002" author="Crizang">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <not>
                 <indexExists indexName="UNIQUE_CONSTRAINT_USERNAME"/>
             </not>
@@ -36,7 +36,7 @@
                              columnNames="username"/>
     </changeSet>
     <changeSet id="1-0-000003" author="Crizang">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <not>
                 <indexExists indexName="UNIQUE_CONSTRAINT_TRAINER_NAME"/>
             </not>

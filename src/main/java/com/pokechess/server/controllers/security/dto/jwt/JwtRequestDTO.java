@@ -1,4 +1,4 @@
-package com.pokechess.server.controllers.security.dto;
+package com.pokechess.server.controllers.security.dto.jwt;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
