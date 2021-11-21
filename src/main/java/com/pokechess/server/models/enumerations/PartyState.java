@@ -3,7 +3,7 @@ package com.pokechess.server.models.enumerations;
 import org.springframework.lang.Nullable;
 
 public enum PartyState {
-    CREATION;
+    CREATION, DELETED;
 
     @Nullable
     public static PartyState getEnum(String name) {

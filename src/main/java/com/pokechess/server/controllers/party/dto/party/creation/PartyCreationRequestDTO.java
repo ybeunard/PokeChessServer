@@ -4,11 +4,13 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class PartyCreationRequestDTO {
     @NotEmpty(message = "field cannot be empty")
     @Size(max = 50, message = "cannot exceeded 50 characters")
+    @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "can only contains letters, numbers and underscore")
     private String name;
     @Size(max = 50, message = "cannot exceeded 50 characters")
     private String password;

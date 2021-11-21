@@ -1,6 +1,7 @@
 package com.pokechess.server.exceptions;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
 
 public class UserException extends ApiException {
     private static final String DEFAULT_USER_NOT_FOUND_MESSAGE = "User not found";
@@ -13,7 +14,7 @@ public class UserException extends ApiException {
 
     private final UserExceptionType type;
 
-    public static UserException of(UserExceptionType type) {
+    public static UserException of(@NonNull UserExceptionType type) {
         return switch (type) {
             case USER_NOT_FOUND -> new UserException(HttpStatus.NOT_FOUND, DEFAULT_USER_NOT_FOUND_MESSAGE, type);
             case USERNAME_ALREADY_EXIST, TRAINER_NAME_ALREADY_EXIST,

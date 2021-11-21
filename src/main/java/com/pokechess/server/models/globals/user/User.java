@@ -109,6 +109,7 @@ public class User {
     public void setTrainerName(String trainerName) {
         GenericValidator.notEmpty(trainerName, "trainerName");
         GenericValidator.max(trainerName, 50, "trainerName");
+        GenericValidator.pattern(trainerName, "^[a-zA-Z0-9_]+$", "trainerName");
         this.trainerName = trainerName;
     }
 

@@ -10,6 +10,7 @@ import com.pokechess.server.exceptions.UserException;
 import com.pokechess.server.models.globals.user.User;
 import com.pokechess.server.models.globals.user.UserPrincipal;
 import com.pokechess.server.services.security.AuthenticateService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -57,7 +58,7 @@ public class AuthenticateController {
     @PostMapping(value = "/api/v1/register")
     public ResponseEntity<UserRegisterResponseDTO> saveUser(@RequestBody @Valid UserRegisterRequestDTO user) {
         User userRegistered = this.authenticateService.registerUser(UserMapper.mapUserFromUserRegisterRequestDTO(user));
-        return ResponseEntity.ok(UserMapper.mapUserToUserRegisterResponseDTO(userRegistered));
+        return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.mapUserToUserRegisterResponseDTO(userRegistered));
     }
 
     /**

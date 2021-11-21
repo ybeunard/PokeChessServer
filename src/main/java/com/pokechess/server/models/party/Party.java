@@ -171,6 +171,7 @@ public class Party {
     public void setName(String name) {
         GenericValidator.notEmpty(name, "name");
         GenericValidator.max(name, 50, "name");
+        GenericValidator.pattern(name, "^[a-zA-Z0-9_]+$", "name");
         this.name = name;
     }
 

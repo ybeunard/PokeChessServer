@@ -14,4 +14,8 @@ public class PlayerRepository {
     public Boolean existsPlayerByUsername(String username) {
         return this.playerDatasource.existsByUser_Username(username);
     }
+
+    public void deletePlayerById(Integer playerId) {
+        this.playerDatasource.deleteById(playerId);
+    }
 }

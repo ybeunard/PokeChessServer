@@ -28,8 +28,8 @@ public class WebSocketConfig extends AbstractSecurityWebSocketMessageBrokerConfi
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/pokechess");
-        registry.addEndpoint("/pokechess")
+        registry.addEndpoint("/api/v1/pokechess");
+        registry.addEndpoint("/api/v1/pokechess")
                 .withSockJS();
     }
 
