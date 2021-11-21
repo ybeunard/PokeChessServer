@@ -16,9 +16,9 @@ public class UserException extends ApiException {
 
     public static UserException of(@NonNull UserExceptionType type) {
         return switch (type) {
+            case USER_ALREADY_IN_GAME -> new UserException(HttpStatus.FORBIDDEN, type);
             case USER_NOT_FOUND -> new UserException(HttpStatus.NOT_FOUND, DEFAULT_USER_NOT_FOUND_MESSAGE, type);
-            case USERNAME_ALREADY_EXIST, TRAINER_NAME_ALREADY_EXIST,
-                    USER_ALREADY_IN_GAME -> new UserException(HttpStatus.CONFLICT, type);
+            case USERNAME_ALREADY_EXIST, TRAINER_NAME_ALREADY_EXIST -> new UserException(HttpStatus.CONFLICT, type);
         };
     }
 

@@ -67,6 +67,13 @@ public class PartyService {
         return partyCreated;
     }
 
+    public List<Party> getPartyListInCreation(String username) {
+        if (this.playerRepository.existsPlayerByUsername(username)) {
+            throw UserException.of(UserException.UserExceptionType.USER_ALREADY_IN_GAME);
+        }
+        return this.partyRepository.getPartyListByState(PartyState.CREATION);
+    }
+
     public void leaveParty(String playerUsername) {
         try {
             Party playerParty = this.partyRepository.getByPlayerNameAndState(playerUsername, PartyState.CREATION);

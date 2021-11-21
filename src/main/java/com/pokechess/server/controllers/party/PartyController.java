@@ -2,6 +2,7 @@ package com.pokechess.server.controllers.party;
 
 import com.pokechess.server.controllers.party.dto.party.creation.PartyCreationRequestDTO;
 import com.pokechess.server.controllers.party.dto.party.creation.PartyCreationResponseDTO;
+import com.pokechess.server.controllers.party.dto.party.list.PartyListInCreationResponseDTO;
 import com.pokechess.server.controllers.party.mapper.PartyMapper;
 import com.pokechess.server.exceptions.UserException;
 import com.pokechess.server.models.party.Party;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import java.util.List;
 
 import static com.pokechess.server.filter.security.JwtRequestFilter.REQUEST_USERNAME_ATTRIBUTE;
 
@@ -33,6 +36,12 @@ public class PartyController {
                                                                 @RequestBody @Valid PartyCreationRequestDTO requestDTO) {
         Party partyCreated = this.partyService.createParty(username, requestDTO.getName(), requestDTO.getPassword());
         return ResponseEntity.status(HttpStatus.CREATED).body(PartyMapper.mapPartyToPartyCreationResponseDTO(partyCreated));
+    }
+
+    @GetMapping(value = "/api/v1/party")
+    public ResponseEntity<PartyListInCreationResponseDTO> getPartyListInCreation(@RequestAttribute(REQUEST_USERNAME_ATTRIBUTE) String username) {
+        List<Party> partyList = this.partyService.getPartyListInCreation(username);
+        return ResponseEntity.ok(PartyMapper.mapPartyListToPartyListInCreationResponseDTO(partyList));
     }
 
     @DeleteMapping(value = "/api/v1/party")

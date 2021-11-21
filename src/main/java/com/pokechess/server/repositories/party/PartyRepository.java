@@ -42,6 +42,12 @@ public class PartyRepository {
         return PartyEntityMapper.mapPartyFromPartyEntityWithoutGameObject(partyEntityCreated);
     }
 
+    public List<Party> getPartyListByState(PartyState state) {
+        return this.partyDatasource.findAllByState(state.name())
+                .stream().map(PartyEntityMapper::mapPartyFromPartyEntityWithoutGameObject)
+                .collect(Collectors.toList());
+    }
+
     public Party getByPlayerNameAndState(String playerUsername, PartyState state) {
         return this.partyDatasource.findByPlayers_User_UsernameAndState(playerUsername, state.name())
                 .map(PartyEntityMapper::mapPartyFromPartyEntityWithoutGameObject)
