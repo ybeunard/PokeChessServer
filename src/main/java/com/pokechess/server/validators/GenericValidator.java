@@ -10,6 +10,7 @@ public class GenericValidator {
     private static final String GENERIC_VALIDATOR_NOT_EMPTY_STRING = "cannot be empty";
     private static final String GENERIC_VALIDATOR_NOT_EMPTY_LIST = "cannot be empty";
     private static final String GENERIC_VALIDATOR_MAX_STRING = "length cannot exceed %s";
+    private static final String GENERIC_VALIDATOR_MAX_INTEGER = "cannot exceed %s";
     private static final String GENERIC_VALIDATOR_PATTERN_STRING = "need to respect %s pattern";
 
     public static void notNull(Object obj, String fieldName) {
@@ -33,6 +34,12 @@ public class GenericValidator {
     public static void max(String string, int max, String fieldName) {
         if (Objects.nonNull(string) && string.length() > max) {
             throw new ValidationException(fieldName, string, String.format(GENERIC_VALIDATOR_MAX_STRING, max));
+        }
+    }
+
+    public static void max(Integer integer, int max, String fieldName) {
+        if (Objects.nonNull(integer) && integer > max) {
+            throw new ValidationException(fieldName, integer.toString(), String.format(GENERIC_VALIDATOR_MAX_INTEGER, max));
         }
     }
 

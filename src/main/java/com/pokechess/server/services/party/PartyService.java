@@ -67,6 +67,10 @@ public class PartyService {
         return partyCreated;
     }
 
+    /**
+     *
+     * @throws UserException User already in game exception, User cannot create a party if already in game
+     */
     public List<Party> getPartyListInCreation(String username) {
         if (this.playerRepository.existsPlayerByUsername(username)) {
             throw UserException.of(UserException.UserExceptionType.USER_ALREADY_IN_GAME);
@@ -74,22 +78,35 @@ public class PartyService {
         return this.partyRepository.getPartyListByState(PartyState.CREATION);
     }
 
+    /**
+     *
+     * @throws UserException User already in game exception, User cannot create a party if already in game
+     */
+    public Party joinParty(String username, String partyName, String password) {
+        User user = this.userRepository.getByUsername(username);
+        Player player = createNewPlayer(user);
+        Party partyUpdated = this.partyRepository.addPlayer(partyName, player, password);
+        this.subscriptionRegistryService.removeSubscription(username, PARTY_CREATION_BROKER_DESTINATION);
+        this.subscriptionRegistryService.removeSubscription(username, PARTY_UPDATE_PLAYER_NUMBER_BROKER_DESTINATION);
+        this.subscriptionRegistryService.removeSubscription(username, PARTY_DELETED_BROKER_DESTINATION);
+        this.partyRepository.sendPartyUpdatePlayerNumberMessage(partyUpdated);
+        this.partyRepository.sendPartyUpdatePlayerMessage(partyUpdated);
+        return partyUpdated;
+    }
+
     public void leaveParty(String playerUsername) {
         try {
-            Party playerParty = this.partyRepository.getByPlayerNameAndState(playerUsername, PartyState.CREATION);
-            if (playerParty.getOwner().getUsername().equals(playerUsername)) {
-                this.partyRepository.deletePartyById(playerParty.getId());
-                playerParty.setState(PartyState.DELETED);
+            Party playerParty = this.partyRepository.deletePartyByPlayerNameAndState(playerUsername, PartyState.CREATION);
+            if (PartyState.DELETED.equals(playerParty.getState())) {
                 this.partyRepository.sendPartyChangeStateMessage(playerParty);
                 this.partyRepository.sendPartyDeletedMessage(playerParty.getName());
                 playerParty.getPlayers().forEach(player -> this.deletePlayerSubscription(playerParty, player));
             } else {
-                playerParty.getPlayers().stream().filter(player -> player.getUser().getUsername().equals(playerUsername))
-                        .forEach(player -> {
-                            this.playerRepository.deletePlayerById(player.getId());
-                            playerParty.getPlayers().remove(player);
-                            this.deletePlayerSubscription(playerParty, player);
-                        });
+                List<Player> deletedPlayer = playerParty.getPlayers().stream()
+                        .filter(player -> player.getUser().getUsername().equals(playerUsername))
+                        .peek(player -> this.deletePlayerSubscription(playerParty, player))
+                        .collect(Collectors.toList());
+                playerParty.getPlayers().removeAll(deletedPlayer);
                 this.partyRepository.sendPartyUpdatePlayerMessage(playerParty);
                 this.partyRepository.sendPartyUpdatePlayerNumberMessage(playerParty);
             }

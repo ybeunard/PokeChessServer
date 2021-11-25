@@ -17,6 +17,8 @@ import java.util.*;
 public class Party {
     private static final Integer DEFAULT_CURRENT_TURN_NUMBER = 0;
 
+    public static final Integer MAX_PLAYER = 8;
+
     private Integer id;
     private User owner;
     private String name;
@@ -195,6 +197,7 @@ public class Party {
 
     public void setPlayers(List<Player> players) {
         GenericValidator.notEmpty(players, "players");
+        GenericValidator.max(players.size(), MAX_PLAYER, "players size");
         this.players = players;
     }
 

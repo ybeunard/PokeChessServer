@@ -28,7 +28,7 @@ public class PlayerEntityMapper {
                 .collect(Collectors.toList());
     }
 
-    private static PlayerEntity mapPlayerToPlayerEntity(Player model) {
+    public static PlayerEntity mapPlayerToPlayerEntity(Player model) {
         PlayerEntity entity = new PlayerEntity();
         entity.setId(model.getId());
         entity.setUser(UserEntityMapper.mapUserToUserEntity(model.getUser()));

@@ -55,7 +55,7 @@ public class PartyEntity {
         this.password = password;
     }
 
-    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+    @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name="party_id", referencedColumnName="id", nullable = false)
     public List<PlayerEntity> getPlayers() {
         return players;
