@@ -10,13 +10,13 @@ import org.springframework.web.socket.handler.WebSocketHandlerDecorator;
 
 import java.util.Optional;
 
-public class EmaWebSocketHandlerDecorator extends WebSocketHandlerDecorator {
+public class WebSocketMessageHandler extends WebSocketHandlerDecorator {
     private static final String NULL_CHAR = "\u0000";
     private static final String END_OF_LINE = "\r\n";
     private static final String DOUBLE_LINE_BREAK = "\n\n";
     private static final String LINE_BREAK = "\n";
 
-    public EmaWebSocketHandlerDecorator(WebSocketHandler webSocketHandler) {
+    public WebSocketMessageHandler(WebSocketHandler webSocketHandler) {
         super(webSocketHandler);
     }
 

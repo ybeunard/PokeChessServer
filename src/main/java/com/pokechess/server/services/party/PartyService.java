@@ -1,6 +1,5 @@
 package com.pokechess.server.services.party;
 
-import com.pokechess.server.exceptions.PartyException;
 import com.pokechess.server.exceptions.UserException;
 import com.pokechess.server.models.enumerations.PartyState;
 import com.pokechess.server.models.globals.user.User;
@@ -8,10 +7,11 @@ import com.pokechess.server.models.party.BoardGame;
 import com.pokechess.server.models.party.Party;
 import com.pokechess.server.models.party.Player;
 import com.pokechess.server.models.party.PokemonPlace;
+import com.pokechess.server.repositories.message.MessageRepository;
 import com.pokechess.server.repositories.party.PartyRepository;
 import com.pokechess.server.repositories.player.PlayerRepository;
 import com.pokechess.server.repositories.user.UserRepository;
-import com.pokechess.server.services.security.SubscriptionRegistryService;
+import com.pokechess.server.services.security.SessionManagerService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,24 +21,27 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.pokechess.server.services.security.SubscriptionRegistryService.*;
+import static com.pokechess.server.services.security.SessionManagerService.*;
 
 @Service
 public class PartyService {
-    private final SubscriptionRegistryService subscriptionRegistryService;
+    private final SessionManagerService sessionManagerService;
     private final UserRepository userRepository;
     private final PartyRepository partyRepository;
+    private final MessageRepository messageRepository;
     private final PlayerRepository playerRepository;
     private final PasswordEncoder bcryptEncoder;
 
-    public PartyService(SubscriptionRegistryService subscriptionRegistryService,
+    public PartyService(SessionManagerService sessionManagerService,
                         UserRepository userRepository,
                         PartyRepository partyRepository,
+                        MessageRepository messageRepository,
                         PlayerRepository playerRepository,
                         PasswordEncoder bcryptEncoder) {
-        this.subscriptionRegistryService = subscriptionRegistryService;
+        this.sessionManagerService = sessionManagerService;
         this.userRepository = userRepository;
         this.partyRepository = partyRepository;
+        this.messageRepository = messageRepository;
         this.playerRepository = playerRepository;
         this.bcryptEncoder = bcryptEncoder;
     }
@@ -60,10 +63,10 @@ public class PartyService {
         }
 
         Party partyCreated = this.partyRepository.create(newParty.build());
-        this.subscriptionRegistryService.removeSubscription(ownerUsername, PARTY_CREATION_BROKER_DESTINATION);
-        this.subscriptionRegistryService.removeSubscription(ownerUsername, PARTY_UPDATE_PLAYER_NUMBER_BROKER_DESTINATION);
-        this.subscriptionRegistryService.removeSubscription(ownerUsername, PARTY_DELETED_BROKER_DESTINATION);
-        this.partyRepository.sendPartyCreationMessage(partyCreated);
+        this.sessionManagerService.removeSubscription(ownerUsername, PARTY_CREATION_BROKER_DESTINATION);
+        this.sessionManagerService.removeSubscription(ownerUsername, PARTY_UPDATE_PLAYER_NUMBER_BROKER_DESTINATION);
+        this.sessionManagerService.removeSubscription(ownerUsername, PARTY_DELETED_BROKER_DESTINATION);
+        this.messageRepository.sendPartyCreationMessage(partyCreated);
         return partyCreated;
     }
 
@@ -86,31 +89,16 @@ public class PartyService {
         User user = this.userRepository.getByUsername(username);
         Player player = createNewPlayer(user);
         Party partyUpdated = this.partyRepository.addPlayer(partyName, player, password);
-        this.subscriptionRegistryService.removeSubscription(username, PARTY_CREATION_BROKER_DESTINATION);
-        this.subscriptionRegistryService.removeSubscription(username, PARTY_UPDATE_PLAYER_NUMBER_BROKER_DESTINATION);
-        this.subscriptionRegistryService.removeSubscription(username, PARTY_DELETED_BROKER_DESTINATION);
-        this.partyRepository.sendPartyUpdatePlayerNumberMessage(partyUpdated);
-        this.partyRepository.sendPartyUpdatePlayerMessage(partyUpdated);
+        this.sessionManagerService.removeSubscription(username, PARTY_CREATION_BROKER_DESTINATION);
+        this.sessionManagerService.removeSubscription(username, PARTY_UPDATE_PLAYER_NUMBER_BROKER_DESTINATION);
+        this.sessionManagerService.removeSubscription(username, PARTY_DELETED_BROKER_DESTINATION);
+        this.messageRepository.sendPartyUpdatePlayerNumberMessage(partyUpdated);
+        this.messageRepository.sendPartyUpdatePlayerMessage(partyUpdated);
         return partyUpdated;
     }
 
     public void leaveParty(String playerUsername) {
-        try {
-            Party playerParty = this.partyRepository.deletePartyByPlayerNameAndState(playerUsername, PartyState.CREATION);
-            if (PartyState.DELETED.equals(playerParty.getState())) {
-                this.partyRepository.sendPartyChangeStateMessage(playerParty);
-                this.partyRepository.sendPartyDeletedMessage(playerParty.getName());
-                playerParty.getPlayers().forEach(player -> this.deletePlayerSubscription(playerParty, player));
-            } else {
-                List<Player> deletedPlayer = playerParty.getPlayers().stream()
-                        .filter(player -> player.getUser().getUsername().equals(playerUsername))
-                        .peek(player -> this.deletePlayerSubscription(playerParty, player))
-                        .collect(Collectors.toList());
-                playerParty.getPlayers().removeAll(deletedPlayer);
-                this.partyRepository.sendPartyUpdatePlayerMessage(playerParty);
-                this.partyRepository.sendPartyUpdatePlayerNumberMessage(playerParty);
-            }
-        } catch (PartyException ignored) { }
+        this.sessionManagerService.leaveParty(playerUsername);
     }
 
     /**
@@ -133,12 +121,5 @@ public class PartyService {
     private List<PokemonPlace> generatePokemonPlaceList() {
         return Stream.generate(() -> PokemonPlace.builder().build()).limit(BoardGame.POKEMON_PLACE_LIST_LENGTH)
                 .collect(Collectors.toList());
-    }
-
-    private void deletePlayerSubscription(Party party, Player player) {
-        this.subscriptionRegistryService
-                .removeSubscription(player.getUser().getUsername(), String.format(SPECIFIC_PARTY_UPDATE_PLAYER_BROKER_DESTINATION, party.getName()));
-        this.subscriptionRegistryService
-                .removeSubscription(player.getUser().getUsername(), String.format(SPECIFIC_PARTY_UPDATE_STATE_BROKER_DESTINATION, party.getName()));
     }
 }

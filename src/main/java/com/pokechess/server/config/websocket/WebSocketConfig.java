@@ -35,7 +35,7 @@ public class WebSocketConfig extends AbstractSecurityWebSocketMessageBrokerConfi
 
     @Override
     public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
-        registration.addDecoratorFactory(EmaWebSocketHandlerDecorator::new);
+        registration.addDecoratorFactory(WebSocketMessageHandler::new);
     }
 
     @Override

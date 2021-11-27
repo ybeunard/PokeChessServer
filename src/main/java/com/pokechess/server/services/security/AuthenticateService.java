@@ -21,17 +21,21 @@ public class AuthenticateService implements UserDetailsService {
     private final String jwtSecret;
     public final long expirationValidity;
     public final long refreshExpirationValidity;
+
+    private final SessionManagerService sessionManagerService;
     private final UserRepository userRepository;
     private final PasswordEncoder bcryptEncoder;
 
     public AuthenticateService(@Value("${jwt.secret}") String jwtSecret,
                                @Value("${jwt.expirationValidity}") long expirationValidity,
                                @Value("${jwt.refreshExpirationValidity}") long refreshExpirationValidity,
+                               SessionManagerService sessionManagerService,
                                UserRepository userRepository,
                                PasswordEncoder bcryptEncoder) {
         this.jwtSecret = jwtSecret;
         this.expirationValidity = expirationValidity;
         this.refreshExpirationValidity = refreshExpirationValidity;
+        this.sessionManagerService = sessionManagerService;
         this.userRepository = userRepository;
         this.bcryptEncoder = bcryptEncoder;
     }
@@ -73,8 +77,8 @@ public class AuthenticateService implements UserDetailsService {
 
         try {
             User user = this.userRepository.getByTrainerName(claims.getSubject());
-            if (user.getTrainerName().equals(claims.getSubject()) &&
-                    Objects.nonNull(user.getAccessTokenId()) && user.getAccessTokenId().equals(claims.getId())) {
+            if (user.getTrainerName().equals(claims.getSubject()) && this.sessionManagerService.isConnected(user.getUsername())
+                    && Objects.nonNull(user.getAccessTokenId()) && user.getAccessTokenId().equals(claims.getId())) {
                 return Optional.of(user);
             }
         } catch (UserException ignored) { }
