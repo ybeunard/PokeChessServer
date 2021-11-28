@@ -1,11 +1,11 @@
 package com.pokechess.server.models.globals.game.cards;
 
-import com.pokechess.server.models.globals.game.actions.Effect;
-import com.pokechess.server.validators.ObjectValidator;
+import com.pokechess.server.models.globals.game.effects.Effect;
+import com.pokechess.server.validators.PokemonObjectValidator;
 
 import java.util.List;
 
-public class TrainerObject extends Object {
+public class TrainerObject extends PokemonObject {
     private TrainerObject() { }
 
     public static TrainerObjectBuilder builder() {
@@ -37,7 +37,7 @@ public class TrainerObject extends Object {
             trainerObject.setId(id);
             trainerObject.setCombatEffects(combatEffects);
             trainerObject.setOutOfCombatEffects(outOfCombatEffects);
-            ObjectValidator.validate(trainerObject);
+            PokemonObjectValidator.validate(trainerObject);
             return trainerObject;
         }
     }

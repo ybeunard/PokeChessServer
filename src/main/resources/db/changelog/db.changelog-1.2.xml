@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+    <changeSet id="1-2-000001" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="condition_entity"/>
+            </not>
+        </preConditions>
+        <createTable tableName="condition_entity">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="condition_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="effect_id" type="int"/>
+            <column name="evolution_id" type="int"/>
+            <column name="percentage" type="int"/>
+            <column name="percentages" type="varchar(255)"/>
+            <column name="target" type="varchar(50)"/>
+            <column name="type" type="varchar(50)"/>
+            <column name="value" type="int"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1-2-000002" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="effect_entity"/>
+            </not>
+        </preConditions>
+        <createTable tableName="effect_entity">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="apply_when" type="varchar(50)"/>
+            <column name="duration" type="varchar(50)"/>
+            <column name="effect_id" type="int"/>
+            <column name="effect_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="effects_id" type="int"/>
+            <column name="name" type="varchar(50)"/>
+            <column name="max_cumulate" type="int"/>
+            <column name="percentage" type="int"/>
+            <column name="power" type="int"/>
+            <column name="status" type="varchar(50)"/>
+            <column name="targets" type="varchar(255)"/>
+            <column name="trigger_when" type="varchar(255)"/>
+            <column name="value" type="int"/>
+            <column name="type" type="varchar(50)"/>
+            <column name="attack_id" type="int"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1-2-00003" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="EFFECT_ENTITY_EFFECT_ID_FOREIGN_KEY"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint constraintName="EFFECT_ENTITY_EFFECT_ID_FOREIGN_KEY"
+                                 baseTableName="effect_entity" baseColumnNames="effect_id"
+                                 referencedTableName="effect_entity" referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="1-2-00004" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="EFFECT_ENTITY_EFFECTS_ID_FOREIGN_KEY"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint constraintName="EFFECT_ENTITY_EFFECTS_ID_FOREIGN_KEY"
+                                 baseTableName="effect_entity" baseColumnNames="effects_id"
+                                 referencedTableName="effect_entity" referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="1-2-00005" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="CONDITION_ENTITY_EFFECT_ID_FOREIGN_KEY"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint constraintName="CONDITION_ENTITY_EFFECT_ID_FOREIGN_KEY"
+                                 baseTableName="condition_entity" baseColumnNames="effect_id"
+                                 referencedTableName="effect_entity" referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="1-2-000006" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="attack_entity"/>
+            </not>
+        </preConditions>
+        <createTable tableName="attack_entity">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="targets" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="power" type="int"/>
+            <column name="precision" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="priority" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1-2-00007" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="EFFECT_ENTITY_ATTACK_ID_FOREIGN_KEY"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint constraintName="EFFECT_ENTITY_ATTACK_ID_FOREIGN_KEY"
+                                 baseTableName="effect_entity" baseColumnNames="attack_id"
+                                 referencedTableName="attack_entity" referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="1-2-000008" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="evolution_entity"/>
+            </not>
+        </preConditions>
+        <createTable tableName="evolution_entity">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="pokemon_evolved_id" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pokemon_base_id" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1-2-00009" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="CONDITION_ENTITY_EVOLUTION_ID_FOREIGN_KEY"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint constraintName="CONDITION_ENTITY_EVOLUTION_ID_FOREIGN_KEY"
+                                 baseTableName="condition_entity" baseColumnNames="evolution_id"
+                                 referencedTableName="evolution_entity" referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="1-2-000010" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="pokemon_entity"/>
+            </not>
+        </preConditions>
+        <createTable tableName="pokemon_entity">
+            <column name="pokemon_id" type="varchar(10)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="generation" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="level" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="life_point" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="base_speed" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="size" type="float"/>
+            <column name="weight" type="float"/>
+            <column name="type" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type_two" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="offensive_attack_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="defensive_attack_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1-2-00011" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="UNIQUE_CONSTRAINT_POKEMON_ENTITY_NAME"/>
+            </not>
+        </preConditions>
+        <addUniqueConstraint constraintName="UNIQUE_CONSTRAINT_POKEMON_ENTITY_NAME" tableName="pokemon_entity"
+                             columnNames="name"/>
+    </changeSet>
+    <changeSet id="1-2-00012" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="POKEMON_ENTITY_OFFENSIVE_ATTACK_ID_FOREIGN_KEY"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint constraintName="POKEMON_ENTITY_OFFENSIVE_ATTACK_ID_FOREIGN_KEY"
+                                 baseTableName="pokemon_entity" baseColumnNames="offensive_attack_id"
+                                 referencedTableName="attack_entity" referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="1-2-00013" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="POKEMON_ENTITY_DEFENSIVE_ATTACK_ID_FOREIGN_KEY"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint constraintName="POKEMON_ENTITY_DEFENSIVE_ATTACK_ID_FOREIGN_KEY"
+                                 baseTableName="pokemon_entity" baseColumnNames="defensive_attack_id"
+                                 referencedTableName="attack_entity" referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="1-2-00014" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="EVOLUTION_ENTITY_POKEMON_BASE_ID_FOREIGN_KEY"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint constraintName="EVOLUTION_ENTITY_POKEMON_BASE_ID_FOREIGN_KEY"
+                                 baseTableName="evolution_entity" baseColumnNames="pokemon_base_id"
+                                 referencedTableName="pokemon_entity" referencedColumnNames="pokemon_id"/>
+    </changeSet>
+    <changeSet id="1-2-00015" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="EVOLUTION_ENTITY_POKEMON_EVOLVED_ID_FOREIGN_KEY"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint constraintName="EVOLUTION_ENTITY_POKEMON_EVOLVED_ID_FOREIGN_KEY"
+                                 baseTableName="evolution_entity" baseColumnNames="pokemon_evolved_id"
+                                 referencedTableName="pokemon_entity" referencedColumnNames="pokemon_id"/>
+    </changeSet>
+</databaseChangeLog>

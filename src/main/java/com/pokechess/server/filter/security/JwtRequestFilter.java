@@ -15,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -27,6 +28,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     public static final String REQUEST_TRAINER_ATTRIBUTE = "trainerName";
     public static final String REFRESH_TOKEN_END_POINT = "/api/v1/refreshtoken";
     public static final String WEBSOCKET_CONNECTION_END_POINT = "/api/v1/pokechess";
+    public static final String LOAD_DATA_END_POINT = "/api/v1/load";
 
     private final AuthenticateService authenticateService;
 
@@ -50,10 +52,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (Objects.nonNull(requestTokenHeader) && requestTokenHeader.startsWith(BEARER_TOKEN_START) &&
                 SecurityContextHolder.getContext().getAuthentication() == null) {
             String jwtToken = requestTokenHeader.substring(7);
-            System.out.println(request.getRequestURI());
             Optional<User> userOpt = REFRESH_TOKEN_END_POINT.equals(request.getRequestURI()) ?
                     authenticateService.validateRefreshToken(jwtToken) :
-                    authenticateService.validateAccessToken(jwtToken, !WEBSOCKET_CONNECTION_END_POINT.equals(request.getRequestURI()));
+                    authenticateService.validateAccessToken(jwtToken, !Arrays.asList(WEBSOCKET_CONNECTION_END_POINT, LOAD_DATA_END_POINT).contains(request.getRequestURI()));
             userOpt.ifPresent(user-> {
                 UserPrincipal userPrincipal = UserPrincipal.getBuilder().username(user.getUsername())
                         .password(user.getPasswordHashed()).trainerName(user.getTrainerName()).build();

@@ -9,6 +9,7 @@ import com.pokechess.server.exceptions.JwtException;
 import com.pokechess.server.exceptions.UserException;
 import com.pokechess.server.models.globals.user.User;
 import com.pokechess.server.models.globals.user.UserPrincipal;
+import com.pokechess.server.repositories.loader.LoaderRepository;
 import com.pokechess.server.services.security.AuthenticateService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,8 @@ public class AuthenticateController {
     private final AuthenticationManager authenticationManager;
     private final AuthenticateService authenticateService;
 
-    public AuthenticateController(AuthenticationManager authenticationManager, AuthenticateService authenticateService) {
+    public AuthenticateController(AuthenticationManager authenticationManager,
+                                  AuthenticateService authenticateService) {
         this.authenticationManager = authenticationManager;
         this.authenticateService = authenticateService;
     }

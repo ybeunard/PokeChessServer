@@ -1,6 +1,6 @@
 package com.pokechess.server.models.globals.game.cards;
 
-import com.pokechess.server.models.globals.game.actions.Effect;
+import com.pokechess.server.models.globals.game.effects.Effect;
 import com.pokechess.server.validators.GenericValidator;
 import org.springframework.lang.NonNull;
 

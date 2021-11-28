@@ -10,7 +10,6 @@ import com.pokechess.server.models.globals.game.cards.TrainerObject;
 import com.pokechess.server.models.globals.game.cards.Weather;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ObjectMapper {
@@ -21,10 +20,6 @@ public class ObjectMapper {
 
     public static Berry mapBerryFromBerryDTO(BerryDTO dto) {
         Berry.BerryBuilder builder = Berry.builder().id(dto.getId());
-        Optional.ofNullable(dto.getCombatEffects()).map(ActionMapper::mapEffectListFromEffectDTOList)
-                .ifPresent(builder::combatEffects);
-        Optional.ofNullable(dto.getOutOfCombatEffects()).map(ActionMapper::mapEffectListFromEffectDTOList)
-                .ifPresent(builder::outOfCombatEffects);
         return builder.build();
     }
 
@@ -34,10 +29,6 @@ public class ObjectMapper {
 
     public static TrainerObject mapTrainerObjectFromTrainerObjectDTO(TrainerObjectDTO dto) {
         TrainerObject.TrainerObjectBuilder builder = TrainerObject.builder().id(dto.getId());
-        Optional.ofNullable(dto.getCombatEffects()).map(ActionMapper::mapEffectListFromEffectDTOList)
-                .ifPresent(builder::combatEffects);
-        Optional.ofNullable(dto.getOutOfCombatEffects()).map(ActionMapper::mapEffectListFromEffectDTOList)
-                .ifPresent(builder::outOfCombatEffects);
         return builder.build();
     }
 
@@ -47,8 +38,6 @@ public class ObjectMapper {
 
     public static PokemonTrainer mapPokemonTrainerFromPokemonTrainerDTO(PokemonTrainerDTO dto) {
         PokemonTrainer.PokemonTrainerBuilder builder = PokemonTrainer.builder().id(dto.getId());
-        Optional.ofNullable(dto.getEffects()).map(ActionMapper::mapEffectListFromEffectDTOList)
-                .ifPresent(builder::effects);
         return builder.build();
     }
 
@@ -57,9 +46,8 @@ public class ObjectMapper {
     }
 
     public static Weather mapWeatherFromWeatherDTO(WeatherDTO dto) {
-        Weather.WeatherBuilder builder = Weather.builder().id(dto.getId());
-        Optional.ofNullable(dto.getEffects()).map(ActionMapper::mapEffectListFromEffectDTOList)
-                .ifPresent(builder::effects);
+        Weather.WeatherBuilder builder = Weather.builder().id(dto.getId()).name(dto.getName())
+                .bonus(dto.getBonus()).malus(dto.getMalus());
         return builder.build();
     }
 }

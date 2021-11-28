@@ -1,126 +1,1226 @@
 [
   {
-    "pokemonId": 396,
-    "generation": "FOURTH_GENERATION",
+    "pokemonId": "0001",
+    "name": "Bulbizarre",
+    "generation": "FIRST_GENERATION",
+    "level": 3,
+    "lifePoint": 55,
+    "baseSpeed": 45,
+    "size": 0.7,
+    "weight": 6.9,
+    "type": "GRASS",
+    "type2": "POISON",
+    "offensiveAttack": {
+      "name": "Tranch'Herbe",
+      "description": "Touche les 2 Pokemon adverses de la colonne. Ignore la Défense.",
+      "type": "GRASS",
+      "targets": ["OFFENSIVE_ENEMY", "DEFENSIVE_ENEMY"],
+      "power": 20,
+      "effects": [{
+        "applyWhen": "BEFORE_DAMAGE",
+        "duration": "ON_ATTACK",
+        "effectName": "IGNORE_DEFENSE"
+      }]
+    },
+    "defensiveAttack": {
+      "name": "Vampigraine",
+      "description": "Infecte le Pokemon adverse tant qu'il reste en combat. A la fin de chaque combat, il transfert 10 PV au Pokemon offensif allié.",
+      "type": "GRASS",
+      "effects": [{
+        "applyWhen": "END_ATTACK",
+        "duration": "LOSE_ON_BENCH",
+        "effect": {
+          "effectName": "LEECH_SEED",
+          "power": 10
+        },
+        "effectName": "TRIGGER_EFFECT",
+        "targets": ["OFFENSIVE_ENEMY"],
+        "triggerWhen": "ON_END_FIGHT"
+      }]
+    },
+    "evolutions": [{
+      "description": "Mettre K.O. deux Pokemon",
+      "conditions": [{
+        "conditionName": "EXPERIENCE_REACHED",
+        "value": 2
+      }],
+      "pokemon": {
+        "pokemonId": "0002",
+        "name": "Herbizarre",
+        "generation": "FIRST_GENERATION",
+        "level": 6,
+        "lifePoint": 70,
+        "baseSpeed": 60,
+        "size": 1.0,
+        "weight": 13.0,
+        "type": "GRASS",
+        "type2": "POISON",
+        "offensiveAttack": {
+          "name": "Tranch'Herbe",
+          "description": "Touche les 2 Pokemon adverses de la colonne. Ignore la Défense.",
+          "type": "GRASS",
+          "targets": ["OFFENSIVE_ENEMY", "DEFENSIVE_ENEMY"],
+          "power": 30,
+          "effects": [{
+            "applyWhen": "BEFORE_DAMAGE",
+            "duration": "ON_ATTACK",
+            "effectName": "IGNORE_DEFENSE"
+          }]
+        },
+        "defensiveAttack": {
+          "name": "Vampigraine",
+          "description": "Infecte le Pokemon adverse tant qu'il reste en combat. A la fin de chaque combat, il transfert 10 PV au Pokemon offensif allié.",
+          "type": "GRASS",
+          "effects": [{
+            "applyWhen": "END_ATTACK",
+            "duration": "LOSE_ON_BENCH",
+            "effect": {
+              "effectName": "LEECH_SEED",
+              "power": 20
+            },
+            "effectName": "TRIGGER_EFFECT",
+            "targets": ["OFFENSIVE_ENEMY"],
+            "triggerWhen": "ON_END_FIGHT"
+          }]
+        },
+        "evolutions": [{
+          "description": "Mettre K.O. trois Pokemon",
+          "conditions": [{
+            "conditionName": "EXPERIENCE_REACHED",
+            "value": 3
+          }],
+          "pokemon": {
+            "pokemonId": "0003",
+            "name": "Florizarre",
+            "generation": "FIRST_GENERATION",
+            "level": 9,
+            "lifePoint": 90,
+            "baseSpeed": 80,
+            "size": 2.0,
+            "weight": 100.0,
+            "type": "GRASS",
+            "type2": "POISON",
+            "offensiveAttack": {
+              "name": "Lance-Soleil",
+              "description": "Inflige 10 dégats supplémentaires par niveau de synergie Feu active.",
+              "type": "GRASS",
+              "targets": ["OFFENSIVE_ENEMY"],
+              "power": 50,
+              "effects": [{
+                "applyWhen": "BEFORE_DAMAGE",
+                "duration": "ON_ATTACK",
+                "effectName": "DAMAGE_BY_SYNERGY_LEVEL",
+                "power": 10,
+                "type": "FIRE"
+              }]
+            },
+            "defensiveAttack": {
+              "name": "Vampigraine",
+              "description": "Infecte le Pokemon adverse tant qu'il reste en combat. A la fin de chaque combat, il transfert 10 PV au Pokemon offensif allié.",
+              "type": "GRASS",
+              "effects": [{
+                "applyWhen": "END_ATTACK",
+                "duration": "LOSE_ON_BENCH",
+                "effect": {
+                  "effectName": "LEECH_SEED",
+                  "power": 30
+                },
+                "effectName": "TRIGGER_EFFECT",
+                "targets": ["OFFENSIVE_ENEMY"],
+                "triggerWhen": "ON_END_FIGHT"
+              }]
+            }
+          }
+        }]
+      }
+    }]
+  },
+  {
+    "pokemonId": "0004",
+    "name": "Salamèche",
+    "generation": "FIRST_GENERATION",
+    "level": 3,
+    "lifePoint": 45,
+    "baseSpeed": 65,
+    "size": 0.6,
+    "weight": 8.5,
+    "type": "FIRE",
+    "offensiveAttack": {
+      "name": "Dracosouffle",
+      "description": "Peut paralyser.",
+      "type": "DRAGON",
+      "targets": ["OFFENSIVE_ENEMY"],
+      "power": 20,
+      "effects": [{
+        "applyWhen": "END_ATTACK",
+        "conditions": [{
+          "conditionName": "PERCENTAGE",
+          "percentage": 33
+        }],
+        "duration": "LOSE_ON_KO",
+        "effectName": "APPLY_STATUS",
+        "status": "PAR",
+        "targets": ["OFFENSIVE_ENEMY"]
+      }]
+    },
+    "defensiveAttack": {
+      "name": "Brouillard",
+      "description": "Réduit de 1 la Précision des Pokemon offensifs adverses.",
+      "type": "NORMAL",
+      "effects": [{
+        "applyWhen": "END_ATTACK",
+        "duration": "LOSE_ON_BENCH",
+        "effectName": "PRECISION_MODIFICATION",
+        "targets": ["OFFENSIVE_ENEMY", "OFFENSIVE_ENEMY_LEFT", "OFFENSIVE_ENEMY_RIGHT"],
+        "value": -1
+      }]
+    },
+    "evolutions": [{
+      "description": "Mettre K.O. deux Pokemon",
+      "conditions": [{
+        "conditionName": "EXPERIENCE_REACHED",
+        "value": 2
+      }],
+      "pokemon": {
+        "pokemonId": "0005",
+        "name": "Reptincel",
+        "generation": "FIRST_GENERATION",
+        "level": 6,
+        "lifePoint": 60,
+        "baseSpeed": 80,
+        "size": 1.1,
+        "weight": 19.0,
+        "type": "FIRE",
+        "offensiveAttack": {
+          "name": "Lance-Flammes",
+          "description": "Peut brûler.",
+          "type": "FIRE",
+          "targets": ["OFFENSIVE_ENEMY"],
+          "power": 40,
+          "effects": [{
+            "applyWhen": "END_ATTACK",
+            "conditions": [{
+              "conditionName": "PERCENTAGE",
+              "percentage": 17
+            }],
+            "duration": "LOSE_ON_KO",
+            "effectName": "APPLY_STATUS",
+            "status": "BRN",
+            "targets": ["OFFENSIVE_ENEMY"]
+          }]
+        },
+        "defensiveAttack": {
+          "name": "Grimace",
+          "description": "Réduit de 30 la Vitesse du Pokemon adverse.",
+          "type": "NORMAL",
+          "effects": [{
+            "applyWhen": "END_ATTACK",
+            "duration": "LOSE_ON_BENCH",
+            "effectName": "SPEED_MODIFICATION",
+            "targets": ["OFFENSIVE_ENEMY"],
+            "value": -30
+          }]
+        },
+        "evolutions": [{
+          "description": "Mettre K.O. quatre Pokemon",
+          "conditions": [{
+            "conditionName": "EXPERIENCE_REACHED",
+            "value": 4
+          }],
+          "pokemon": {
+            "pokemonId": "0006",
+            "name": "Dracaufeu",
+            "generation": "FIRST_GENERATION",
+            "level": 9,
+            "lifePoint": 80,
+            "baseSpeed": 100,
+            "size": 1.7,
+            "weight": 90.5,
+            "type": "FIRE",
+            "type2": "FLYING",
+            "offensiveAttack": {
+              "name": "Lame d'Air",
+              "description": "Peut apeurer",
+              "type": "FLYING",
+              "targets": ["OFFENSIVE_ENEMY"],
+              "power": 50,
+              "effects": [{
+                "applyWhen": "END_ATTACK",
+                "conditions": [{
+                  "conditionName": "PERCENTAGE",
+                  "percentage": 33
+                }],
+                "duration": "LOSE_ON_KO",
+                "effectName": "APPLY_STATUS",
+                "status": "FER",
+                "targets": ["OFFENSIVE_ENEMY"]
+              }]
+            },
+            "defensiveAttack": {
+              "name": "Danse Flamme",
+              "description": "Piège les 2 Pokemon adverses dans la colonne",
+              "type": "FIRE",
+              "effects": [{
+                "applyWhen": "END_ATTACK",
+                "duration": "LOSE_ON_KO",
+                "effectName": "APPLY_TRAP",
+                "targets": ["OFFENSIVE_ENEMY", "DEFENSIVE_ENEMY"]
+              }]
+            }
+          }
+        }]
+      }
+    }]
+  },
+  {
+    "pokemonId": "0010",
+    "name": "Chenipan",
+    "generation": "FIRST_GENERATION",
     "level": 1,
     "lifePoint": 35,
-    "baseSpeed": 60,
+    "baseSpeed": 45,
+    "size": 0.3,
+    "weight": 2.9,
+    "type": "BUG",
+    "offensiveAttack": {
+      "name": "Charge",
+      "description": "Aucun effet supplémentaire",
+      "type": "NORMAL",
+      "targets": ["OFFENSIVE_ENEMY"],
+      "power": 10
+    },
+    "defensiveAttack": {
+      "name": "Sécrétion",
+      "description": "Réduit de 20 la Vitesse du Pokemon adverse",
+      "type": "BUG",
+      "effects": [{
+        "applyWhen": "END_ATTACK",
+        "duration": "LOSE_ON_BENCH",
+        "effectName": "SPEED_MODIFICATION",
+        "targets": ["OFFENSIVE_ENEMY"],
+        "value": -20
+      }]
+    },
+    "evolutions": [{
+        "description": "Mettre K.O. un Pokemon",
+        "conditions": [{
+          "conditionName": "EXPERIENCE_REACHED",
+          "value": 1
+        }],
+      "pokemon": {
+        "pokemonId": "0011",
+        "name": "Chrysacier",
+        "generation": "FIRST_GENERATION",
+        "level": 1,
+        "lifePoint": 45,
+        "baseSpeed": 30,
+        "size": 0.7,
+        "weight": 9.9,
+        "type": "BUG",
+        "offensiveAttack": {
+          "name": "Armure",
+          "description": "Augmente de 10 la Défense de Chrysacier",
+          "type": "NORMAL",
+          "effects": [{
+            "applyWhen": "END_ATTACK",
+            "duration": "LOSE_ON_BENCH",
+            "effectName": "DEFENSE_MODIFICATION",
+            "targets": ["CURRENT_POKEMON"],
+            "value": 10
+          }]
+        },
+        "defensiveAttack": {
+          "name": "Armure",
+          "description": "Augmente de 10 la Défense du Pokemon offensif",
+          "type": "NORMAL",
+          "effects": [{
+            "applyWhen": "END_ATTACK",
+            "duration": "LOSE_ON_BENCH",
+            "effectName": "DEFENSE_MODIFICATION",
+            "targets": ["OFFENSIVE_ALLY"],
+            "value": 10
+          }]
+        },
+        "evolutions": [{
+          "description": "Mettre K.O. un Pokemon",
+          "conditions": [{
+            "conditionName": "EXPERIENCE_REACHED",
+            "value": 1
+          }],
+          "pokemon": {
+            "pokemonId": "0012",
+            "name": "Papilusion",
+            "generation": "FIRST_GENERATION",
+            "level": 6,
+            "lifePoint": 65,
+            "baseSpeed": 70,
+            "size": 1.1,
+            "weight": 32.0,
+            "type": "BUG",
+            "type2": "FLYING",
+            "offensiveAttack": {
+              "name": "Choc Mental",
+              "description": "Peut rendre confus",
+              "type": "PSYCHIC",
+              "targets": ["OFFENSIVE_ENEMY"],
+              "power": 40,
+              "effects": [{
+                "applyWhen": "END_ATTACK",
+                "conditions": [{
+                  "conditionName": "PERCENTAGE",
+                  "percentage": 17
+                }],
+                "duration": "LOSE_ON_KO",
+                "effectName": "APPLY_STATUS",
+                "status": "CNF",
+                "targets": ["OFFENSIVE_ENEMY"]
+              }]
+            },
+            "defensiveAttack": {
+              "name": "Papillodance",
+              "description": "Augmente de 20 l'Attaque, la Défense et la Vitesse du Pokemon offensif",
+              "type": "BUG",
+              "effects": [{
+                "applyWhen": "END_ATTACK",
+                "duration": "LOSE_ON_BENCH",
+                "effectName": "ATTACK_MODIFICATION",
+                "targets": ["OFFENSIVE_ALLY"],
+                "value": 20
+              }, {
+                "applyWhen": "END_ATTACK",
+                "duration": "LOSE_ON_BENCH",
+                "effectName": "DEFENSE_MODIFICATION",
+                "targets": ["OFFENSIVE_ALLY"],
+                "value": 20
+              }, {
+                "applyWhen": "END_ATTACK",
+                "duration": "LOSE_ON_BENCH",
+                "effectName": "SPEED_MODIFICATION",
+                "targets": ["OFFENSIVE_ALLY"],
+                "value": 20
+              }]
+            }
+          }
+        }]
+      }
+    }]
+  },
+  {
+    "pokemonId": "0013",
+    "name": "Aspicot",
+    "generation": "FIRST_GENERATION",
+    "level": 1,
+    "lifePoint": 30,
+    "baseSpeed": 50,
+    "size": 0.3,
+    "weight": 3.2,
+    "type": "BUG",
+    "type2": "POISON",
+    "offensiveAttack": {
+      "name": "Dard-Venin",
+      "description": "Peut empoisoner.",
+      "type": "POISON",
+      "targets": ["OFFENSIVE_ENEMY"],
+      "power": 10,
+      "effects": [{
+        "applyWhen": "END_ATTACK",
+        "conditions": [{
+          "conditionName": "PERCENTAGE",
+          "percentage": 17
+        }],
+        "duration": "LOSE_ON_KO",
+        "effectName": "APPLY_STATUS",
+        "targets": ["OFFENSIVE_ENEMY"],
+        "status": "PSN"
+      }]
+    },
+    "defensiveAttack": {
+      "name": "Sécrétion",
+      "description": "Réduit de 20 la Vitesse du Pokemon adverse",
+      "type": "BUG",
+      "effects": [{
+        "applyWhen": "END_ATTACK",
+        "duration": "LOSE_ON_BENCH",
+        "effectName": "SPEED_MODIFICATION",
+        "targets": ["OFFENSIVE_ENEMY"],
+        "value": -20
+      }]
+    },
+    "evolutions": [{
+      "description": "Mettre K.O. un Pokemon",
+      "conditions": [{
+        "conditionName": "EXPERIENCE_REACHED",
+        "value": 1
+      }],
+      "pokemon": {
+        "pokemonId": "0014",
+        "name": "Coconfort",
+        "generation": "FIRST_GENERATION",
+        "level": 1,
+        "lifePoint": 40,
+        "baseSpeed": 35,
+        "size": 0.6,
+        "weight": 10.0,
+        "type": "BUG",
+        "type2": "POISON",
+        "offensiveAttack": {
+          "name": "Armure",
+          "description": "Augmente de 10 la Défense de Coconfort",
+          "type": "NORMAL",
+          "effects": [{
+            "applyWhen": "END_ATTACK",
+            "duration": "LOSE_ON_BENCH",
+            "effectName": "DEFENSE_MODIFICATION",
+            "targets": ["CURRENT_POKEMON"],
+            "value": 10
+          }]
+        },
+        "defensiveAttack": {
+          "name": "Armure",
+          "description": "Augmente de 10 la Défense du Pokemon offensif",
+          "type": "NORMAL",
+          "effects": [{
+            "applyWhen": "END_ATTACK",
+            "duration": "LOSE_ON_BENCH",
+            "effectName": "DEFENSE_MODIFICATION",
+            "targets": ["OFFENSIVE_ALLY"],
+            "value": 10
+          }]
+        },
+        "evolutions": [{
+          "description": "Mettre K.O. un Pokemon",
+          "conditions": [{
+            "conditionName": "EXPERIENCE_REACHED",
+            "value": 1
+          }],
+          "pokemon": {
+            "pokemonId": "0015",
+            "name": "Dardargnan",
+            "generation": "FIRST_GENERATION",
+            "level": 6,
+            "lifePoint": 60,
+            "baseSpeed": 75,
+            "size": 1.0,
+            "weight": 29.5,
+            "type": "BUG",
+            "type2": "POISON",
+            "offensiveAttack": {
+              "name": "Double-Dard",
+              "description": "Touche les 2 Pokemon adverses de la colonne. Peut empoisonner.",
+              "type": "BUG",
+              "targets": ["OFFENSIVE_ENEMY", "DEFENSIVE_ENEMY"],
+              "power": 40,
+              "effects": [{
+                "applyWhen": "END_ATTACK",
+                "conditions": [{
+                  "conditionName": "PERCENTAGE",
+                  "percentage": 33
+                }],
+                "duration": "LOSE_ON_KO",
+                "effectName": "APPLY_STATUS",
+                "targets": ["OFFENSIVE_ENEMY", "DEFENSIVE_ENEMY"],
+                "status": "PSN"
+              }]
+            },
+            "defensiveAttack": {
+              "name": "Hâte",
+              "description": "Augmente de 30 la Vitesse du Pokemon offensif",
+              "type": "PSYCHIC",
+              "effects": [{
+                "applyWhen": "END_ATTACK",
+                "duration": "LOSE_ON_BENCH",
+                "effectName": "SPEED_MODIFICATION",
+                "targets": ["OFFENSIVE_ALLY"],
+                "value": 30
+              }]
+            }
+          }
+        }]
+      }
+    }]
+  },
+  {
+    "pokemonId": "0019",
+    "name": "Rattata",
+    "generation": "FIRST_GENERATION",
+    "level": 1,
+    "lifePoint": 35,
+    "baseSpeed": 72,
+    "size": 0.3,
+    "weight": 3.5,
+    "type": "NORMAL",
+    "offensiveAttack": {
+      "name": "Vive-Attaque",
+      "description": "Inflige 10 dégâts supplémentaires si Rattata attaque avant le Pokemon adverse.",
+      "type": "NORMAL",
+      "targets": ["OFFENSIVE_ENEMY"],
+      "power": 20,
+      "effects": [{
+        "applyWhen": "BEFORE_DAMAGE",
+        "conditions": [{
+          "conditionName": "ATTACK_BEFORE",
+          "target": "OFFENSIVE_ENEMY"
+        }],
+        "duration": "ON_ATTACK",
+        "effectName": "BONUS_DAMAGE",
+        "power": 10
+      }]
+    },
+    "defensiveAttack": {
+      "name": "Mimi-Queue",
+      "description": "Réduit de 10 la Défense du Pokemon adverse.",
+      "type": "NORMAL",
+      "effects": [{
+        "applyWhen": "END_ATTACK",
+        "duration": "LOSE_ON_BENCH",
+        "effectName": "DEFENSE_MODIFICATION",
+        "targets": ["OFFENSIVE_ENEMY"],
+        "value": -10
+      }]
+    },
+    "evolutions": [{
+      "description": "Mettre K.O. deux Pokemon",
+      "conditions": [{
+        "conditionName": "EXPERIENCE_REACHED",
+        "value": 2
+      }],
+      "pokemon": {
+        "pokemonId": "0020",
+        "name": "Rattatac",
+        "generation": "FIRST_GENERATION",
+        "level": 6,
+        "lifePoint": 60,
+        "baseSpeed": 97,
+        "size": 0.7,
+        "weight": 18.5,
+        "type": "NORMAL",
+        "offensiveAttack": {
+          "name": "Croc de Mort",
+          "description": "Peut apeurer.",
+          "type": "NORMAL",
+          "targets": ["OFFENSIVE_ENEMY"],
+          "power": 40,
+          "effects": [{
+            "applyWhen": "END_ATTACK",
+            "conditions": [{
+              "conditionName": "PERCENTAGE",
+              "percentage": 17
+            }],
+            "duration": "ONE_TURN",
+            "effectName": "APPLY_STATUS",
+            "status": "FER",
+            "targets": ["OFFENSIVE_ENEMY"]
+          }]
+        },
+        "defensiveAttack": {
+          "name": "Grimace",
+          "description": "Réduit de 30 la vitesse du Pokemon adverse.",
+          "type": "NORMAL",
+          "effects": [{
+            "applyWhen": "END_ATTACK",
+            "duration": "LOSE_ON_BENCH",
+            "effectName": "SPEED_MODIFICATION",
+            "targets": ["OFFENSIVE_ENEMY"],
+            "value": -30
+          }]
+        }
+      }
+    }]
+  },
+  {
+    "pokemonId": "A-0019",
+    "name": "Rattata d'Alola",
+    "generation": "SEVENTH_GENERATION",
+    "level": 1,
+    "lifePoint": 35,
+    "baseSpeed": 72,
+    "size": 0.3,
+    "weight": 3.8,
+    "type": "DARK",
+    "type2": "NORMAL",
+    "offensiveAttack": {
+      "name": "Vive-Attaque",
+      "description": "Inflige 10 dégâts supplémentaires si Rattata d'Alola attaque avant le Pokemon adverse.",
+      "type": "NORMAL",
+      "targets": ["OFFENSIVE_ENEMY"],
+      "power": 20,
+      "effects": [{
+        "applyWhen": "END_ATTACK",
+        "conditions": [{
+          "conditionName": "ATTACK_BEFORE",
+          "target": "OFFENSIVE_ENEMY"
+        }],
+        "duration": "ON_ATTACK",
+        "effectName": "BONUS_DAMAGE",
+        "power": 10
+      }]
+    },
+    "defensiveAttack": {
+      "name": "Mimi-Queue",
+      "description": "Réduit de 10 la Défense du Pokemon adverse",
+      "type": "NORMAL",
+      "effects": [{
+        "applyWhen": "END_ATTACK",
+        "duration": "LOSE_ON_BENCH",
+        "effectName": "DEFENSE_MODIFICATION",
+        "targets": ["OFFENSIVE_ENEMY"],
+        "value": -10
+      }]
+    },
+    "evolutions": [{
+      "description": "Mettre K.O. deux Pokemon",
+      "conditions": [{
+        "conditionName": "EXPERIENCE_REACHED",
+        "value": 2
+      }],
+      "pokemon": {
+        "pokemonId": "A-0020",
+        "name": "Rattatac d'Alola",
+        "generation": "SEVENTH_GENERATION",
+        "level": 6,
+        "lifePoint": 75,
+        "baseSpeed": 77,
+        "size": 0.7,
+        "weight": 25.5,
+        "type": "DARK",
+        "type2": "NORMAL",
+        "offensiveAttack": {
+          "name": "Croc de Mort",
+          "description": "Peut apeurer.",
+          "type": "NORMAL",
+          "targets": ["OFFENSIVE_ENEMY"],
+          "power": 30,
+          "effects": [{
+            "applyWhen": "END_ATTACK",
+            "conditions": [{
+              "conditionName": "PERCENTAGE",
+              "percentage": 17
+            }],
+            "duration": "ONE_TURN",
+            "effectName": "APPLY_STATUS",
+            "status": "FER",
+            "targets": ["OFFENSIVE_ENEMY"]
+          }]
+        },
+        "defensiveAttack": {
+          "name": "Grimace",
+          "description": "Réduit de 30 la Vitesse du Pokemon adverse.",
+          "type": "NORMAL",
+          "effects": [{
+            "applyWhen": "END_ATTACK",
+            "duration": "LOSE_ON_BENCH",
+            "effectName": "ATTACK_MODIFICATION",
+            "targets": ["OFFENSIVE_ENEMY"],
+            "value": -30
+          }]
+        }
+      }
+    }]
+  },
+  {
+    "pokemonId": "0021",
+    "name": "Piafabec",
+    "generation": "FIRST_GENERATION",
+    "level": 1,
+    "lifePoint": 35,
+    "baseSpeed": 70,
     "size": 0.3,
     "weight": 2.0,
     "type": "NORMAL",
     "type2": "FLYING",
     "offensiveAttack": {
-      "type": "FLYING",
-      "power": 20,
-      "precision": 0
-    },
-    "defensiveAttack": {
+      "name": "Furie",
+      "description": "Peut infliger 10 ou 20 dégâts supplémentaires",
       "type": "NORMAL",
+      "targets": ["OFFENSIVE_ENEMY"],
+      "power": 20,
       "effects": [{
-        "type": "PRECISION_MODIFICATION",
-        "trigger": {
-          "action": "ATTACK_RECEIVE",
-          "targets": ["ALLY_OFFENSIVE_COLUMN", "CURRENT_POKEMON"],
-          "duration": "THIS_TURN"
-        },
-        "targets": ["CURRENT_ATTACK"],
-        "level": -1,
-        "duration": "THIS_TURN"
+        "applyWhen": "BEFORE_DAMAGE",
+        "conditions": [{
+          "conditionName": "MULTI_PERCENTAGE",
+          "percentages": [33, 33]
+        }],
+        "effectName": "MULTI_PERCENTAGE_EFFECT",
+        "effects": [{
+          "duration": "ON_ATTACK",
+          "effectName": "BONUS_DAMAGE",
+          "power": 10
+        }, {
+          "duration": "ON_ATTACK",
+          "effectName": "BONUS_DAMAGE",
+          "power": 20
+        }]
       }]
     },
-    "weaknesses": ["ELECTRIC", "ICE", "ROCK"],
-    "resistances": ["GHOST", "GROUND", "BUG", "GRASS"],
+    "defensiveAttack": {
+      "name": "Groz'Yeux",
+      "description": "Réduit de 10 la Défense du Pokemon adverse",
+      "type": "NORMAL",
+      "effects": [{
+        "applyWhen": "END_ATTACK",
+        "duration": "LOSE_ON_BENCH",
+        "effectName": "DEFENSE_MODIFICATION",
+        "targets": ["OFFENSIVE_ENEMY"],
+        "value": -10
+      }]
+    },
     "evolutions": [{
+      "description": "Mettre K.O. deux Pokemon",
+      "conditions": [{
+        "conditionName": "EXPERIENCE_REACHED",
+        "value": 2
+      }],
       "pokemon": {
-        "pokemonId": 397,
-        "generation": "FOURTH_GENERATION",
-        "level": 4,
-        "lifePoint": 50,
-        "baseSpeed": 80,
-        "size": 0.6,
-        "weight": 15.5,
+        "pokemonId": "0022",
+        "name": "Rapasdepic",
+        "generation": "FIRST_GENERATION",
+        "level": 7,
+        "lifePoint": 65,
+        "baseSpeed": 100,
+        "size": 1.2,
+        "weight": 38.0,
         "type": "NORMAL",
         "type2": "FLYING",
         "offensiveAttack": {
-          "type": "FLYING",
-          "power": 30,
+          "name": "Tunnelier",
+          "description": "Peut infliger 20 dégâts supplémentaires",
+          "type": "GROUND",
+          "targets": ["OFFENSIVE_ENEMY"],
+          "power": 40,
           "effects": [{
-            "type": "ATTACK_CANNOT_FAIL",
-            "targets": ["CURRENT_ATTACK"],
-            "duration": "ACTIVE"
+            "applyWhen": "BEFORE_DAMAGE",
+            "conditions": [{
+              "conditionName": "PERCENTAGE",
+              "percentage": 33
+            }],
+            "duration": "ON_ATTACK",
+            "effectName": "BONUS_DAMAGE",
+            "power": 20
           }]
         },
         "defensiveAttack": {
+          "name": "Atterrissage",
+          "description": "Soigne de 40 PV Rapasdepic et lui retire le type Vol jusqu'à la fin du prochain tour",
           "type": "NORMAL",
           "effects": [{
-            "type": "SWAP_PLACE",
-            "targets": ["ENEMY_OFFENSIVE_COLUMN", "BENCH_POKEMON"],
-            "duration": "ACTIVE"
+            "applyWhen": "END_ATTACK",
+            "effectName": "HEALING",
+            "targets": ["CURRENT_POKEMON"],
+            "power": 40
           }, {
-            "type": "SWAP_PLACE",
-            "targets": ["ENEMY_DEFENSIVE_COLUMN", "BENCH_POKEMON"],
-            "duration": "ACTIVE"
+            "applyWhen": "END_ATTACK",
+            "conditions": [{
+              "conditionName": "HAVE_TYPE_2",
+              "target": "CURRENT_POKEMON",
+              "type": "FLYING"
+            }],
+            "duration": "TWO_TURN",
+            "effectName": "CHANGE_SECOND_TYPE",
+            "targets": ["CURRENT_POKEMON"],
+            "type": "NO_TYPE"
           }]
-        },
-        "weaknesses": ["ELECTRIC", "ICE", "ROCK"],
-        "resistances": ["GHOST", "GROUND", "BUG", "GRASS"],
-        "evolutions": [{
-          "pokemon": {
-            "pokemonId": 398,
-            "generation": "FOURTH_GENERATION",
-            "level": 8,
-            "lifePoint": 70,
-            "baseSpeed": 100,
-            "size": 1.2,
-            "weight": 24.9,
-            "type": "NORMAL",
-            "type2": "FLYING",
-            "offensiveAttack": {
-              "type": "FIGHTING",
-              "power": 60,
-              "effects": [{
-                "type": "ATTACK_MODIFICATION",
-                "targets": ["TARGETED_POKEMON"],
-                "level": -20,
-                "duration": "LOSE_ON_BENCH"
-              }, {
-                "type": "DEFENSE_MODIFICATION",
-                "targets": ["TARGETED_POKEMON"],
-                "level": -20,
-                "duration": "LOSE_ON_BENCH"
-              }]
-            },
-            "defensiveAttack": {
-              "type": "NORMAL",
-              "effects": [{
-                "type": "SWAP_PLACE",
-                "targets": ["ENEMY_OFFENSIVE_COLUMN", "BENCH_POKEMON"],
-                "duration": "ACTIVE"
-              }, {
-                "type": "SWAP_PLACE",
-                "targets": ["ENEMY_DEFENSIVE_COLUMN", "BENCH_POKEMON"],
-                "duration": "ACTIVE"
-              }]
-            },
-            "weaknesses": ["ELECTRIC", "ICE", "ROCK"],
-            "resistances": ["GHOST", "GROUND", "BUG", "GRASS"]
-          },
-          "conditions": [{
-            "type": "EXPERIENCE_EQUALS",
-            "target": "CURRENT_POKEMON",
-            "level": 3
-          }]
-        }]
-      },
-      "conditions": [{
-        "type": "EXPERIENCE_EQUALS",
-        "target": "CURRENT_POKEMON",
-        "level": 2
-      }]
+        }
+      }
     }]
   },
   {
-    "pokemonId": 41,
+    "pokemonId": "0023",
+    "name": "Abo",
+    "generation": "FIRST_GENERATION",
+    "level": 2,
+    "lifePoint": 45,
+    "baseSpeed": 55,
+    "size": 2.0,
+    "weight": 6.9,
+    "type": "POISON",
+    "offensiveAttack": {
+      "name": "Ligotage",
+      "description": "Piège le Pokemon adverse",
+      "type": "NORMAL",
+      "targets": ["OFFENSIVE_ENEMY"],
+      "power": 30,
+      "effects": [{
+        "applyWhen": "END_ATTACK",
+        "duration": "LOSE_ON_KO",
+        "effectName": "APPLY_TRAP",
+        "targets": ["OFFENSIVE_ENEMY"]
+      }]
+    },
+    "defensiveAttack": {
+      "name": "Regarde Médusant",
+      "description": "Paralyse le Pokemon adverse",
+      "type": "NORMAL",
+      "effects": [{
+        "applyWhen": "END_ATTACK",
+        "duration": "LOSE_ON_KO",
+        "effectName": "APPLY_STATUS",
+        "targets": ["OFFENSIVE_ENEMY"],
+        "status": "PAR"
+      }]
+    },
+    "evolutions": [{
+      "description": "Mettre K.O. deux Pokemon",
+      "conditions": [{
+        "conditionName": "EXPERIENCE_REACHED",
+        "value": 2
+      }],
+      "pokemon": {
+        "pokemonId": "0024",
+        "name": "Arbok",
+        "generation": "FIRST_GENERATION",
+        "level": 7,
+        "lifePoint": 70,
+        "baseSpeed": 80,
+        "size": 3.5,
+        "weight": 65.0,
+        "type": "POISON",
+        "offensiveAttack": {
+          "name": "Mâchouille",
+          "description": "Peut supprimer le bonus en Défense du Pokemon adverse.",
+          "type": "DARK",
+          "targets": ["OFFENSIVE_ENEMY"],
+          "power": 50,
+          "effects": [{
+            "applyWhen": "BEFORE_DAMAGE",
+            "conditions": [{
+              "conditionName": "PERCENTAGE",
+              "percentage": 33
+            }],
+            "effectName": "DELETE_DEFENSE_BONUS",
+            "targets": ["OFFENSIVE_ENEMY"]
+          }]
+        },
+        "defensiveAttack": {
+          "name": "Regarde Médusant",
+          "description": "Paralyse Pokemon adverse",
+          "type": "NORMAL",
+          "effects": [{
+            "applyWhen": "END_ATTACK",
+            "duration": "LOSE_ON_KO",
+            "effectName": "APPLY_STATUS",
+            "targets": ["OFFENSIVE_ENEMY"],
+            "status": "PAR"
+          }]
+        }
+      }
+    }]
+  },
+  {
+    "pokemonId": "0027",
+    "name": "Sabelette",
+    "generation": "FIRST_GENERATION",
+    "level": 3,
+    "lifePoint": 55,
+    "baseSpeed": 40,
+    "size": 0.6,
+    "weight": 12.0,
+    "type": "GROUND",
+    "offensiveAttack": {
+      "name": "Taillade",
+      "description": "Inflige 10 dégâts supplémentaires après chaque utilisation consécutive (Maximum 50)",
+      "type": "BUG",
+      "targets": ["OFFENSIVE_ENEMY"],
+      "power": 20,
+      "effects": [{
+        "applyWhen": "END_ATTACK",
+        "duration": "LOSE_ON_BENCH",
+        "effectName": "CUMULATE_DAMAGE",
+        "name": "Taillade",
+        "maxCumulate": 5,
+        "power": 10
+      }]
+    },
+    "defensiveAttack": {
+      "name": "Tourbi-Sable",
+      "description": "Piège les Pokemon adverses dans la colonne",
+      "type": "GROUND",
+      "effects": [{
+        "applyWhen": "END_ATTACK",
+        "duration": "LOSE_ON_KO",
+        "effectName": "APPLY_TRAP",
+        "targets": ["OFFENSIVE_ENEMY", "DEFENSIVE_ENEMY"]
+      }]
+    },
+    "evolutions": [{
+      "description": "Mettre K.O. deux Pokemon",
+      "conditions": [{
+        "conditionName": "EXPERIENCE_REACHED",
+        "value": 2
+      }],
+      "pokemon": {
+        "pokemonId": "0028",
+        "name": "Sablaireau",
+        "generation": "FIRST_GENERATION",
+        "level": 7,
+        "lifePoint": 80,
+        "baseSpeed": 65,
+        "size": 1.0,
+        "weight": 29.5,
+        "type": "GROUND",
+        "offensiveAttack": {
+          "name": "Gyroballe",
+          "description": "Inflige 10 dégâts supplémentaires si Sablaireau attaque après le Pokemon adverse.",
+          "type": "STEEL",
+          "targets": ["OFFENSIVE_ENEMY"],
+          "power": 50,
+          "effects": [{
+            "applyWhen": "BEFORE_DAMAGE",
+            "conditions": [{
+              "conditionName": "ATTACK_AFTER",
+              "target": "OFFENSIVE_ENEMY"
+            }],
+            "duration": "ON_ATTACK",
+            "effectName": "BONUS_DAMAGE",
+            "power": 10
+          }]
+        },
+        "defensiveAttack": {
+          "name": "Tourbi-Sable",
+          "description": "Piège les Pokemon adverses dans la colonne",
+          "type": "GROUND",
+          "effects": [{
+            "applyWhen": "END_ATTACK",
+            "duration": "LOSE_ON_KO",
+            "effectName": "APPLY_TRAP",
+            "targets": ["OFFENSIVE_ENEMY", "DEFENSIVE_ENEMY"]
+          }]
+        }
+      }
+    }]
+  },
+  {
+    "pokemonId": "0037",
+    "name": "Goupix",
+    "generation": "FIRST_GENERATION",
+    "level": 2,
+    "lifePoint": 50,
+    "baseSpeed": 65,
+    "size": 0.6,
+    "weight": 9.9,
+    "type": "FIRE",
+    "offensiveAttack": {
+      "name": "Flammèche",
+      "description": "Peut bruler.",
+      "type": "FIRE",
+      "targets": ["OFFENSIVE_ENEMY"],
+      "power": 20,
+      "effects": [{
+        "applyWhen": "END_ATTACK",
+        "conditions": [{
+          "conditionName": "PERCENTAGE",
+          "percentage": 17
+        }],
+        "duration": "LOSE_ON_KO",
+        "effectName": "APPLY_STATUS",
+        "targets": ["OFFENSIVE_ENEMY"],
+        "status": "BRN"
+      }]
+    },
+    "defensiveAttack": {
+      "name": "Onde Folie",
+      "description": "Rend confus le Pokemon adverse",
+      "type": "GHOST",
+      "effects": [{
+        "applyWhen": "END_ATTACK",
+        "duration": "LOSE_ON_KO",
+        "effectName": "APPLY_STATUS",
+        "targets": ["OFFENSIVE_ENEMY"],
+        "status": "CNF"
+      }]
+    },
+    "evolutions": [{
+      "description": "Mettre K.O. trois Pokemon + avoir une synergie Feu 3 active",
+      "conditions": [{
+        "conditionName": "EXPERIENCE_REACHED",
+        "value": 3
+      }, {
+        "conditionName": "ACTIVE_SYNERGY",
+        "type": "FIRE",
+        "value": 1
+      }],
+      "pokemon": {
+        "pokemonId": "0038",
+        "name": "Feunard",
+        "generation": "FIRST_GENERATION",
+        "level": 9,
+        "lifePoint": 85,
+        "baseSpeed": 100,
+        "size": 1.1,
+        "weight": 19.9,
+        "type": "FIRE",
+        "offensiveAttack": {
+          "name": "Extrasenseur",
+          "description": "Peut apeurer.",
+          "type": "PSYCHIC",
+          "targets": ["OFFENSIVE_ENEMY"],
+          "power": 40,
+          "effects": [{
+            "applyWhen": "END_ATTACK",
+            "conditions": [{
+              "conditionName": "PERCENTAGE",
+              "percentage": 17
+            }],
+            "duration": "ONE_TURN",
+            "effectName": "APPLY_STATUS",
+            "targets": ["OFFENSIVE_ENEMY"],
+            "status": "FER"
+          }]
+        },
+        "defensiveAttack": {
+          "name": "Onde Folie",
+          "description": "Rend confus le Pokemon adverse.",
+          "type": "GHOST",
+          "effects": [{
+            "applyWhen": "END_ATTACK",
+            "duration": "LOSE_ON_KO",
+            "effectName": "APPLY_STATUS",
+            "targets": ["OFFENSIVE_ENEMY"],
+            "status": "CNF"
+          }]
+        }
+      }
+    }]
+  },
+  {
+    "pokemonId": "0174",
+    "name": "Toudoudou",
+    "generation": "SECOND_GENERATION",
+    "level": 1,
+    "lifePoint": 40,
+    "baseSpeed": 15,
+    "size": 0.3,
+    "weight": 1.0,
+    "type": "NORMAL",
+    "type2": "FAIRY",
+    "offensiveAttack": {
+      "name": "Ecras'Face",
+      "description": "Aucun effet supplémentaire",
+      "type": "NORMAL",
+      "targets": ["OFFENSIVE_ENEMY"],
+      "power": 10
+    },
+    "defensiveAttack": {
+      "name": "Berceuse",
+      "description": "Peut endormir.",
+      "type": "NORMAL",
+      "effects": [{
+        "applyWhen": "END_ATTACK",
+        "conditions": [{
+          "conditionName": "PERCENTAGE",
+          "percentage": 50
+        }],
+        "duration": "FIVE_TURN",
+        "effectName": "APPLY_STATUS",
+        "targets": ["OFFENSIVE_ENEMY"],
+        "status": "SLP"
+      }]
+    },
+    "evolutions": [{
+      "description": "Mettre K.O. un Pokemon + avoir une synergie Fée 3 active",
+      "conditions": [{
+        "conditionName": "EXPERIENCE_REACHED",
+        "value": 1
+      }, {
+        "conditionName": "ACTIVE_SYNERGY",
+        "type": "FAIRY",
+        "value": 1
+      }],
+      "pokemon": {
+        "pokemonId": "0039",
+        "name": "Rondoudou",
+        "generation": "FIRST_GENERATION",
+        "level": 2,
+        "lifePoint": 55,
+        "baseSpeed": 20,
+        "size": 0.5,
+        "weight": 5.5,
+        "type": "NORMAL",
+        "type2": "FAIRY",
+        "offensiveAttack": {
+          "name": "Voix Enjôleuse",
+          "description": "Ne peut pas échouer",
+          "type": "FAIRY",
+          "targets": ["OFFENSIVE_ENEMY"],
+          "power": 10,
+          "effects": [{
+            "applyWhen": "BEFORE_PRECISION_RESOLUTION",
+            "duration": "ON_ATTACK",
+            "effectName": "CANNOT_FAIL"
+          }]
+        },
+        "defensiveAttack": {
+          "name": "Berceuse",
+          "description": "Peut endormir le Pokemon adverse",
+          "type": "NORMAL",
+          "effects": [{
+            "applyWhen": "END_ATTACK",
+            "conditions": [{
+              "conditionName": "PERCENTAGE",
+              "percentage": 50
+            }],
+            "duration": "FIVE_TURN",
+            "effectName": "APPLY_STATUS",
+            "targets": ["OFFENSIVE_ENEMY"],
+            "status": "SLP"
+          }]
+        },
+        "evolutions": [{
+          "description": "Mettre K.O. deux Pokemon + avoir une synergie Fée 3 active",
+          "conditions": [{
+            "conditionName": "EXPERIENCE_REACHED",
+            "value": 2
+          }, {
+            "conditionName": "ACTIVE_SYNERGY",
+            "type": "FAIRY",
+            "value": 1
+          }],
+          "pokemon": {
+            "pokemonId": "0040",
+            "name": "Grodoudou",
+            "generation": "FIRST_GENERATION",
+            "level": 7,
+            "lifePoint": 80,
+            "baseSpeed": 45,
+            "size": 1.0,
+            "weight": 12.0,
+            "type": "NORMAL",
+            "type2": "FAIRY",
+            "offensiveAttack": {
+              "name": "Voix Enjôleuse",
+              "description": "Ne peut pas échouer",
+              "type": "FAIRY",
+              "targets": ["OFFENSIVE_ENEMY"],
+              "power": 40,
+              "effects": [{
+                "applyWhen": "BEFORE_PRECISION_RESOLUTION",
+                "duration": "ON_ATTACK",
+                "effectName": "CANNOT_FAIL"
+              }]
+            },
+            "defensiveAttack": {
+              "name": "Berceuse",
+              "description": "Peut endormir le Pokemon adverse",
+              "type": "NORMAL",
+              "effects": [{
+                "applyWhen": "END_ATTACK",
+                "conditions": [{
+                  "conditionName": "PERCENTAGE",
+                  "percentage": 50
+                }],
+                "duration": "FIVE_TURN",
+                "effectName": "APPLY_STATUS",
+                "targets": ["OFFENSIVE_ENEMY"],
+                "status": "SLP"
+              }]
+            }
+          }
+        }]
+      }
+    }]
+  },
+  {
+    "pokemonId": "0041",
+    "name": "Nosferapti",
     "generation": "FIRST_GENERATION",
     "level": 1,
     "lifePoint": 40,
@@ -130,32 +1230,43 @@
     "type": "POISON",
     "type2": "FLYING",
     "offensiveAttack": {
+      "name": "Vampirisme",
+      "description": "Soigne Nosferapti d'un montant égal à la moitié de ses dégats",
       "type": "BUG",
+      "targets": ["OFFENSIVE_ENEMY"],
       "power": 10,
       "effects": [{
-        "type": "LIFE_STEAL",
-        "targets": ["CURRENT_ATTACK"],
-        "duration": "THIS_TURN"
+        "applyWhen": "BEFORE_DAMAGE",
+        "duration": "ON_ATTACK",
+        "effectName": "LIFE_STEAL",
+        "percentage": 50
       }]
     },
     "defensiveAttack": {
+      "name": "Ultrason",
+      "description": "Peut rendre confus le Pokemon adverse",
       "type": "NORMAL",
       "effects": [{
-        "type": "APPLY_STATUS",
+        "applyWhen": "END_ATTACK",
         "conditions": [{
-          "type": "DICE_ROLL",
-          "successRate": 3
+          "conditionName": "PERCENTAGE",
+          "percentage": 50
         }],
-        "targets": ["TARGETED_POKEMON"],
-        "status": "CNF",
-        "duration": "INFINITE"
+        "duration": "LOSE_ON_KO",
+        "effectName": "APPLY_STATUS",
+        "targets": ["OFFENSIVE_ENEMY"],
+        "status": "CNF"
       }]
     },
-    "weaknesses": ["ELECTRIC", "ICE", "ROCK", "PSYCHIC"],
-    "resistances": ["BUG", "FIGHTING", "GRASS", "FAIRY", "POISON"],
     "evolutions": [{
+      "description": "Mettre K.O. deux Pokemon",
+      "conditions": [{
+        "conditionName": "EXPERIENCE_REACHED",
+        "value": 2
+      }],
       "pokemon": {
-        "pokemonId": 42,
+        "pokemonId": "0042",
+        "name": "Nosferalto",
         "generation": "FIRST_GENERATION",
         "level": 7,
         "lifePoint": 75,
@@ -165,28 +1276,43 @@
         "type": "POISON",
         "type2": "FLYING",
         "offensiveAttack": {
+          "name": "Vampirisme",
+          "description": "Soigne Nosferalto d'un montant égal à la moitié de ses dégats",
           "type": "BUG",
+          "targets": ["OFFENSIVE_ENEMY"],
           "power": 40,
           "effects": [{
-            "type": "LIFE_STEAL",
-            "targets": ["CURRENT_ATTACK"],
-            "duration": "THIS_TURN"
+            "applyWhen": "BEFORE_DAMAGE",
+            "duration": "ON_ATTACK",
+            "effectName": "LIFE_STEAL",
+            "percentage": 50
           }]
         },
         "defensiveAttack": {
+          "name": "Onde Folie",
+          "description": "Rend confus le Pokemon adverse",
           "type": "GHOST",
           "effects": [{
-            "type": "APPLY_STATUS",
-            "targets": ["TARGETED_POKEMON"],
-            "status": "CNF",
-            "duration": "INFINITE"
+            "applyWhen": "END_ATTACK",
+            "duration": "LOSE_ON_KO",
+            "effectName": "APPLY_STATUS",
+            "targets": ["OFFENSIVE_ENEMY"],
+            "status": "CNF"
           }]
         },
-        "weaknesses": ["ELECTRIC", "ICE", "ROCK", "PSYCHIC"],
-        "resistances": ["BUG", "FIGHTING", "GRASS", "FAIRY", "POISON"],
         "evolutions": [{
+          "description": "Mettre K.O. quatre Pokemon + avoir une synergie Poison 6 active",
+          "conditions": [{
+            "conditionName": "EXPERIENCE_REACHED",
+            "value": 4
+          }, {
+            "conditionName": "ACTIVE_SYNERGY",
+            "type": "POISON",
+            "value": 2
+          }],
           "pokemon": {
-            "pokemonId": 169,
+            "pokemonId": "0169",
+            "name": "Nostenfer",
             "generation": "SECOND_GENERATION",
             "level": 9,
             "lifePoint": 80,
@@ -196,56 +1322,527 @@
             "type": "POISON",
             "type2": "FLYING",
             "offensiveAttack": {
+              "name": "Poison-Croix",
+              "description": "Peut infliger 20 dégâts supplémentaires, Peut empoisonner le Pokemon adverse",
               "type": "POISON",
+              "targets": ["OFFENSIVE_ENEMY"],
               "power": 40,
               "effects": [{
-                "type": "ATTACK_MODIFICATION",
+                "applyWhen": "BEFORE_DAMAGE",
                 "conditions": [{
-                  "type": "DICE_ROLL",
-                  "successRate": 2
+                  "conditionName": "PERCENTAGE",
+                  "percentage": 33
                 }],
-                "targets": ["CURRENT_ATTACK"],
-                "level": 20,
-                "duration": "THIS_TURN"
+                "duration": "ON_ATTACK",
+                "effectName": "BONUS_DAMAGE",
+                "power": 20
               }, {
-                "type": "APPLY_STATUS",
+                "applyWhen": "END_ATTACK",
                 "conditions": [{
-                  "type": "DICE_ROLL",
-                  "successRate": 1
+                  "conditionName": "PERCENTAGE",
+                  "percentage": 17
                 }],
-                "targets": ["TARGETED_POKEMON"],
-                "status": "PSN",
-                "duration": "INFINITE"
+                "duration": "LOSE_ON_KO",
+                "effectName": "APPLY_STATUS",
+                "targets": ["OFFENSIVE_ENEMY"],
+                "status": "PSN"
               }]
             },
             "defensiveAttack": {
+              "name": "Onde Folie",
+              "description": "Rend confus le Pokemon adverse",
               "type": "GHOST",
               "effects": [{
-                "type": "APPLY_STATUS",
-                "targets": ["TARGETED_POKEMON"],
-                "status": "CNF",
-                "duration": "INFINITE"
+                "applyWhen": "END_ATTACK",
+                "duration": "LOSE_ON_KO",
+                "effectName": "APPLY_STATUS",
+                "targets": ["OFFENSIVE_ENEMY"],
+                "status": "CNF"
               }]
-            },
-            "weaknesses": ["ELECTRIC", "ICE", "ROCK", "PSYCHIC"],
-            "resistances": ["BUG", "FIGHTING", "GRASS", "FAIRY", "POISON"]
-          },
-          "conditions": [{
-            "type": "EXPERIENCE_EQUALS",
-            "target": "CURRENT_POKEMON",
-            "level": 4
-          }, {
-            "type": "SYNERGY",
-            "level": 6,
-            "synergy": "POISON"
-          }]
+            }
+          }
         }]
-      },
-      "conditions": [{
-        "type": "EXPERIENCE_EQUALS",
-        "target": "CURRENT_POKEMON",
-        "level": 2
-      }]
+      }
     }]
+  },
+  {
+    "pokemonId": "0046",
+    "name": "Paras",
+    "generation": "FIRST_GENERATION",
+    "level": 2,
+    "lifePoint": 50,
+    "baseSpeed": 25,
+    "size": 0.3,
+    "weight": 5.4,
+    "type": "BUG",
+    "type2": "GRASS",
+    "offensiveAttack": {
+      "name": "Taillade",
+      "description": "Inflige 10 dégâts supplémentaires après chaque utilisation consécutive (Maximum 50)",
+      "type": "BUG",
+      "targets": ["OFFENSIVE_ENEMY"],
+      "power": 20,
+      "effects": [{
+        "applyWhen": "END_ATTACK",
+        "duration": "LOSE_ON_BENCH",
+        "effectName": "CUMULATE_DAMAGE",
+        "maxCumulate": 5,
+        "name": "Taillade",
+        "power": 10
+      }]
+    },
+    "defensiveAttack": {
+      "name": "Spore",
+      "description": "Endort le Pokemon adverse",
+      "type": "GRASS",
+      "effects": [{
+        "applyWhen": "END_ATTACK",
+        "duration": "FIVE_TURN",
+        "effectName": "APPLY_STATUS",
+        "targets": ["OFFENSIVE_ENEMY"],
+        "status": "SLP"
+      }]
+    },
+    "evolutions": [{
+      "description": "Mettre K.O. deux Pokemon",
+      "conditions": [{
+        "conditionName": "EXPERIENCE_REACHED",
+        "value": 2
+      }],
+      "pokemon": {
+        "pokemonId": "0047",
+        "name": "Parasect",
+        "generation": "FIRST_GENERATION",
+        "level": 6,
+        "lifePoint": 75,
+        "baseSpeed": 30,
+        "size": 1.0,
+        "weight": 29.5,
+        "type": "BUG",
+        "type2": "GRASS",
+        "offensiveAttack": {
+          "name": "Poison-Croix",
+          "description": "Peut infliger 20 dégâts supplémentaires. Peut empoisonner le Pokemon adverse",
+          "type": "POISON",
+          "targets": ["OFFENSIVE_ENEMY"],
+          "power": 50,
+          "effects": [{
+            "applyWhen": "BEFORE_DAMAGE",
+            "duration": "ON_ATTACK",
+            "effectName": "BONUS_DAMAGE",
+            "conditions": [{
+              "conditionName": "PERCENTAGE",
+              "percentage": 33
+            }],
+            "power": 20
+          }, {
+            "applyWhen": "END_ATTACK",
+            "conditions": [{
+              "conditionName": "PERCENTAGE",
+              "percentage": 17
+            }],
+            "duration": "LOSE_ON_KO",
+            "effectName": "APPLY_STATUS",
+            "targets": ["OFFENSIVE_ENEMY"],
+            "status": "PSN"
+          }]
+        },
+        "defensiveAttack": {
+          "name": "Spore",
+          "description": "Endort le Pokemon adverse",
+          "type": "GRASS",
+          "effects": [{
+            "applyWhen": "END_ATTACK",
+            "duration": "FIVE_TURN",
+            "effectName": "APPLY_STATUS",
+            "targets": ["OFFENSIVE_ENEMY"],
+            "status": "SLP"
+          }]
+        }
+      }
+    }]
+  },
+  {
+    "pokemonId": "0048",
+    "name": "Mimitoss",
+    "generation": "FIRST_GENERATION",
+    "level": 3,
+    "lifePoint": 55,
+    "baseSpeed": 45,
+    "size": 1.0,
+    "weight": 30.0,
+    "type": "BUG",
+    "type2": "POISON",
+    "offensiveAttack": {
+      "name": "Rafalse Psy",
+      "description": "Peut rendre confus le Pokemon adverse",
+      "type": "PSYCHIC",
+      "targets": ["OFFENSIVE_ENEMY"],
+      "power": 20,
+      "effects": [{
+        "applyWhen": "END_ATTACK",
+        "conditions": [{
+          "conditionName": "PERCENTAGE",
+          "percentage": 17
+        }],
+        "duration": "LOSE_ON_KO",
+        "effectName": "APPLY_STATUS",
+        "targets": ["OFFENSIVE_ENEMY"],
+        "status": "CNF"
+      }]
+    },
+    "defensiveAttack": {
+      "name": "Para Spore",
+      "description": "Paralyse le Pokemon adverse. Peut échouer.",
+      "type": "GRASS",
+      "precision": 4,
+      "effects": [{
+        "applyWhen": "END_ATTACK",
+        "duration": "LOSE_ON_KO",
+        "effectName": "APPLY_STATUS",
+        "targets": ["OFFENSIVE_ENEMY"],
+        "status": "PAR"
+      }]
+    },
+    "evolutions": [{
+      "description": "Mettre K.O. trois Pokemon",
+      "conditions": [{
+        "conditionName": "EXPERIENCE_REACHED",
+        "value": 3
+      }],
+      "pokemon": {
+        "pokemonId": "0049",
+        "name": "Aéromite",
+        "generation": "FIRST_GENERATION",
+        "level": 7,
+        "lifePoint": 70,
+        "baseSpeed": 90,
+        "size": 1.5,
+        "weight": 12.5,
+        "type": "BUG",
+        "type2": "POISON",
+        "offensiveAttack": {
+          "name": "Psyko",
+          "description": "Peut supprimer le bonus en Défense du Pokemon adverse",
+          "type": "PSYCHIC",
+          "targets": ["OFFENSIVE_ENEMY"],
+          "power": 40,
+          "effects": [{
+            "applyWhen": "BEFORE_DAMAGE",
+            "effectName": "DELETE_DEFENSE_BONUS",
+            "conditions": [{
+              "conditionName": "PERCENTAGE",
+              "percentage": 17
+            }],
+            "targets": ["OFFENSIVE_ENEMY"]
+          }]
+        },
+        "defensiveAttack": {
+          "name": "Poudre Dodo",
+          "description": "Endort le Pokemon adverse. Peut échouer",
+          "type": "GRASS",
+          "precision": 4,
+          "effects": [{
+            "applyWhen": "END_ATTACK",
+            "duration": "FIVE_TURN",
+            "effectName": "APPLY_STATUS",
+            "targets": ["OFFENSIVE_ENEMY"],
+            "status": "SLP"
+          }]
+        }
+      }
+    }]
+  },
+  {
+    "pokemonId": "0050",
+    "name": "Taupiqueur",
+    "generation": "FIRST_GENERATION",
+    "level": 1,
+    "lifePoint": 25,
+    "baseSpeed": 95,
+    "size": 0.2,
+    "weight": 0.8,
+    "type": "GROUND",
+    "offensiveAttack": {
+      "name": "Tunnel",
+      "description": "Touche le Pokemon support si il y en a un et lui inflige 10 dégâts supplémentaires",
+      "type": "GROUND",
+      "targets": ["OFFENSIVE_ENEMY"],
+      "power": 20,
+      "effects": [{
+        "applyWhen": "START_ATTACK",
+        "conditions": [{
+          "conditionName": "DETECT_SUPPORT",
+          "target": "OFFENSIVE_ENEMY"
+        }],
+        "duration": "ON_ATTACK",
+        "effectName": "SWAP_TARGET_TO_SUPPORT"
+      }, {
+        "applyWhen": "BEFORE_DAMAGE",
+        "conditions": [{
+          "conditionName": "DETECT_SUPPORT",
+          "target": "OFFENSIVE_ENEMY"
+        }],
+        "duration": "ON_ATTACK",
+        "effectName" : "BONUS_DAMAGE",
+        "power": 10
+      }]
+    },
+    "defensiveAttack": {
+      "name": "Jet de Sable",
+      "description": "Réduit la Précision des Pokemon adverses dans la colonne",
+      "type": "GROUND",
+      "effects": [{
+        "applyWhen":  "END_ATTACK",
+        "duration": "LOSE_ON_BENCH",
+        "effectName": "PRECISION_MODIFICATION",
+        "targets": ["OFFENSIVE_ENEMY", "DEFENSIVE_ENEMY"],
+        "value": -1
+      }]
+    },
+    "evolutions": [{
+      "description": "Mettre K.O. trois Pokemon",
+      "conditions": [{
+        "conditionName": "EXPERIENCE_REACHED",
+        "value": 3
+      }],
+      "pokemon": {
+        "pokemonId": "0051",
+        "name": "Triopikeur",
+        "generation": "FIRST_GENERATION",
+        "level": 6,
+        "lifePoint": 50,
+        "baseSpeed": 120,
+        "size": 0.7,
+        "weight": 33.3,
+        "type": "GROUND",
+        "offensiveAttack": {
+          "name": "Tunnel",
+          "description": "Touche le Pokemon support si il y en a un et lui inflige 10 dégâts supplémentaires",
+          "type": "GROUND",
+          "targets": ["OFFENSIVE_ENEMY"],
+          "power": 50,
+          "effects": [{
+            "applyWhen": "START_ATTACK",
+            "conditions": [{
+              "conditionName": "DETECT_SUPPORT",
+              "target": "OFFENSIVE_ENEMY"
+            }],
+            "duration": "ON_ATTACK",
+            "effectName": "SWAP_TARGET_TO_SUPPORT"
+          }, {
+            "applyWhen": "BEFORE_DAMAGE",
+            "conditions": [{
+              "conditionName": "DETECT_SUPPORT",
+              "target": "OFFENSIVE_ENEMY"
+            }],
+            "duration": "ON_ATTACK",
+            "effectName" : "BONUS_DAMAGE",
+            "power": 10
+          }]
+        },
+        "defensiveAttack": {
+          "name": "Tourbi-Sable",
+          "description": "Piège les Pokemon adverses dans la colonne",
+          "type": "GROUND",
+          "effects": [{
+            "applyWhen": "END_ATTACK",
+            "duration": "LOSE_ON_KO",
+            "effectName": "APPLY_TRAP",
+            "targets": ["OFFENSIVE_ENEMY", "DEFENSIVE_ENEMY"]
+          }]
+        }
+      }
+    }]
+  },
+  {
+    "pokemonId": "0129",
+    "name": "Magicarpe",
+    "generation": "FIRST_GENERATION",
+    "level": 1,
+    "lifePoint": 30,
+    "baseSpeed": 80,
+    "size": 0.9,
+    "weight": 10.0,
+    "type": "WATER",
+    "offensiveAttack": {
+      "name": "Charge",
+      "description": "Aucun effet supplémentaire",
+      "type": "NORMAL",
+      "targets": ["OFFENSIVE_ENEMY"],
+      "power": 10
+    },
+    "defensiveAttack": {
+      "name": "Trempette",
+      "description": "Aucun effet",
+      "type": "NORMAL",
+      "effects": [{
+        "applyWhen": "START_ATTACK",
+        "effectName": "DO_NOTHING"
+      }]
+    }
+  },
+  {
+    "pokemonId": "0161",
+    "name": "Fouinette",
+    "generation": "SECOND_GENERATION",
+    "level": 1,
+    "lifePoint": 40,
+    "baseSpeed": 20,
+    "size": 0.8,
+    "weight": 6.0,
+    "type": "NORMAL",
+    "offensiveAttack": {
+      "name": "Griffe",
+      "description": "Aucun effet supplémentaire",
+      "type": "NORMAL",
+      "targets": ["OFFENSIVE_ENEMY"],
+      "power": 10
+    },
+    "defensiveAttack": {
+      "name": "Boul'Armure",
+      "description": "Augmente de 10 la Défense du Pokemon offensif",
+      "type": "NORMAL",
+      "effects": [{
+        "applyWhen": "END_ATTACK",
+        "duration": "LOSE_ON_BENCH",
+        "effectName": "DEFENSE_MODIFICATION",
+        "targets": ["OFFENSIVE_ENEMY"],
+        "value": 10
+      }]
+    }
+  },
+  {
+    "pokemonId": "0163",
+    "name": "Hoothoot",
+    "generation": "SECOND_GENERATION",
+    "level": 1,
+    "lifePoint": 50,
+    "baseSpeed": 50,
+    "size": 0.7,
+    "weight": 21.2,
+    "type": "NORMAL",
+    "type2": "FLYING",
+    "offensiveAttack": {
+      "name": "Choc Mental",
+      "description": "Peut rendre confus le Pokemon adverse",
+      "type": "PSYCHIC",
+      "targets": ["OFFENSIVE_ENEMY"],
+      "power": 10,
+      "effects": [{
+        "applyWhen": "END_ATTACK",
+        "conditions": [{
+          "conditionName": "PERCENTAGE",
+          "percentage": 17
+        }],
+        "duration": "LOSE_ON_KO",
+        "effectName": "APPLY_STATUS",
+        "targets": ["OFFENSIVE_ENEMY"],
+        "status": "CNF"
+      }]
+    },
+    "defensiveAttack": {
+      "name": "Hypnose",
+      "description": "Peut endormir le Pokemon adverse",
+      "type": "PSYCHIC",
+      "effects": [{
+        "applyWhen": "END_ATTACK",
+        "conditions": [{
+          "conditionName": "PERCENTAGE",
+          "percentage": 50
+        }],
+        "duration": "FIVE_TURN",
+        "effectName": "APPLY_STATUS",
+        "targets": ["OFFENSIVE_ENEMY"],
+        "status": "SLP"
+      }]
+    }
+  },
+  {
+    "pokemonId": "0165",
+    "name": "Coxy",
+    "generation": "SECOND_GENERATION",
+    "level": 1,
+    "lifePoint": 50,
+    "baseSpeed": 55,
+    "size": 1.0,
+    "weight": 10.8,
+    "type": "BUG",
+    "type2": "FLYING",
+    "offensiveAttack": {
+      "name": "Match Punch",
+      "description": "Inflige 10 dégâts supplémentaires si Coxy attaque avant le Pokemon adverse",
+      "type": "FIGHTING",
+      "targets": ["OFFENSIVE_ENEMY"],
+      "power": 10,
+      "effects": [{
+        "applyWhen": "BEFORE_DAMAGE",
+        "conditions": [{
+          "conditionName": "ATTACK_BEFORE",
+          "target": "OFFENSIVE_ENEMY"
+        }],
+        "duration": "ON_ATTACK",
+        "effectName": "BONUS_DAMAGE",
+        "power": 10
+      }]
+    },
+    "defensiveAttack": {
+      "name": "Rune Protect",
+      "description": "Protège le Pokemon offensif contre les changements de status jusqu'à la fin du prochain combat",
+      "type": "NORMAL",
+      "effects": [{
+        "applyWhen": "END_ATTACK",
+        "duration": "TWO_TURN",
+        "effectName": "PROTECT_STATUS_CHANGE",
+        "targets": ["OFFENSIVE_ALLY"]
+      }]
+    }
+  },
+  {
+    "pokemonId": "0167",
+    "name": "Mimigal",
+    "generation": "SECOND_GENERATION",
+    "level": 1,
+    "lifePoint": 40,
+    "baseSpeed": 30,
+    "size": 0.5,
+    "weight": 8.5,
+    "type": "BUG",
+    "type2": "POISON",
+    "offensiveAttack": {
+      "name": "Ombre Portée",
+      "description": "Inflige 10 dégâts supplémentaires si Mimigal attaque avant le Pokemon adverse",
+      "type": "GHOST",
+      "targets": ["OFFENSIVE_ENEMY"],
+      "power": 20,
+      "effects": [{
+        "applyWhen": "BEFORE_DAMAGE",
+        "conditions": [{
+          "conditionName": "ATTACK_BEFORE",
+          "target": "OFFENSIVE_ENEMY"
+        }],
+        "duration": "ON_ATTACK",
+        "effectName": "BONUS_DAMAGE",
+        "power": 10
+      }]
+    },
+    "defensiveAttack": {
+      "name": "Fil Toxique",
+      "description": "Réduit de 20 la Vitesse du Pokemon adverse et l'empoisonne",
+      "type": "POISON",
+      "effects": [{
+        "applyWhen": "END_ATTACK",
+        "duration": "LOSE_ON_BENCH",
+        "effectName": "SPEED_MODIFICATION",
+        "targets": ["OFFENSIVE_ENEMY"],
+        "value": -20
+      }, {
+        "applyWhen": "END_ATTACK",
+        "duration": "LOSE_ON_KO",
+        "effectName": "APPLY_STATUS",
+        "targets": ["OFFENSIVE_ENEMY"],
+        "status": "PSN"
+      }]
+    }
   }
 ]

@@ -1,22 +1,32 @@
 package com.pokechess.server.models.globals.game.cards;
 
-import com.pokechess.server.models.enumerations.Type;
+import com.pokechess.server.exceptions.ValidationException;
+import com.pokechess.server.exceptions.loading.PokemonException;
 import com.pokechess.server.models.enumerations.Generation;
+import com.pokechess.server.models.enumerations.Type;
 import com.pokechess.server.models.globals.game.actions.Attack;
-import com.pokechess.server.models.globals.game.actions.Effect;
 import com.pokechess.server.models.globals.game.actions.Evolution;
 import com.pokechess.server.validators.GenericValidator;
 import com.pokechess.server.validators.PokemonValidator;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class Pokemon {
+    private static final Generation DEFAULT_GENERATION = Generation.NO_GENERATION;
     private static final Type DEFAULT_TYPE_2 = Type.NO_TYPE;
 
-    private Integer pokemonId;
+    public static final Integer MIN_POKEMON_LEVEL = 0;
+    public static final Integer MIN_POKEMON_LIFE_POINT = 1;
+    public static final Integer MIN_POKEMON_BASE_SPEED = 1;
+
+    private String pokemonId;
+    private String name;
     private Generation generation;
     private Integer level;
     private Integer lifePoint;
@@ -27,8 +37,6 @@ public class Pokemon {
     private Type type2;
     private Attack offensiveAttack;
     private Attack defensiveAttack;
-    private List<Type> weaknesses;
-    private List<Type> resistances;
     private List<Evolution> evolutions;
 
     private Pokemon() { }
@@ -38,7 +46,8 @@ public class Pokemon {
     }
 
     public static class PokemonBuilder {
-        private Integer pokemonId;
+        private String pokemonId;
+        private String name;
         private Generation generation;
         private Integer level;
         private Integer lifePoint;
@@ -49,12 +58,15 @@ public class Pokemon {
         private Type type2;
         private Attack offensiveAttack;
         private Attack defensiveAttack;
-        private List<Type> weaknesses;
-        private List<Type> resistances;
         private List<Evolution> evolutions;
 
-        public PokemonBuilder pokemonId(Integer pokemonId) {
+        public PokemonBuilder pokemonId(String pokemonId) {
             this.pokemonId = pokemonId;
+            return this;
+        }
+
+        public PokemonBuilder name(String name) {
+            this.name = name;
             return this;
         }
 
@@ -108,49 +120,55 @@ public class Pokemon {
             return this;
         }
 
-        public PokemonBuilder weaknesses(List<Type> weaknesses) {
-            this.weaknesses = weaknesses;
-            return this;
-        }
-
-        public PokemonBuilder resistances(List<Type> resistances) {
-            this.resistances = resistances;
-            return this;
-        }
-
         public PokemonBuilder evolutions(List<Evolution> evolutions) {
             this.evolutions = evolutions;
             return this;
         }
 
         public Pokemon build() {
-            Pokemon pokemon = new Pokemon();
-            pokemon.setPokemonId(pokemonId);
-            pokemon.setGeneration(generation);
-            pokemon.setLevel(level);
-            pokemon.setLifePoint(lifePoint);
-            pokemon.setBaseSpeed(baseSpeed);
-            pokemon.setSize(size);
-            pokemon.setWeight(weight);
-            pokemon.setType(type);
-            pokemon.setType2(Objects.nonNull(type2) ? type2 : DEFAULT_TYPE_2);
-            pokemon.setOffensiveAttack(offensiveAttack);
-            pokemon.setDefensiveAttack(defensiveAttack);
-            pokemon.setWeaknesses(weaknesses);
-            pokemon.setResistances(resistances);
-            pokemon.setEvolutions(evolutions);
-            return pokemon;
+            try {
+                Pokemon pokemon = new Pokemon();
+                pokemon.setPokemonId(pokemonId);
+                pokemon.setName(name);
+                pokemon.setGeneration(Objects.nonNull(generation) ? generation : DEFAULT_GENERATION);
+                pokemon.setLevel(level);
+                pokemon.setLifePoint(lifePoint);
+                pokemon.setBaseSpeed(baseSpeed);
+                pokemon.setSize(size);
+                pokemon.setWeight(weight);
+                pokemon.setType(type);
+                pokemon.setType2(Objects.nonNull(type2) ? type2 : DEFAULT_TYPE_2);
+                pokemon.setOffensiveAttack(offensiveAttack);
+                pokemon.setDefensiveAttack(defensiveAttack);
+                pokemon.setEvolutions(evolutions);
+                PokemonValidator.validate(pokemon);
+                return pokemon;
+            } catch (ValidationException e) {
+                throw PokemonException.of(pokemonId, e);
+            }
         }
     }
 
     @NonNull
-    public Integer getPokemonId() {
+    public String getPokemonId() {
         return pokemonId;
     }
 
-    public void setPokemonId(Integer pokemonId) {
+    public void setPokemonId(String pokemonId) {
         GenericValidator.notNull(pokemonId, "pokemonId");
+        GenericValidator.pattern(pokemonId, "^((A|G|M|GM|F)-)?[0-9]{4}$", "pokemonId");
         this.pokemonId = pokemonId;
+    }
+
+    @NonNull
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        GenericValidator.notEmpty(name, "name");
+        GenericValidator.max(name, 50, "name");
+        this.name = name;
     }
 
     @NonNull
@@ -170,6 +188,7 @@ public class Pokemon {
 
     public void setLevel(Integer level) {
         GenericValidator.notNull(level, "level");
+        GenericValidator.min(level, MIN_POKEMON_LEVEL, "level");
         this.level = level;
     }
 
@@ -180,6 +199,7 @@ public class Pokemon {
 
     public void setLifePoint(Integer lifePoint) {
         GenericValidator.notNull(lifePoint, "lifePoint");
+        GenericValidator.min(lifePoint, MIN_POKEMON_LIFE_POINT, "lifePoint");
         this.lifePoint = lifePoint;
     }
 
@@ -190,26 +210,25 @@ public class Pokemon {
 
     public void setBaseSpeed(Integer baseSpeed) {
         GenericValidator.notNull(baseSpeed, "baseSpeed");
+        GenericValidator.min(baseSpeed, MIN_POKEMON_BASE_SPEED, "baseSpeed");
         this.baseSpeed = baseSpeed;
     }
 
-    @NonNull
+    @Nullable
     public Float getSize() {
         return size;
     }
 
     public void setSize(Float size) {
-        GenericValidator.notNull(size, "size");
         this.size = size;
     }
 
-    @NonNull
+    @Nullable
     public Float getWeight() {
         return weight;
     }
 
     public void setWeight(Float weight) {
-        GenericValidator.notNull(weight, "weight");
         this.weight = weight;
     }
 
@@ -219,7 +238,7 @@ public class Pokemon {
     }
 
     public void setType(Type type) {
-        PokemonValidator.notNoType(type);
+        PokemonValidator.notNoType(type, "type");
         this.type = type;
     }
 
@@ -254,32 +273,6 @@ public class Pokemon {
     }
 
     @NonNull
-    public List<Type> getWeaknesses() {
-        return weaknesses;
-    }
-
-    public void setWeaknesses(List<Type> weaknesses) {
-        if (Objects.isNull(weaknesses)) {
-            weaknesses = new ArrayList<>();
-        }
-        PokemonValidator.notContainsNoType(weaknesses);
-        this.weaknesses = weaknesses;
-    }
-
-    @NonNull
-    public List<Type> getResistances() {
-        return resistances;
-    }
-
-    public void setResistances(List<Type> resistances) {
-        if (Objects.isNull(resistances)) {
-            resistances = new ArrayList<>();
-        }
-        PokemonValidator.notContainsNoType(resistances);
-        this.resistances = resistances;
-    }
-
-    @NonNull
     public List<Evolution> getEvolutions() {
         if (Objects.isNull(evolutions)) {
             evolutions = new ArrayList<>();
@@ -289,5 +282,21 @@ public class Pokemon {
 
     public void setEvolutions(List<Evolution> evolutions) {
         this.evolutions = evolutions;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof Pokemon && EqualsBuilder.reflectionEquals(this, o);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "Pokemon [pokemonId=%s, name=%s, generation=%s, level=%s, lifePoint=%s, baseSpeed=%s, size=%s, weight=%s, type=%s, type2=%s, offensiveAttack=%s, defensiveAttack=%s, evolutions=%s]", this.pokemonId, this.name, this.generation, this.level, this.lifePoint, this.baseSpeed, this.size, this.weight, this.type, this.type2, this.offensiveAttack, this.defensiveAttack, this.evolutions);
     }
 }

@@ -2,9 +2,11 @@ package com.pokechess.server.models.enumerations.actions;
 
 import org.springframework.lang.Nullable;
 
+import java.util.Arrays;
+import java.util.List;
+
 public enum Target {
-    ALLY_OFFENSIVE_COLUMN, ALLY_DEFENSIVE_COLUMN, ENEMY_OFFENSIVE_COLUMN, ENEMY_DEFENSIVE_COLUMN, CURRENT_POKEMON, CURRENT_ATTACK,
-    TARGETED_POKEMON, BENCH_POKEMON;
+    OFFENSIVE_ALLY, DEFENSIVE_ALLY, OFFENSIVE_ENEMY, DEFENSIVE_ENEMY, OFFENSIVE_ENEMY_LEFT, OFFENSIVE_ENEMY_RIGHT, CURRENT_POKEMON;
 
     @Nullable
     public static Target getEnum(String name) {
@@ -15,4 +17,7 @@ public enum Target {
         }
         return null;
     }
+
+    public static final List<Target> pokemonTargets = Arrays.asList(OFFENSIVE_ALLY, DEFENSIVE_ALLY, OFFENSIVE_ENEMY,
+            DEFENSIVE_ENEMY, OFFENSIVE_ENEMY_LEFT, OFFENSIVE_ENEMY_RIGHT, CURRENT_POKEMON);
 }

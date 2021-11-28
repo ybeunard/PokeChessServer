@@ -1,11 +1,11 @@
 package com.pokechess.server.models.globals.game.cards;
 
-import com.pokechess.server.models.globals.game.actions.Effect;
-import com.pokechess.server.validators.ObjectValidator;
+import com.pokechess.server.models.globals.game.effects.Effect;
+import com.pokechess.server.validators.PokemonObjectValidator;
 
 import java.util.List;
 
-public class Berry extends Object {
+public class Berry extends PokemonObject {
     private Berry() { }
 
     public static BerryBuilder builder() {
@@ -37,7 +37,7 @@ public class Berry extends Object {
             berry.setId(id);
             berry.setCombatEffects(combatEffects);
             berry.setOutOfCombatEffects(outOfCombatEffects);
-            ObjectValidator.validate(berry);
+            PokemonObjectValidator.validate(berry);
             return berry;
         }
     }
