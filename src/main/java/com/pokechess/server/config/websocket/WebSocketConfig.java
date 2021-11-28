@@ -8,6 +8,8 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
 
+import static com.pokechess.server.filter.security.JwtRequestFilter.WEBSOCKET_CONNECTION_END_POINT;
+
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig extends AbstractSecurityWebSocketMessageBrokerConfigurer {
@@ -28,8 +30,8 @@ public class WebSocketConfig extends AbstractSecurityWebSocketMessageBrokerConfi
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/api/v1/pokechess");
-        registry.addEndpoint("/api/v1/pokechess")
+        registry.addEndpoint(WEBSOCKET_CONNECTION_END_POINT);
+        registry.addEndpoint(WEBSOCKET_CONNECTION_END_POINT)
                 .withSockJS();
     }
 

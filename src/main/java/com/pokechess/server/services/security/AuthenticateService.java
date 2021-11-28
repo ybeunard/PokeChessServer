@@ -70,14 +70,15 @@ public class AuthenticateService implements UserDetailsService {
      * @throws JwtException expired jwt token exception
      * @throws JwtException incorrect jwt token exception
      */
-    public Optional<User> validateAccessToken(String accessToken) {
+    public Optional<User> validateAccessToken(String accessToken, boolean connectionRequired) {
         Claims claims = getAllClaimsFromToken(accessToken);
         if (isTokenExpired(claims.getExpiration()))
             throw JwtException.of(JwtException.JwtExceptionType.EXPIRED_JWT_TOKEN);
 
         try {
             User user = this.userRepository.getByTrainerName(claims.getSubject());
-            if (user.getTrainerName().equals(claims.getSubject()) && this.sessionManagerService.isConnected(user.getUsername())
+            if (user.getTrainerName().equals(claims.getSubject()) &&
+                    (!connectionRequired || this.sessionManagerService.isConnected(user.getUsername()))
                     && Objects.nonNull(user.getAccessTokenId()) && user.getAccessTokenId().equals(claims.getId())) {
                 return Optional.of(user);
             }

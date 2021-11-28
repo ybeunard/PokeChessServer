@@ -26,6 +26,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     public static final String REQUEST_USERNAME_ATTRIBUTE = "username";
     public static final String REQUEST_TRAINER_ATTRIBUTE = "trainerName";
     public static final String REFRESH_TOKEN_END_POINT = "/api/v1/refreshtoken";
+    public static final String WEBSOCKET_CONNECTION_END_POINT = "/api/v1/pokechess";
 
     private final AuthenticateService authenticateService;
 
@@ -49,10 +50,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (Objects.nonNull(requestTokenHeader) && requestTokenHeader.startsWith(BEARER_TOKEN_START) &&
                 SecurityContextHolder.getContext().getAuthentication() == null) {
             String jwtToken = requestTokenHeader.substring(7);
-
+            System.out.println(request.getRequestURI());
             Optional<User> userOpt = REFRESH_TOKEN_END_POINT.equals(request.getRequestURI()) ?
                     authenticateService.validateRefreshToken(jwtToken) :
-                    authenticateService.validateAccessToken(jwtToken);
+                    authenticateService.validateAccessToken(jwtToken, !WEBSOCKET_CONNECTION_END_POINT.equals(request.getRequestURI()));
             userOpt.ifPresent(user-> {
                 UserPrincipal userPrincipal = UserPrincipal.getBuilder().username(user.getUsername())
                         .password(user.getPasswordHashed()).trainerName(user.getTrainerName()).build();
