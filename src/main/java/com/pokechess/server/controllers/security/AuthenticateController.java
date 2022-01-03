@@ -9,7 +9,6 @@ import com.pokechess.server.exceptions.JwtException;
 import com.pokechess.server.exceptions.UserException;
 import com.pokechess.server.models.globals.user.User;
 import com.pokechess.server.models.globals.user.UserPrincipal;
-import com.pokechess.server.repositories.loader.LoaderRepository;
 import com.pokechess.server.services.security.AuthenticateService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,7 +67,7 @@ public class AuthenticateController {
      * @throws UserException User not found exception
      */
     @GetMapping(value = REFRESH_TOKEN_END_POINT)
-    public ResponseEntity<?> refreshToken(@RequestAttribute(name = REQUEST_TRAINER_ATTRIBUTE) String trainerName) {
+    public ResponseEntity<JwtResponseDTO> refreshToken(@RequestAttribute(name = REQUEST_TRAINER_ATTRIBUTE) String trainerName) {
         final String accessToken = authenticateService.doGenerateAccessToken(trainerName);
         final String refreshToken = authenticateService.doGenerateRefreshToken(trainerName);
         return ResponseEntity.ok(new JwtResponseDTO(accessToken, authenticateService.refreshExpirationValidity, refreshToken));

@@ -4,13 +4,20 @@ import com.pokechess.server.datasources.database.card.mapper.CardEntityMapper;
 import com.pokechess.server.datasources.database.card.pokemon.entity.AttackEntity;
 import com.pokechess.server.datasources.database.card.pokemon.entity.EvolutionEntity;
 import com.pokechess.server.datasources.database.card.pokemon.entity.PokemonEntity;
+import com.pokechess.server.models.enumerations.Generation;
+import com.pokechess.server.models.enumerations.Type;
+import com.pokechess.server.models.enumerations.actions.Target;
 import com.pokechess.server.models.globals.game.actions.Attack;
 import com.pokechess.server.models.globals.game.actions.Evolution;
 import com.pokechess.server.models.globals.game.cards.Pokemon;
 import com.pokechess.server.models.globals.game.effects.Effect;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static com.pokechess.server.datasources.database.card.mapper.CardEntityMapper.mapObjectListFromString;
 
 public class PokemonEntityMapper {
     public static List<PokemonEntity> mapPokemonListToPokemonEntityList(List<Pokemon> modelList) {
@@ -60,5 +67,37 @@ public class PokemonEntityMapper {
         entity.setDescription(model.getDescription());
         entity.setConditions(CardEntityMapper.mapConditionListToConditionEntityList(model.getConditions()));
         return entity;
+    }
+
+    public static Pokemon mapPokemonFromPokemonEntity(PokemonEntity entity) {
+        return Pokemon.builder().pokemonId(entity.getPokemonId()).name(entity.getName())
+                .generation(Generation.getEnum(entity.getGeneration())).level(entity.getLevel())
+                .lifePoint(entity.getLifePoint()).baseSpeed(entity.getBaseSpeed())
+                .size(entity.getSize()).weight(entity.getWeight()).type(Type.getEnum(entity.getType()))
+                .type2(Type.getEnum(entity.getType2())).offensiveAttack(mapAttackFromAttackEntity(entity.getOffensiveAttack()))
+                .defensiveAttack(mapAttackFromAttackEntity(entity.getDefensiveAttack()))
+                .evolutions(mapEvolutionListFromEvolutionEntityList(entity.getEvolutions())).build();
+    }
+
+    private static Attack mapAttackFromAttackEntity(AttackEntity entity) {
+        return Attack.builder().name(entity.getName())
+                .description(entity.getDescription()).type(Type.getEnum(entity.getType()))
+                .power(entity.getPower()).precision(entity.getPrecision()).priority(entity.getPriority())
+                .targets(mapObjectListFromString(entity.getTargets(), Target.class))
+                .effects(CardEntityMapper.mapApplyWhenEffectListFromEffectEntityList(entity.getEffects())).build();
+    }
+
+    public static List<Evolution> mapEvolutionListFromEvolutionEntityList(List<EvolutionEntity> entityList) {
+        if (Objects.isNull(entityList)) {
+            return new ArrayList<>();
+        }
+        return entityList.stream().map(PokemonEntityMapper::mapEvolutionFromEvolutionEntity)
+                .collect(Collectors.toList());
+    }
+
+    private static Evolution mapEvolutionFromEvolutionEntity(EvolutionEntity entity) {
+        return Evolution.builder().description(entity.getDescription())
+                .pokemon(mapPokemonFromPokemonEntity(entity.getPokemon()))
+                .conditions(CardEntityMapper.mapConditionListFromConditionEntityList(entity.getConditions())).build();
     }
 }

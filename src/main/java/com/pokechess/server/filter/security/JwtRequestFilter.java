@@ -29,6 +29,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     public static final String REFRESH_TOKEN_END_POINT = "/api/v1/refreshtoken";
     public static final String WEBSOCKET_CONNECTION_END_POINT = "/api/v1/pokechess";
     public static final String LOAD_DATA_END_POINT = "/api/v1/load";
+    public static final String PAGINATED_POKEMON_END_POINT = "/api/v1/pokemon";
 
     private final AuthenticateService authenticateService;
 
@@ -54,7 +55,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             String jwtToken = requestTokenHeader.substring(7);
             Optional<User> userOpt = REFRESH_TOKEN_END_POINT.equals(request.getRequestURI()) ?
                     authenticateService.validateRefreshToken(jwtToken) :
-                    authenticateService.validateAccessToken(jwtToken, !Arrays.asList(WEBSOCKET_CONNECTION_END_POINT, LOAD_DATA_END_POINT).contains(request.getRequestURI()));
+                    authenticateService.validateAccessToken(jwtToken, !Arrays.asList(WEBSOCKET_CONNECTION_END_POINT, LOAD_DATA_END_POINT,
+                            PAGINATED_POKEMON_END_POINT).contains(request.getRequestURI()));
             userOpt.ifPresent(user-> {
                 UserPrincipal userPrincipal = UserPrincipal.getBuilder().username(user.getUsername())
                         .password(user.getPasswordHashed()).trainerName(user.getTrainerName()).build();

@@ -28,6 +28,11 @@ public class ActiveSynergyCondition implements Condition {
         }
     }
 
+    public ActiveSynergyCondition(ConditionEntity entity) {
+        this.setType(Type.getEnum(entity.getType()));
+        this.setValue(entity.getValue());
+    }
+
     @Override
     public ConditionEntity mapToEntity() {
         ConditionEntity entity = new ConditionEntity();

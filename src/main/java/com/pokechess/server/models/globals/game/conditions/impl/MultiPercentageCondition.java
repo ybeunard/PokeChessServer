@@ -1,6 +1,7 @@
 package com.pokechess.server.models.globals.game.conditions.impl;
 
 import com.pokechess.server.datasources.database.card.entity.ConditionEntity;
+import com.pokechess.server.datasources.database.card.mapper.CardEntityMapper;
 import com.pokechess.server.datasources.loader.dto.actions.ConditionLoaderDTO;
 import com.pokechess.server.exceptions.ValidationException;
 import com.pokechess.server.exceptions.loading.ActionException;
@@ -25,6 +26,10 @@ public class MultiPercentageCondition implements Condition {
         } catch (ValidationException e) {
             throw ActionException.of(ActionException.ActionExceptionType.CONDITION_VALIDATION, CONDITION_NAME, e);
         }
+    }
+
+    public MultiPercentageCondition(ConditionEntity entity) {
+        this.setPercentages(CardEntityMapper.mapObjectListFromString(entity.getPercentages(), Integer.class));
     }
 
     @Override

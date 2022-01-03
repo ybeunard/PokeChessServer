@@ -22,6 +22,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.pokechess.server.datasources.database.card.mapper.CardEntityMapper.mapConditionListFromConditionEntityList;
 import static com.pokechess.server.datasources.loader.mapper.ActionLoaderMapper.mapConditionListFromConditionLoaderDTOList;
 
 public class LifeStealEffect implements ApplyWhenEffect, DurationEffect, PercentageEffect {
@@ -43,6 +44,13 @@ public class LifeStealEffect implements ApplyWhenEffect, DurationEffect, Percent
         } catch (ActionException e) {
             throw ActionException.of(ActionException.ActionExceptionType.EFFECT_VALIDATION, EFFECT_NAME, e);
         }
+    }
+
+    public LifeStealEffect(EffectEntity entity) {
+        this.setApplyWhen(ApplyWhen.getEnum(entity.getApplyWhen()));
+        this.setConditions(mapConditionListFromConditionEntityList(entity.getConditions()));
+        this.setDuration(DurationTime.getEnum(entity.getDuration()));
+        this.setPercentage(entity.getPercentage());
     }
 
     @Override

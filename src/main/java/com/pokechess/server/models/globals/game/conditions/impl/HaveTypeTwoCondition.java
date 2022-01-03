@@ -27,6 +27,11 @@ public class HaveTypeTwoCondition implements Condition {
         }
     }
 
+    public HaveTypeTwoCondition(ConditionEntity entity) {
+        this.setTarget(Target.getEnum(entity.getTarget()));
+        this.setType(Type.getEnum(entity.getType()));
+    }
+
     @Override
     public ConditionEntity mapToEntity() {
         ConditionEntity entity = new ConditionEntity();

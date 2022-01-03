@@ -21,6 +21,10 @@ public class PercentageCondition implements Condition {
         }
     }
 
+    public PercentageCondition(ConditionEntity entity) {
+        this.setPercentage(entity.getPercentage());
+    }
+
     @Override
     public ConditionEntity mapToEntity() {
         ConditionEntity entity = new ConditionEntity();

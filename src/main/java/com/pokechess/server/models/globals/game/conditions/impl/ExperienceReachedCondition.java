@@ -23,6 +23,10 @@ public class ExperienceReachedCondition implements Condition {
         }
     }
 
+    public ExperienceReachedCondition(ConditionEntity entity) {
+        this.setValue(entity.getValue());
+    }
+
     @Override
     public ConditionEntity mapToEntity() {
         ConditionEntity entity = new ConditionEntity();

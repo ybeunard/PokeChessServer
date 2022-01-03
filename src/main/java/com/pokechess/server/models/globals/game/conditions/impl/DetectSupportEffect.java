@@ -24,6 +24,10 @@ public class DetectSupportEffect implements Condition {
         }
     }
 
+    public DetectSupportEffect(ConditionEntity entity) {
+        this.setTarget(Target.getEnum(entity.getTarget()));
+    }
+
     @Override
     public ConditionEntity mapToEntity() {
         ConditionEntity entity = new ConditionEntity();

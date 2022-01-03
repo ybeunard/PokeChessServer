@@ -23,7 +23,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.pokechess.server.datasources.database.card.mapper.CardEntityMapper.mapObjectToString;
+import static com.pokechess.server.datasources.database.card.mapper.CardEntityMapper.*;
 import static com.pokechess.server.datasources.loader.mapper.ActionLoaderMapper.mapConditionListFromConditionLoaderDTOList;
 import static com.pokechess.server.datasources.loader.mapper.ActionLoaderMapper.mapTargetListFromStringList;
 
@@ -46,6 +46,13 @@ public class ProtectStatusChangeEffect implements ApplyWhenEffect, DurationEffec
         } catch (ActionException e) {
             throw ActionException.of(ActionException.ActionExceptionType.EFFECT_VALIDATION, EFFECT_NAME, e);
         }
+    }
+
+    public ProtectStatusChangeEffect(EffectEntity entity) {
+        this.setApplyWhen(ApplyWhen.getEnum(entity.getApplyWhen()));
+        this.setConditions(mapConditionListFromConditionEntityList(entity.getConditions()));
+        this.setDuration(DurationTime.getEnum(entity.getDuration()));
+        this.setTargets(mapObjectListFromString(entity.getTargets(), Target.class));
     }
 
     @Override

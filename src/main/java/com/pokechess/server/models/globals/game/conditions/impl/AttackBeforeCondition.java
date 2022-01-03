@@ -24,6 +24,10 @@ public class AttackBeforeCondition implements Condition {
         }
     }
 
+    public AttackBeforeCondition(ConditionEntity entity) {
+        this.setTarget(Target.getEnum(entity.getTarget()));
+    }
+
     @Override
     public ConditionEntity mapToEntity() {
         ConditionEntity entity = new ConditionEntity();

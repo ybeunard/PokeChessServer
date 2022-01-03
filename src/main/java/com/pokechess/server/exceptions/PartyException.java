@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 
 public class PartyException extends ApiException {
-    private static final String DEFAULT_PARTY_MAX_PLAYER_MESSAGE = "Party not found";
+    private static final String DEFAULT_PARTY_MAX_PLAYER_MESSAGE = "Party max player already reached";
     private static final String DEFAULT_NAME_ALREADY_EXIST_MESSAGE = "Party name already exist";
     private static final String DEFAULT_INCORRECT_PASSWORD_MESSAGE = "Party password incorrect";
     private static final String DEFAULT_PARTY_NOT_FOUND_MESSAGE = "Party not found";

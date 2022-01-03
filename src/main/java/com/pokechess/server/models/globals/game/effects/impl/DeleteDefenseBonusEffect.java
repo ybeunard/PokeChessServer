@@ -21,7 +21,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.pokechess.server.datasources.database.card.mapper.CardEntityMapper.mapObjectToString;
+import static com.pokechess.server.datasources.database.card.mapper.CardEntityMapper.*;
 import static com.pokechess.server.datasources.loader.mapper.ActionLoaderMapper.mapConditionListFromConditionLoaderDTOList;
 import static com.pokechess.server.datasources.loader.mapper.ActionLoaderMapper.mapTargetListFromStringList;
 
@@ -42,6 +42,12 @@ public class DeleteDefenseBonusEffect implements ApplyWhenEffect, TargetEffect {
         } catch (ActionException e) {
             throw ActionException.of(ActionException.ActionExceptionType.EFFECT_VALIDATION, EFFECT_NAME, e);
         }
+    }
+
+    public DeleteDefenseBonusEffect(EffectEntity entity) {
+        this.setApplyWhen(ApplyWhen.getEnum(entity.getApplyWhen()));
+        this.setConditions(mapConditionListFromConditionEntityList(entity.getConditions()));
+        this.setTargets(mapObjectListFromString(entity.getTargets(), Target.class));
     }
 
     @Override

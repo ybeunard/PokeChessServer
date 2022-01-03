@@ -1,6 +1,7 @@
 package com.pokechess.server.models.globals.game.effects.impl;
 
 import com.pokechess.server.datasources.database.card.entity.EffectEntity;
+import com.pokechess.server.datasources.database.card.mapper.CardEntityMapper;
 import com.pokechess.server.datasources.loader.dto.actions.EffectLoaderDTO;
 import com.pokechess.server.datasources.loader.mapper.ActionLoaderMapper;
 import com.pokechess.server.exceptions.ValidationException;
@@ -45,6 +46,14 @@ public class AttackModificationEffect implements ApplyWhenEffect, DurationEffect
         } catch (ActionException e) {
             throw ActionException.of(ActionException.ActionExceptionType.EFFECT_VALIDATION, EFFECT_NAME, e);
         }
+    }
+
+    public AttackModificationEffect(EffectEntity entity) {
+        this.setApplyWhen(ApplyWhen.getEnum(entity.getApplyWhen()));
+        this.setConditions(CardEntityMapper.mapConditionListFromConditionEntityList(entity.getConditions()));
+        this.setDuration(DurationTime.getEnum(entity.getDuration()));
+        this.setTargets(CardEntityMapper.mapObjectListFromString(entity.getTargets(), Target.class));
+        this.setValue(entity.getValue());
     }
 
     @Override

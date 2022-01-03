@@ -23,6 +23,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.pokechess.server.datasources.database.card.mapper.CardEntityMapper.mapConditionListFromConditionEntityList;
 import static com.pokechess.server.datasources.loader.mapper.ActionLoaderMapper.mapConditionListFromConditionLoaderDTOList;
 
 public class CumulateDamageEffect implements ApplyWhenEffect, DurationEffect, NameEffect, PowerEffect {
@@ -48,6 +49,15 @@ public class CumulateDamageEffect implements ApplyWhenEffect, DurationEffect, Na
         } catch (ActionException e) {
             throw ActionException.of(ActionException.ActionExceptionType.EFFECT_VALIDATION, EFFECT_NAME, e);
         }
+    }
+
+    public CumulateDamageEffect(EffectEntity entity) {
+        this.setApplyWhen(ApplyWhen.getEnum(entity.getApplyWhen()));
+        this.setConditions(mapConditionListFromConditionEntityList(entity.getConditions()));
+        this.setDuration(DurationTime.getEnum(entity.getDuration()));
+        this.setName(entity.getName());
+        this.setMaxCumulate(entity.getMaxCumulate());
+        this.setPower(entity.getPower());
     }
 
     @Override
