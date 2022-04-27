@@ -9,7 +9,9 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,6 +21,9 @@ public class Player {
     private static final Integer DEFAULT_LIFE_POINT = 100;
     private static final Integer DEFAULT_WIN_COUNTER = 0;
     private static final Integer DEFAULT_MONEY = 0;
+    private static final Boolean DEFAULT_LOCK_HAND = false;
+    public static final List<Integer> LEVEL_STAGE = Arrays.asList(0, 1, 2, 4, 8, 16, 32, 56, 88, 128);
+    public static final List<Integer> SERIES_GOLD = Arrays.asList(0, 0, 1, 1, 2, 3);
 
     private Integer id;
     private User user;
@@ -28,7 +33,10 @@ public class Player {
     private Integer lifePoint;
     private Integer winCounter;
     private List<Pokemon> hand;
+    private Boolean lock;
     private Integer money;
+    private Boolean loading;
+    private Boolean disconnected;
     private PokemonTrainer pokemonTrainer;
     private Player opponentPlayer;
 
@@ -47,7 +55,10 @@ public class Player {
         private Integer lifePoint;
         private Integer winCounter;
         private List<Pokemon> hand;
+        private Boolean lock;
         private Integer money;
+        private Boolean loading;
+        private Boolean disconnected;
         private PokemonTrainer pokemonTrainer;
         private Player opponentPlayer;
 
@@ -91,8 +102,23 @@ public class Player {
             return this;
         }
 
+        public PlayerBuilder lock(Boolean lock) {
+            this.lock = lock;
+            return this;
+        }
+
         public PlayerBuilder money(Integer money) {
             this.money = money;
+            return this;
+        }
+
+        public PlayerBuilder loading(Boolean loading) {
+            this.loading = loading;
+            return this;
+        }
+
+        public PlayerBuilder disconnected(Boolean disconnected) {
+            this.disconnected = disconnected;
             return this;
         }
 
@@ -116,7 +142,10 @@ public class Player {
             player.setLifePoint(Objects.nonNull(lifePoint) ? lifePoint : DEFAULT_LIFE_POINT);
             player.setWinCounter(Objects.nonNull(winCounter) ? winCounter : DEFAULT_WIN_COUNTER);
             player.setHand(hand);
+            player.setLock(Objects.nonNull(lock) ? lock : DEFAULT_LOCK_HAND);
             player.setMoney(Objects.nonNull(money) ? money : DEFAULT_MONEY);
+            player.setLoading(loading);
+            player.setDisconnected(disconnected);
             player.setPokemonTrainer(pokemonTrainer);
             player.setOpponentPlayer(opponentPlayer);
             return player;
@@ -204,6 +233,16 @@ public class Player {
         this.hand = hand;
     }
 
+    @NotNull
+    public Boolean isLock() {
+        return lock;
+    }
+
+    public void setLock(Boolean lock) {
+        GenericValidator.notNull(lock, "lock");
+        this.lock = lock;
+    }
+
     @NonNull
     public Integer getMoney() {
         return money;
@@ -212,6 +251,26 @@ public class Player {
     public void setMoney(Integer money) {
         GenericValidator.notNull(money, "money");
         this.money = money;
+    }
+
+    @NotNull
+    public Boolean isLoading() {
+        return loading;
+    }
+
+    public void setLoading(Boolean loading) {
+        GenericValidator.notNull(loading, "loading");
+        this.loading = loading;
+    }
+
+    @NotNull
+    public Boolean isDisconnected() {
+        return disconnected;
+    }
+
+    public void setDisconnected(Boolean disconnected) {
+        GenericValidator.notNull(disconnected, "disconnected");
+        this.disconnected = disconnected;
     }
 
     @Nullable
@@ -245,6 +304,6 @@ public class Player {
     @Override
     public String toString() {
         return String.format(
-                "Player [id=%s, user=%s, boardGame=%s, level=%s, experiencePoint=%s, lifePoint=%s, winCounter=%s, hand=%s, money=%s, pokemonTrainer=%s, opponentPlayer=%s]", this.id, this.user, this.boardGame, this.level, this.experiencePoint, this.lifePoint, this.winCounter, this.hand, this.money, this.pokemonTrainer, this.opponentPlayer);
+                "Player [id=%s, user=%s, boardGame=%s, level=%s, experiencePoint=%s, lifePoint=%s, winCounter=%s, hand=%s, money=%s, loading=%s, disconnected=%s, pokemonTrainer=%s, opponentPlayer=%s]", this.id, this.user, this.boardGame, this.level, this.experiencePoint, this.lifePoint, this.winCounter, this.hand, this.money, this.loading, this.disconnected, this.pokemonTrainer, this.opponentPlayer);
     }
 }

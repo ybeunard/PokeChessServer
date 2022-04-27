@@ -1,5 +1,6 @@
 package com.pokechess.server.models.enumerations;
 
+import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import java.util.*;
@@ -18,7 +19,7 @@ public enum Type {
         this.typeName = typeName;
     }
 
-    @Nullable
+    @NonNull
     public String getTypeName() {
         return typeName;
     }

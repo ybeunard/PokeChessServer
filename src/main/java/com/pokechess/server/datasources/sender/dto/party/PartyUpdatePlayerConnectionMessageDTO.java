@@ -5,8 +5,9 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.List;
 
-public class PartyUpdatePlayerMessageDTO {
+public class PartyUpdatePlayerConnectionMessageDTO {
     public List<String> players;
+    public List<String> playersDisconnected;
 
     public List<String> getPlayers() {
         return players;
@@ -16,9 +17,17 @@ public class PartyUpdatePlayerMessageDTO {
         this.players = players;
     }
 
+    public List<String> getPlayersDisconnected() {
+        return playersDisconnected;
+    }
+
+    public void setPlayersDisconnected(List<String> playersDisconnected) {
+        this.playersDisconnected = playersDisconnected;
+    }
+
     @Override
     public boolean equals(Object o) {
-        return o instanceof PartyUpdatePlayerMessageDTO && EqualsBuilder.reflectionEquals(this, o);
+        return o instanceof PartyUpdatePlayerConnectionMessageDTO && EqualsBuilder.reflectionEquals(this, o);
     }
 
     @Override
@@ -29,6 +38,6 @@ public class PartyUpdatePlayerMessageDTO {
     @Override
     public String toString() {
         return String.format(
-                "PartyUpdatePlayerMessageDTO [players=%s]", this.players);
+                "PartyUpdatePlayerConnectionMessageDTO [players=%s, playersDisconnected=%s]", this.players, this.playersDisconnected);
     }
 }

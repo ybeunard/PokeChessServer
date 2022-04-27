@@ -1,4 +1,4 @@
-package com.pokechess.server.validators;
+package com.pokechess.server.validators.pokemon;
 
 import com.pokechess.server.datasources.loader.dto.PokemonLoaderDTO;
 import com.pokechess.server.datasources.loader.dto.actions.EvolutionLoaderDTO;
@@ -22,6 +22,8 @@ import static com.pokechess.server.models.enumerations.Type.NO_TYPE;
 
 public class PokemonValidator {
     private static final String POKEMON_VALIDATOR_NO_TYPE = "cannot be null or NO_TYPE";
+    private static final String POKEMON_VALIDATOR_INCORRECT_POKEMON_PLACE_LIST =
+            "must be full with distinct position value";
 
     public static void validatePokemonDuplication(List<PokemonLoaderDTO> pokemonList) {
         List<DuplicatePokemonTest> duplicatePokemonTests = pokemonList.stream().map(pokemon -> {
@@ -68,9 +70,11 @@ public class PokemonValidator {
         }
     }
 
-    public static void correctPokemonPlaceListSize(List<PokemonPlace> pokemonPlaceSet) {
-        if (Objects.isNull(pokemonPlaceSet) || BoardGame.POKEMON_PLACE_LIST_LENGTH.equals(pokemonPlaceSet.size())) {
-            // TODO THROW
+    public static void correctPokemonPlaceListSize(List<PokemonPlace> pokemonPlaceSet, String fieldName) {
+        if (Objects.isNull(pokemonPlaceSet) || !BoardGame.POKEMON_PLACE_LIST_LENGTH.equals(pokemonPlaceSet.size())
+            || !BoardGame.POKEMON_PLACE_LIST_LENGTH.equals((int) pokemonPlaceSet.stream()
+                .map(PokemonPlace::getPosition).distinct().count())) {
+            throw new ValidationException(fieldName, POKEMON_VALIDATOR_INCORRECT_POKEMON_PLACE_LIST);
         }
     }
 

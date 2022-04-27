@@ -7,7 +7,7 @@ import com.pokechess.server.models.enumerations.Type;
 import com.pokechess.server.models.globals.game.actions.Attack;
 import com.pokechess.server.models.globals.game.actions.Evolution;
 import com.pokechess.server.validators.GenericValidator;
-import com.pokechess.server.validators.PokemonValidator;
+import com.pokechess.server.validators.pokemon.PokemonValidator;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.lang.NonNull;

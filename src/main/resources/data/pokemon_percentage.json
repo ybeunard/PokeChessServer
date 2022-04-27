@@ -1,0 +1,220 @@
+[
+  {
+    "playerLevel": 1,
+    "percentages": [
+      {
+        "percentage": 1,
+        "pokemonLevel": 1
+      }
+    ]
+  },
+  {
+    "playerLevel": 2,
+    "percentages": [
+      {
+        "percentage": 0.8,
+        "pokemonLevel": 1
+      },
+      {
+        "percentage": 0.2,
+        "pokemonLevel": 2
+      }
+    ]
+  },{
+    "playerLevel": 3,
+    "percentages": [
+      {
+        "percentage": 0.6,
+        "pokemonLevel": 1
+      },
+      {
+        "percentage": 0.3,
+        "pokemonLevel": 2
+      },
+      {
+        "percentage": 0.1,
+        "pokemonLevel": 3
+      }
+    ]
+  },{
+    "playerLevel": 4,
+    "percentages": [
+      {
+        "percentage": 0.4,
+        "pokemonLevel": 1
+      },
+      {
+        "percentage": 0.3,
+        "pokemonLevel": 2
+      },
+      {
+        "percentage": 0.2,
+        "pokemonLevel": 3
+      },
+      {
+        "percentage": 0.1,
+        "pokemonLevel": 4
+      }
+    ]
+  },{
+    "playerLevel": 5,
+    "percentages": [
+      {
+        "percentage": 0.25,
+        "pokemonLevel": 1
+      },
+      {
+        "percentage": 0.3,
+        "pokemonLevel": 2
+      },
+      {
+        "percentage": 0.3,
+        "pokemonLevel": 3
+      },
+      {
+        "percentage": 0.1,
+        "pokemonLevel": 4
+      },
+      {
+        "percentage": 0.05,
+        "pokemonLevel": 5
+      }
+    ]
+  },{
+    "playerLevel": 6,
+    "percentages": [
+      {
+        "percentage": 0.15,
+        "pokemonLevel": 1
+      },
+      {
+        "percentage": 0.2,
+        "pokemonLevel": 2
+      },
+      {
+        "percentage": 0.35,
+        "pokemonLevel": 3
+      },
+      {
+        "percentage": 0.15,
+        "pokemonLevel": 4
+      },
+      {
+        "percentage": 0.1,
+        "pokemonLevel": 5
+      },
+      {
+        "percentage": 0.05,
+        "pokemonLevel": 6
+      }
+    ]
+  },{
+    "playerLevel": 7,
+    "percentages": [
+      {
+        "percentage": 0.08,
+        "pokemonLevel": 1
+      },
+      {
+        "percentage": 0.15,
+        "pokemonLevel": 2
+      },
+      {
+        "percentage": 0.35,
+        "pokemonLevel": 3
+      },
+      {
+        "percentage": 0.18,
+        "pokemonLevel": 4
+      },
+      {
+        "percentage": 0.12,
+        "pokemonLevel": 5
+      },
+      {
+        "percentage": 0.08,
+        "pokemonLevel": 6
+      },
+      {
+        "percentage": 0.04,
+        "pokemonLevel": 7
+      }
+    ]
+  },{
+    "playerLevel": 8,
+    "percentages": [
+      {
+        "percentage": 0.05,
+        "pokemonLevel": 1
+      },
+      {
+        "percentage": 0.1,
+        "pokemonLevel": 2
+      },
+      {
+        "percentage": 0.26,
+        "pokemonLevel": 3
+      },
+      {
+        "percentage": 0.2,
+        "pokemonLevel": 4
+      },
+      {
+        "percentage": 0.15,
+        "pokemonLevel": 5
+      },
+      {
+        "percentage": 0.12,
+        "pokemonLevel": 6
+      },
+      {
+        "percentage": 0.08,
+        "pokemonLevel": 7
+      },
+      {
+        "percentage": 0.04,
+        "pokemonLevel": 8
+      }
+    ]
+  },{
+    "playerLevel": 9,
+    "percentages": [
+      {
+        "percentage": 0.04,
+        "pokemonLevel": 1
+      },
+      {
+        "percentage": 0.06,
+        "pokemonLevel": 2
+      },
+      {
+        "percentage": 0.2,
+        "pokemonLevel": 3
+      },
+      {
+        "percentage": 0.2,
+        "pokemonLevel": 4
+      },
+      {
+        "percentage": 0.16,
+        "pokemonLevel": 5
+      },
+      {
+        "percentage": 0.14,
+        "pokemonLevel": 6
+      },
+      {
+        "percentage": 0.1,
+        "pokemonLevel": 7
+      },
+      {
+        "percentage": 0.06,
+        "pokemonLevel": 8
+      },
+      {
+        "percentage": 0.04,
+        "pokemonLevel": 9
+      }
+    ]
+  }
+]

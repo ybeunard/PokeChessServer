@@ -25,7 +25,7 @@ public class PokemonEntityMapper {
                 .collect(Collectors.toList());
     }
 
-    private static PokemonEntity mapPokemonToPokemonEntity(Pokemon model) {
+    public static PokemonEntity mapPokemonToPokemonEntity(Pokemon model) {
         PokemonEntity entity = new PokemonEntity();
         entity.setPokemonId(model.getPokemonId());
         entity.setName(model.getName());
@@ -67,6 +67,10 @@ public class PokemonEntityMapper {
         entity.setDescription(model.getDescription());
         entity.setConditions(CardEntityMapper.mapConditionListToConditionEntityList(model.getConditions()));
         return entity;
+    }
+
+    public static List<Pokemon> mapPokemonListFromPokemonEntityList(List<PokemonEntity> entities) {
+        return entities.stream().map(PokemonEntityMapper::mapPokemonFromPokemonEntity).collect(Collectors.toList());
     }
 
     public static Pokemon mapPokemonFromPokemonEntity(PokemonEntity entity) {

@@ -26,7 +26,11 @@ public class PokemonDTOMapper {
         return dto;
     }
 
-    private static PokemonDTO mapPokemonToPokemonDTO(Pokemon pokemon) {
+    public static List<PokemonDTO> mapPokemonListToPokemonDTOList(List<Pokemon> pokemonList) {
+        return pokemonList.stream().map(PokemonDTOMapper::mapPokemonToPokemonDTO).collect(Collectors.toList());
+    }
+
+    public static PokemonDTO mapPokemonToPokemonDTO(Pokemon pokemon) {
         PokemonDTO dto = new PokemonDTO();
         dto.setPokemonId(pokemon.getPokemonId());
         dto.setName(pokemon.getName());

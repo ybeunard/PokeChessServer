@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+    <changeSet id="1-3-000001" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="pokemon_draw_entity"/>
+            </not>
+        </preConditions>
+        <createTable tableName="pokemon_draw_entity">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="party_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="level" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pokemon_id" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1-3-000002" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="UNIQUE_CONSTRAINT_POKEMON_DRAW_ENTITY_PARTY_ID_POKEMON_ID"/>
+            </not>
+        </preConditions>
+        <addUniqueConstraint constraintName="UNIQUE_CONSTRAINT_POKEMON_DRAW_ENTITY_PARTY_ID_POKEMON_ID"
+                             tableName="pokemon_draw_entity" columnNames="party_id,pokemon_id"/>
+    </changeSet>
+    <changeSet id="1-3-000003" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="POKEMON_DRAW_ENTITY_PARTY_ID_FOREIGN_KEY"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="pokemon_draw_entity" baseColumnNames="party_id" constraintName="POKEMON_DRAW_ENTITY_PARTY_ID_FOREIGN_KEY"
+                                 referencedTableName="party_entity" referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="1-3-000004" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="POKEMON_DRAW_ENTITY_POKEMON_ID_FOREIGN_KEY"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="pokemon_draw_entity" baseColumnNames="pokemon_id" constraintName="POKEMON_DRAW_ENTITY_POKEMON_ID_FOREIGN_KEY"
+                                 referencedTableName="pokemon_entity" referencedColumnNames="pokemon_id"/>
+    </changeSet>
+    <changeSet id="1-3-000005" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="player_entity" columnName="loading" />
+            </not>
+        </preConditions>
+        <addColumn tableName="player_entity">
+            <column name="loading" type="boolean"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1-3-000006" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="player_entity" columnName="disconnected" />
+            </not>
+        </preConditions>
+        <addColumn tableName="player_entity">
+            <column name="disconnected" type="boolean"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1-3-000007" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="player_hand_entity"/>
+            </not>
+        </preConditions>
+        <createTable tableName="player_hand_entity">
+            <column name="player_id" type="int">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="pokemon_id" type="varchar(10)">
+                <constraints primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1-3-000008" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyName="PLAYER_HAND_ENTITY_PLAYER_ID_FOREIGN_KEY"/>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="player_hand_entity" baseColumnNames="player_id" constraintName="PLAYER_HAND_ENTITY_PLAYER_ID_FOREIGN_KEY"
+                                 referencedTableName="player_entity" referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="1-3-000009" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyName="PLAYER_HAND_ENTITY_POKEMON_ID_FOREIGN_KEY"/>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="player_hand_entity" baseColumnNames="pokemon_id" constraintName="PLAYER_HAND_ENTITY_POKEMON_ID_FOREIGN_KEY"
+                                 referencedTableName="pokemon_entity" referencedColumnNames="pokemon_id"/>
+    </changeSet>
+    <changeSet id="1-3-000010" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="pokemon_instance_entity"/>
+            </not>
+        </preConditions>
+        <createTable tableName="pokemon_instance_entity">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="pokemon_id" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1-3-000011" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="pokemon_place_entity" columnName="position" />
+            </not>
+        </preConditions>
+        <addColumn tableName="pokemon_place_entity">
+            <column name="position" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1-3-000012" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="pokemon_place_entity" columnName="pokemon_instance_id" />
+            </not>
+        </preConditions>
+        <addColumn tableName="pokemon_place_entity">
+            <column name="pokemon_instance_id" type="int"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1-3-000013" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyName="POKEMON_PLACE_ENTITY_POKEMON_INSTANCE_ID_FOREIGN_KEY"/>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="pokemon_place_entity" baseColumnNames="pokemon_instance_id"
+                                 constraintName="POKEMON_PLACE_ENTITY_POKEMON_INSTANCE_ID_FOREIGN_KEY"
+                                 referencedTableName="pokemon_instance_entity" referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="1-3-000014" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <foreignKeyConstraintExists foreignKeyName="POKEMON_INSTANCE_ENTITY_POKEMON_ID_FOREIGN_KEY"/>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="pokemon_instance_entity" baseColumnNames="pokemon_id"
+                                 constraintName="POKEMON_INSTANCE_ENTITY_POKEMON_ID_FOREIGN_KEY"
+                                 referencedTableName="pokemon_entity" referencedColumnNames="pokemon_id"/>
+    </changeSet>
+    <changeSet id="1-3-000015" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="draw_percentages"/>
+            </not>
+        </preConditions>
+        <createTable tableName="draw_percentages">
+            <column name="player_level" type="int">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="pokemon_level" type="int">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="percentage" type="decimal"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1-3-000016" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="board_game_entity" columnName="pokemon_center_counter"/>
+        </preConditions>
+        <dropColumn tableName="board_game_entity" columnName="pokemon_center_counter"/>
+    </changeSet>
+    <changeSet id="1-3-000017" author="Crizang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="player_entity" columnName="lock" />
+            </not>
+        </preConditions>
+        <addColumn tableName="player_entity">
+            <column name="lock" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

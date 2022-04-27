@@ -14,7 +14,6 @@ public class BoardGameEntity {
     private List<PokemonPlaceEntity> bench;
     private List<PokemonPlaceEntity> benchOverload;
     private PokemonPlaceEntity pokemonCenter;
-    private Integer pokemonCenterCounter;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,7 +55,7 @@ public class BoardGameEntity {
         this.bench = bench;
     }
 
-    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+    @OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name="board_game_bench_overload_id", referencedColumnName="id")
     public List<PokemonPlaceEntity> getBenchOverload() {
         return benchOverload;
@@ -76,15 +75,6 @@ public class BoardGameEntity {
         this.pokemonCenter = pokemonCenter;
     }
 
-    @Column(name = "pokemon_center_counter", nullable = false)
-    public Integer getPokemonCenterCounter() {
-        return pokemonCenterCounter;
-    }
-
-    public void setPokemonCenterCounter(Integer pokemonCenterCounter) {
-        this.pokemonCenterCounter = pokemonCenterCounter;
-    }
-
     @Override
     public boolean equals(Object o) {
         return o instanceof BoardGameEntity && EqualsBuilder.reflectionEquals(this, o);
@@ -98,6 +88,6 @@ public class BoardGameEntity {
     @Override
     public String toString() {
         return String.format(
-                "BoardGameEntity [id=%s, offensiveLine=%s, defensiveLine=%s, bench=%s, benchOverload=%s, pokemonCenter=%s, pokemonCenterCounter=%s]", this.id, this.offensiveLine, this.defensiveLine, this.bench, this.benchOverload, this.pokemonCenter, this.pokemonCenterCounter);
+                "BoardGameEntity [id=%s, offensiveLine=%s, defensiveLine=%s, bench=%s, benchOverload=%s, pokemonCenter=%s]", this.id, this.offensiveLine, this.defensiveLine, this.bench, this.benchOverload, this.pokemonCenter);
     }
 }

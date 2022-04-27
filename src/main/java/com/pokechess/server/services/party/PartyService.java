@@ -1,5 +1,6 @@
 package com.pokechess.server.services.party;
 
+import com.pokechess.server.exceptions.PartyException;
 import com.pokechess.server.exceptions.UserException;
 import com.pokechess.server.models.enumerations.PartyState;
 import com.pokechess.server.models.globals.user.User;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import static com.pokechess.server.services.security.SessionManagerService.*;
 
@@ -93,11 +94,13 @@ public class PartyService {
         this.sessionManagerService.removeSubscription(username, PARTY_UPDATE_PLAYER_NUMBER_BROKER_DESTINATION);
         this.sessionManagerService.removeSubscription(username, PARTY_DELETED_BROKER_DESTINATION);
         this.messageRepository.sendPartyUpdatePlayerNumberMessage(partyUpdated);
-        this.messageRepository.sendPartyUpdatePlayerMessage(partyUpdated);
+        this.messageRepository.sendPartyUpdatePlayerConnectionMessage(partyUpdated);
         return partyUpdated;
     }
 
     public void leaveParty(String playerUsername) {
+        if (!PartyState.CREATION.equals(this.partyRepository.getPartyByPlayerName(playerUsername).getState()))
+            throw PartyException.of(PartyException.PartyExceptionType.PARTY_ALREADY_START);
         this.sessionManagerService.leaveParty(playerUsername);
     }
 
@@ -109,17 +112,18 @@ public class PartyService {
         if (this.playerRepository.existsPlayerByUsername(user.getUsername())) {
             throw UserException.of(UserException.UserExceptionType.USER_ALREADY_IN_GAME);
         }
-        return Player.builder().user(user).boardGame(createNewBoardGame()).build();
+        return Player.builder().user(user).boardGame(createNewBoardGame())
+                .loading(true).disconnected(false).build();
     }
 
     private BoardGame createNewBoardGame() {
         return BoardGame.builder()
                 .offensiveLine(generatePokemonPlaceList()).defensiveLine(generatePokemonPlaceList())
-                .bench(generatePokemonPlaceList()).pokemonCenter(PokemonPlace.builder().build()).build();
+                .bench(generatePokemonPlaceList()).pokemonCenter(PokemonPlace.builder().position(1).build()).build();
     }
 
     private List<PokemonPlace> generatePokemonPlaceList() {
-        return Stream.generate(() -> PokemonPlace.builder().build()).limit(BoardGame.POKEMON_PLACE_LIST_LENGTH)
+        return IntStream.range(0, BoardGame.POKEMON_PLACE_LIST_LENGTH).mapToObj((index) -> PokemonPlace.builder().position(index + 1).build())
                 .collect(Collectors.toList());
     }
 }

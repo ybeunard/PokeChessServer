@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class PartyInCreationDTO {
     private String name;
+    private String owner;
     private Integer numberOfPlayer;
     private Boolean withPassword;
 
@@ -14,6 +15,14 @@ public class PartyInCreationDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public Integer getNumberOfPlayer() {
@@ -45,6 +54,6 @@ public class PartyInCreationDTO {
     @Override
     public String toString() {
         return String.format(
-                "PartyInCreationDTO [name=%s, numberOfPlayer=%s, withPassword=%s]", this.name, this.numberOfPlayer, this.withPassword);
+                "PartyInCreationDTO [name=%s, owner=%s, numberOfPlayer=%s, withPassword=%s]", this.name, this.owner, this.numberOfPlayer, this.withPassword);
     }
 }

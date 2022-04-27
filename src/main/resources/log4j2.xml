@@ -2,7 +2,7 @@
 <Configuration xmlns="http://logging.apache.org/log4j/2.0/config">
     <Properties>
         <Property name="rootLoggerLevel">${bundle:application:logging.level.root}</Property>
-        <Property name="loggerLevel">${bundle:application:logging.level.org.pokechess.server}</Property>
+        <Property name="loggerLevel">${bundle:application:logging.level.com.pokechess.server}</Property>
     </Properties>
 
     <Appenders>
@@ -11,7 +11,7 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Logger name="org.pokechess.server" level="${loggerLevel}" additivity="false">
+        <Logger name="com.pokechess.server" level="${loggerLevel}" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
         <Root level="${rootLoggerLevel}">

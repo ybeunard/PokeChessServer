@@ -15,8 +15,16 @@ import org.springframework.lang.Nullable;
 import java.util.*;
 
 public class Party {
-    private static final Integer DEFAULT_CURRENT_TURN_NUMBER = 0;
+    private static final Integer DEFAULT_CURRENT_TURN_NUMBER = 1;
 
+    public final static Integer NO_COAST = 0;
+    public static final Integer ROLL_COAST = 2;
+    public static final Integer EXPERIENCE_COAST = 4;
+    public static final Integer EXPERIENCE_BY_PAY = 2;
+    public static final Integer TRAINER_HAND_SIZE = 5;
+    public static final Integer INTEREST_LEVEL = 10;
+    public static final Integer MAX_INTEREST = 5;
+    public static final Integer MIN_PLAYER = 2;
     public static final Integer MAX_PLAYER = 8;
 
     private Integer id;

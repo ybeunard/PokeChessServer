@@ -14,4 +14,8 @@ public class MessageSenderDatasource {
     public void sendMessage(String destination, Object payload) {
         this.simpMessagingTemplate.convertAndSend(destination, payload);
     }
+
+    public void sendMessageToPlayer(String username, String destination, Object payload) {
+        this.simpMessagingTemplate.convertAndSendToUser(username, destination, payload);
+    }
 }

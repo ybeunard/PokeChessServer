@@ -2,7 +2,7 @@ package com.pokechess.server.models.party;
 
 import com.pokechess.server.models.enumerations.Synergy;
 import com.pokechess.server.validators.GenericValidator;
-import com.pokechess.server.validators.PokemonValidator;
+import com.pokechess.server.validators.pokemon.PokemonValidator;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.lang.NonNull;
@@ -11,8 +11,11 @@ import org.springframework.lang.Nullable;
 import java.util.*;
 
 public class BoardGame {
+    public static final Integer POKEMON_STARTING_POSITION = 3;
     public static final Integer POKEMON_PLACE_LIST_LENGTH = 5;
-    public static final Integer DEFAULT_POKEMON_CENTER_COUNTER = 0;
+    public static final Integer MIN_POKEMON_PLACE_BEFORE_LEVEL_LIMIT = 2;
+    public static final Integer MAX_POKEMON_PLACE_BEFORE_LEVEL_LIMIT = 4;
+    public static final Integer LEVEL_LIMIT = 5;
 
     private Integer id;
     private List<PokemonPlace> offensiveLine;
@@ -22,7 +25,6 @@ public class BoardGame {
     private List<Synergy> synergies;
     private List<Object> inventory;
     private PokemonPlace pokemonCenter;
-    private Integer pokemonCenterCounter;
 
     private BoardGame() { }
 
@@ -39,7 +41,6 @@ public class BoardGame {
         private List<Synergy> synergies;
         private List<Object> inventory;
         private PokemonPlace pokemonCenter;
-        private Integer pokemonCenterCounter;
 
         public BoardGameBuilder id(Integer id) {
             this.id = id;
@@ -81,11 +82,6 @@ public class BoardGame {
             return this;
         }
 
-        public BoardGameBuilder pokemonCenterCounter(Integer pokemonCenterCounter) {
-            this.pokemonCenterCounter = pokemonCenterCounter;
-            return this;
-        }
-
         public BoardGame build() {
             BoardGame boardGame = new BoardGame();
             boardGame.setId(id);
@@ -96,7 +92,6 @@ public class BoardGame {
             boardGame.setSynergies(synergies);
             boardGame.setInventory(inventory);
             boardGame.setPokemonCenter(pokemonCenter);
-            boardGame.setPokemonCenterCounter(Objects.nonNull(pokemonCenterCounter) ? pokemonCenterCounter : DEFAULT_POKEMON_CENTER_COUNTER);
             return boardGame;
         }
     }
@@ -116,7 +111,7 @@ public class BoardGame {
     }
 
     public void setOffensiveLine(List<PokemonPlace> offensiveLine) {
-        PokemonValidator.correctPokemonPlaceListSize(offensiveLine);
+        PokemonValidator.correctPokemonPlaceListSize(offensiveLine, "offensiveLine");
         this.offensiveLine = offensiveLine;
     }
 
@@ -126,7 +121,7 @@ public class BoardGame {
     }
 
     public void setDefensiveLine(List<PokemonPlace> defensiveLine) {
-        PokemonValidator.correctPokemonPlaceListSize(defensiveLine);
+        PokemonValidator.correctPokemonPlaceListSize(defensiveLine, "defensiveLine");
         this.defensiveLine = defensiveLine;
     }
 
@@ -136,7 +131,7 @@ public class BoardGame {
     }
 
     public void setBench(List<PokemonPlace> bench) {
-        PokemonValidator.correctPokemonPlaceListSize(bench);
+        PokemonValidator.correctPokemonPlaceListSize(bench, "bench");
         this.bench = bench;
     }
 
@@ -186,16 +181,6 @@ public class BoardGame {
         this.pokemonCenter = pokemonCenter;
     }
 
-    @NonNull
-    public Integer getPokemonCenterCounter() {
-        return pokemonCenterCounter;
-    }
-
-    public void setPokemonCenterCounter(Integer pokemonCenterCounter) {
-        GenericValidator.notNull(pokemonCenterCounter, "pokemonCenterCounter");
-        this.pokemonCenterCounter = pokemonCenterCounter;
-    }
-
     @Override
     public boolean equals(Object o) {
         return o instanceof BoardGame && EqualsBuilder.reflectionEquals(this, o);
@@ -209,6 +194,6 @@ public class BoardGame {
     @Override
     public String toString() {
         return String.format(
-                "BoardGame [id=%s, offensiveLine=%s, defensiveLine=%s, bench=%s, benchOverload=%s, synergies=%s, inventory=%s, pokemonCenter=%s, pokemonCenterCounter=%s]", this.id, this.offensiveLine, this.defensiveLine, this.bench, this.benchOverload, this.synergies, this.inventory, this.pokemonCenter, this.pokemonCenterCounter);
+                "BoardGame [id=%s, offensiveLine=%s, defensiveLine=%s, bench=%s, benchOverload=%s, synergies=%s, inventory=%s, pokemonCenter=%s]", this.id, this.offensiveLine, this.defensiveLine, this.bench, this.benchOverload, this.synergies, this.inventory, this.pokemonCenter);
     }
 }

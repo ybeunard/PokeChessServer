@@ -3,15 +3,12 @@ package com.pokechess.server.services.security;
 import com.pokechess.server.exceptions.PartyException;
 import com.pokechess.server.models.enumerations.PartyState;
 import com.pokechess.server.models.party.Party;
-import com.pokechess.server.models.party.Player;
 import com.pokechess.server.repositories.message.MessageRepository;
 import com.pokechess.server.repositories.party.PartyRepository;
 import com.pokechess.server.repositories.player.PlayerRepository;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.event.EventListener;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.lang.NonNull;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -30,19 +27,44 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.pokechess.server.config.websocket.WebSocketConfig.SIMPLE_BROKER_PARTY;
+import static com.pokechess.server.config.websocket.WebSocketConfig.USER_DESTINATION_PREFIX;
 import static org.springframework.messaging.simp.SimpMessageHeaderAccessor.SESSION_ID_HEADER;
 
 @Component
-@Order(Ordered.HIGHEST_PRECEDENCE)
 public class SessionManagerService extends DefaultSubscriptionRegistry implements BeanPostProcessor {
     private static final String EMPTY_MESSAGE = "";
 
     // Destinations
     public static final String PARTY_CREATION_BROKER_DESTINATION = SIMPLE_BROKER_PARTY + "/creation";
-    public static final String PARTY_UPDATE_PLAYER_NUMBER_BROKER_DESTINATION = SIMPLE_BROKER_PARTY + "/update/playernumber";
-    public static final String PARTY_DELETED_BROKER_DESTINATION = SIMPLE_BROKER_PARTY + "/deleted";
-    public static final String SPECIFIC_PARTY_UPDATE_PLAYER_BROKER_DESTINATION = SIMPLE_BROKER_PARTY + "/%s/update/player";
-    public static final String SPECIFIC_PARTY_UPDATE_STATE_BROKER_DESTINATION = SIMPLE_BROKER_PARTY + "/%s/update/state";
+    public static final String PARTY_UPDATE_PLAYER_NUMBER_BROKER_DESTINATION = SIMPLE_BROKER_PARTY + "/update";
+    public static final String PARTY_DELETED_BROKER_DESTINATION = SIMPLE_BROKER_PARTY + "/deletion";
+
+    // Party Destinations
+    public static final String SPECIFIC_PARTY_UPDATE_STATE_BROKER_DESTINATION = SIMPLE_BROKER_PARTY + "/%s/state";
+    public static final String SPECIFIC_PARTY_UPDATE_PLAYER_CONNECTION_BROKER_DESTINATION = SIMPLE_BROKER_PARTY + "/%s/players/connection";
+    public static final String SPECIFIC_PARTY_UPDATE_TURN_NUMBER_BROKER_DESTINATION = SIMPLE_BROKER_PARTY + "/%s/turn";
+    public static final String SPECIFIC_PARTY_UPDATE_PLAYER_LEVEL_BROKER_DESTINATION = SIMPLE_BROKER_PARTY + "/%s/players/level";
+    public static final String SPECIFIC_PARTY_UPDATE_PLAYER_GOLD_BROKER_DESTINATION = SIMPLE_BROKER_PARTY + "/%s/players/gold";
+    public static final String SPECIFIC_PARTY_UPDATE_PLAYER_OFFENSIVE_BROKER_DESTINATION = SIMPLE_BROKER_PARTY + "/%s/players/offensive";
+    public static final String SPECIFIC_PARTY_UPDATE_PLAYER_DEFENSIVE_BROKER_DESTINATION = SIMPLE_BROKER_PARTY + "/%s/players/defensive";
+    public static final String SPECIFIC_PARTY_UPDATE_PLAYER_BENCH_BROKER_DESTINATION = SIMPLE_BROKER_PARTY + "/%s/players/bench";
+    public static final String SPECIFIC_PARTY_UPDATE_PLAYER_POKEMON_CENTER_BROKER_DESTINATION = SIMPLE_BROKER_PARTY + "/%s/players/center";
+
+    private static final List<String> SPECIFIC_PARTY_BROKER_DESTINATION = List.of(SPECIFIC_PARTY_UPDATE_STATE_BROKER_DESTINATION,
+            SPECIFIC_PARTY_UPDATE_PLAYER_CONNECTION_BROKER_DESTINATION, SPECIFIC_PARTY_UPDATE_TURN_NUMBER_BROKER_DESTINATION,
+            SPECIFIC_PARTY_UPDATE_PLAYER_LEVEL_BROKER_DESTINATION, SPECIFIC_PARTY_UPDATE_PLAYER_GOLD_BROKER_DESTINATION,
+            SPECIFIC_PARTY_UPDATE_PLAYER_BENCH_BROKER_DESTINATION, SPECIFIC_PARTY_UPDATE_PLAYER_OFFENSIVE_BROKER_DESTINATION,
+            SPECIFIC_PARTY_UPDATE_PLAYER_DEFENSIVE_BROKER_DESTINATION, SPECIFIC_PARTY_UPDATE_PLAYER_POKEMON_CENTER_BROKER_DESTINATION);
+
+    // Player Destinations
+    public static final String SPECIFIC_PLAYER_UPDATE_HAND_BROKER_DESTINATION = "/hand";
+    public static final String SPECIFIC_PLAYER_UPDATE_LOCK_HAND_BROKER_DESTINATION = "/lock";
+    public static final String SPECIFIC_PLAYER_UPDATE_EXPERIENCE_BROKER_DESTINATION = "/experience";
+    public static final String SPECIFIC_PLAYER_UPDATE_GOLD_BROKER_DESTINATION = "/gold";
+
+    private static final List<String> SPECIFIC_PLAYER_BROKER_DESTINATION = List.of(SPECIFIC_PLAYER_UPDATE_HAND_BROKER_DESTINATION,
+            SPECIFIC_PLAYER_UPDATE_LOCK_HAND_BROKER_DESTINATION, SPECIFIC_PLAYER_UPDATE_EXPERIENCE_BROKER_DESTINATION,
+            SPECIFIC_PLAYER_UPDATE_GOLD_BROKER_DESTINATION);
 
     private final PlayerRepository playerRepository;
     private final PartyRepository partyRepository;
@@ -92,6 +114,8 @@ public class SessionManagerService extends DefaultSubscriptionRegistry implement
         if (!authorizeSubscribe(user.getName(), destination)) {
             return;
         }
+        if (destination.startsWith(USER_DESTINATION_PREFIX))
+            destination = getTrainerDestination(user.getName(), destination);
         super.addSubscriptionInternal(sessionId, subscriptionId, destination, message);
     }
 
@@ -113,7 +137,7 @@ public class SessionManagerService extends DefaultSubscriptionRegistry implement
     public void handleSessionDisconnect(SessionDisconnectEvent event) {
         Principal user = event.getUser();
         String sessionId = (String) event.getMessage().getHeaders().get(SESSION_ID_HEADER);
-        if (Objects.isNull(user) ||Objects.isNull(sessionId)) {
+        if (Objects.isNull(user) || Objects.isNull(sessionId)) {
             return;
         }
 
@@ -138,21 +162,25 @@ public class SessionManagerService extends DefaultSubscriptionRegistry implement
             case PARTY_UPDATE_PLAYER_NUMBER_BROKER_DESTINATION:
             case PARTY_DELETED_BROKER_DESTINATION:
                 return !this.playerRepository.existsPlayerByUsername(username);
+            case USER_DESTINATION_PREFIX + SPECIFIC_PLAYER_UPDATE_HAND_BROKER_DESTINATION:
+            case USER_DESTINATION_PREFIX + SPECIFIC_PLAYER_UPDATE_EXPERIENCE_BROKER_DESTINATION:
+            case USER_DESTINATION_PREFIX + SPECIFIC_PLAYER_UPDATE_GOLD_BROKER_DESTINATION:
+                return this.playerRepository.existsPlayerByUsername(username);
             default:
         }
 
-        Matcher m1 = getSpecificPattern(SPECIFIC_PARTY_UPDATE_PLAYER_BROKER_DESTINATION).matcher(destination);
-        if (m1.find()) {
-            String partyName = m1.group(1);
-            return this.partyRepository.existsByNameAndPlayerNameAndState(partyName, username, PartyState.CREATION);
-        }
+        return SPECIFIC_PARTY_BROKER_DESTINATION.stream().anyMatch(brokerDestination -> {
+            Matcher matcher = getSpecificPattern(brokerDestination).matcher(destination);
+            if (matcher.find()) {
+                String partyName = matcher.group(1);
+                return this.partyRepository.existsByNameAndPlayerName(partyName, username);
+            }
+            return false;
+        });
+    }
 
-        Matcher m2 = getSpecificPattern(SPECIFIC_PARTY_UPDATE_STATE_BROKER_DESTINATION).matcher(destination);
-        if (m2.find()) {
-            String partyName = m2.group(1);
-            return this.partyRepository.existsByNameAndPlayerName(partyName, username);
-        }
-        return true;
+    private String getTrainerDestination(String username, String destination) {
+        return destination.replace(USER_DESTINATION_PREFIX, USER_DESTINATION_PREFIX + "/" + username);
     }
 
     private Pattern getSpecificPattern(String destination) {
@@ -170,25 +198,37 @@ public class SessionManagerService extends DefaultSubscriptionRegistry implement
 
     public void leaveParty(String playerUsername) {
         try {
-            Party playerParty = this.partyRepository.deletePartyByPlayerNameAndState(playerUsername, PartyState.CREATION);
+            Party playerParty = this.partyRepository.deletePartyByPlayerNameAndState(playerUsername);
             if (PartyState.DELETED.equals(playerParty.getState())) {
                 this.messageRepository.sendPartyChangeStateMessage(playerParty);
-                this.messageRepository.sendPartyDeletedMessage(playerParty.getName());
-                playerParty.getPlayers().forEach(player -> this.deletePlayerSubscription(playerParty, player));
-            } else {
-                playerParty.getPlayers().removeIf(player -> {
-                    this.deletePlayerSubscription(playerParty, player);
-                    return player.getUser().getUsername().equals(playerUsername);
-                });
-                this.messageRepository.sendPartyUpdatePlayerMessage(playerParty);
+                this.messageRepository.sendPartyDeletedMessage(playerParty);
+                playerParty.getPlayers().forEach(player -> this.deletePlayerSubscription(playerParty.getName(), player.getUser().getUsername()));
+            } else if (PartyState.TERMINATED.equals(playerParty.getState())) {
+                this.messageRepository.sendPartyChangeStateMessage(playerParty);
+                playerParty.getPlayers().forEach(player -> this.deletePlayerSubscription(playerParty.getName(), player.getUser().getUsername()));
+            } else if (PartyState.CREATION.equals(playerParty.getState())) {
+                this.deletePlayerSubscription(playerParty.getName(), playerUsername);
+                this.messageRepository.sendPartyUpdatePlayerConnectionMessage(playerParty);
                 this.messageRepository.sendPartyUpdatePlayerNumberMessage(playerParty);
+            } else {
+                this.messageRepository.sendPartyUpdatePlayerConnectionMessage(playerParty);
             }
         } catch (PartyException ignored) { }
     }
 
-    private void deletePlayerSubscription(Party party, Player player) {
-        this.removeSubscription(player.getUser().getUsername(), String.format(SPECIFIC_PARTY_UPDATE_PLAYER_BROKER_DESTINATION, party.getName()));
-        this.removeSubscription(player.getUser().getUsername(), String.format(SPECIFIC_PARTY_UPDATE_STATE_BROKER_DESTINATION, party.getName()));
+    public void terminateParty(String partyName) {
+        try {
+            Party playerParty = this.partyRepository.terminateParty(partyName);
+            this.messageRepository.sendPartyChangeStateMessage(playerParty);
+            playerParty.getPlayers().forEach(player -> this.deletePlayerSubscription(playerParty.getName(), player.getUser().getUsername()));
+        } catch (PartyException ignored) { }
+    }
+
+    private void deletePlayerSubscription(String partyName, String playerUsername) {
+        SPECIFIC_PARTY_BROKER_DESTINATION.forEach(brokerDestination ->
+                this.removeSubscription(playerUsername, String.format(brokerDestination, partyName)));
+        SPECIFIC_PLAYER_BROKER_DESTINATION.forEach(brokerDestination ->
+                this.removeSubscription(playerUsername, String.format("%s/%s%s", USER_DESTINATION_PREFIX, playerUsername, brokerDestination)));
     }
 
     @Override

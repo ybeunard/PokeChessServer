@@ -1,8 +1,11 @@
 package com.pokechess.server.datasources.loader;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pokechess.server.datasources.loader.dto.*;
 import com.pokechess.server.exceptions.ApiException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
@@ -13,8 +16,11 @@ import java.util.List;
 
 @Component
 public class ElementLoader {
-    private static final String ERROR_LOADING_MESSAGE = "Error loading data from %s: Data corrupted";
+    private static final Logger LOGGER = LogManager.getLogger(ElementLoader.class);
+
+    public static final String ERROR_LOADING_MESSAGE = "Error loading data from %s: Data corrupted";
     private static final String POKEMON_RESOURCES = "data/pokemon.json";
+    private static final String POKEMON_DRAW_PERCENTAGE_RESOURCES = "data/pokemon_percentage.json";
     private static final String BERRY_RESOURCES = "data/berry.json";
     private static final String TRAINER_OBJECT_RESOURCES = "data/trainer_object.json";
     private static final String TRAINER_RESOURCES = "data/trainer.json";
@@ -29,6 +35,16 @@ public class ElementLoader {
     @NonNull
     public List<PokemonLoaderDTO> loadPokemon() {
         return load(POKEMON_RESOURCES, PokemonLoaderDTO.class);
+    }
+
+    @NonNull
+    public JsonNode loadPokemonDrawPercentage() {
+        try {
+            return mapper.readTree(new InputStreamReader(new ClassPathResource(POKEMON_DRAW_PERCENTAGE_RESOURCES).getInputStream()));
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, String.format(ERROR_LOADING_MESSAGE, POKEMON_DRAW_PERCENTAGE_RESOURCES));
+        }
     }
 
     @NonNull
@@ -55,7 +71,7 @@ public class ElementLoader {
         try {
             return mapper.readValue(new InputStreamReader(new ClassPathResource(resource).getInputStream()), mapper.getTypeFactory().constructCollectionLikeType(List.class, classType));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            LOGGER.error(e.getMessage());
             throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, String.format(ERROR_LOADING_MESSAGE, resource));
         }
     }

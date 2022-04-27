@@ -16,8 +16,8 @@ public interface PartyDatasource extends JpaRepository<PartyEntity, Integer> {
     Optional<PartyEntity> findByNameWithLock(String name);
     List<PartyEntity> findAllByState(String state);
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query(value = "SELECT p FROM party_entity p INNER JOIN p.players player INNER JOIN player.user user WHERE p.state=:state AND user.username=:playerUsername")
-    Optional<PartyEntity> findByPlayers_User_UsernameAndStateWithLock(String playerUsername, String state);
+    @Query(value = "SELECT p FROM party_entity p INNER JOIN p.players player INNER JOIN player.user user WHERE user.username=:playerUsername")
+    Optional<PartyEntity> findByPlayers_User_UsernameWithLock(String playerUsername);
+    Optional<PartyEntity> findByPlayers_User_Username(String playerUsername);
     boolean existsByNameAndPlayers_User_Username(String partyName, String playerName);
-    boolean existsByNameAndPlayers_User_UsernameAndState(String partyName, String playerName, String state);
 }

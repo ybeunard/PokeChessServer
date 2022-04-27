@@ -13,8 +13,9 @@ import static com.pokechess.server.filter.security.JwtRequestFilter.WEBSOCKET_CO
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig extends AbstractSecurityWebSocketMessageBrokerConfigurer {
-    public static final String SIMPLE_BROKER_PARTY = "/party";
-    public static final String USER_DESTINATION_PREFIX = "/trainer";
+    public static final String SIMPLE_BROKER_PARTY = "/parties";
+    public static final String USER_DESTINATION_PREFIX = "/trainers";
+    public static final String SIMPLE_ENDPOINT_GAME = "/game";
 
     @Override
     protected void configureInbound(MessageSecurityMetadataSourceRegistry messages) {
@@ -23,8 +24,8 @@ public class WebSocketConfig extends AbstractSecurityWebSocketMessageBrokerConfi
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker(SIMPLE_BROKER_PARTY);
-        config.setApplicationDestinationPrefixes("/game");
+        config.enableSimpleBroker(SIMPLE_BROKER_PARTY, USER_DESTINATION_PREFIX);
+        config.setApplicationDestinationPrefixes(SIMPLE_ENDPOINT_GAME);
         config.setUserDestinationPrefix(USER_DESTINATION_PREFIX);
     }
 

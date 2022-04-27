@@ -5,9 +5,12 @@ import com.pokechess.server.controllers.party.dto.party.creation.PartyCreationRe
 import com.pokechess.server.controllers.party.dto.party.list.PartyListInCreationResponseDTO;
 import com.pokechess.server.controllers.party.dto.party.password.PasswordRequestDTO;
 import com.pokechess.server.controllers.party.mapper.PartyMapper;
+import com.pokechess.server.controllers.pokemon.dto.PokemonDTO;
+import com.pokechess.server.controllers.pokemon.mapper.PokemonDTOMapper;
 import com.pokechess.server.exceptions.PartyException;
 import com.pokechess.server.exceptions.UserException;
 import com.pokechess.server.exceptions.ValidationException;
+import com.pokechess.server.models.globals.game.cards.Pokemon;
 import com.pokechess.server.models.party.Party;
 import com.pokechess.server.services.party.PartyService;
 import org.springframework.http.HttpStatus;
@@ -36,11 +39,11 @@ public class PartyController {
      * @throws UserException User already in game exception, User cannot create a party if already in game
      * @throws PartyException Party name need to be unique
      */
-    @PostMapping(value = "/api/v1/party")
+    @PostMapping(value = "/api/v1/parties")
     public ResponseEntity<PartyCreationResponseDTO> createParty(@RequestAttribute(REQUEST_USERNAME_ATTRIBUTE) String username,
                                                                 @RequestBody @Valid PartyCreationRequestDTO requestDTO) {
         if (Objects.nonNull(requestDTO.getPassword()) && "".equals(requestDTO.getPassword())) {
-            throw new ValidationException("Password", "Password can null but not empty");
+            throw new ValidationException("Password", "Password can be null but not empty");
         }
         Party partyCreated = this.partyService.createParty(username, requestDTO.getName(), requestDTO.getPassword());
         return ResponseEntity.status(HttpStatus.CREATED).body(PartyMapper.mapPartyToPartyCreationResponseDTO(partyCreated));
@@ -50,7 +53,7 @@ public class PartyController {
      *
      * @throws UserException User already in game exception, User cannot create a party if already in game
      */
-    @GetMapping(value = "/api/v1/party")
+    @GetMapping(value = "/api/v1/parties")
     public ResponseEntity<PartyListInCreationResponseDTO> getPartyListInCreation(@RequestAttribute(REQUEST_USERNAME_ATTRIBUTE) String username) {
         List<Party> partyList = this.partyService.getPartyListInCreation(username);
         return ResponseEntity.ok(PartyMapper.mapPartyListToPartyListInCreationResponseDTO(partyList));
@@ -59,19 +62,19 @@ public class PartyController {
     /**
      *
      * @throws UserException User not found exception
-     * @throws UserException User already in game exception, User cannot create a party if already in game
+     * @throws UserException User already in game exception, User cannot join a party if already in game
      * @throws PartyException Party not found exception
      * @throws PartyException Incorrect password provided
      * @throws PartyException Max player in the game, Cannot exceed a number of player by game
      */
-    @PostMapping(value = "/api/v1/party/{partyName}/join")
+    @PostMapping(value = "/api/v1/parties/{partyName}/join")
     public ResponseEntity<PartyCreationResponseDTO> joinParty(@RequestAttribute(REQUEST_USERNAME_ATTRIBUTE) String username,
                                     @PathVariable String partyName, @RequestBody(required = false) PasswordRequestDTO requestDTO) {
         Party partyUpdated = this.partyService.joinParty(username, partyName, Objects.nonNull(requestDTO) ? requestDTO.getPassword() : null);
         return ResponseEntity.ok(PartyMapper.mapPartyToPartyCreationResponseDTO(partyUpdated));
     }
 
-    @DeleteMapping(value = "/api/v1/party")
+    @DeleteMapping(value = "/api/v1/parties")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void leaveParty(@RequestAttribute(REQUEST_USERNAME_ATTRIBUTE) String username) {
         this.partyService.leaveParty(username);

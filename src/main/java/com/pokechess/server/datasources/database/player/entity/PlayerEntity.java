@@ -1,11 +1,13 @@
 package com.pokechess.server.datasources.database.player.entity;
 
 import com.pokechess.server.datasources.database.board.game.entity.BoardGameEntity;
+import com.pokechess.server.datasources.database.card.pokemon.entity.PokemonEntity;
 import com.pokechess.server.datasources.database.user.entity.UserEntity;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity(name = "player_entity")
 public class PlayerEntity {
@@ -16,7 +18,11 @@ public class PlayerEntity {
     private Integer experiencePoint;
     private Integer lifePoint;
     private Integer winCounter;
+    private List<PokemonEntity> hand;
+    private Boolean lock;
     private Integer money;
+    private Boolean loading;
+    private Boolean disconnected;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -84,6 +90,27 @@ public class PlayerEntity {
         this.winCounter = winCounter;
     }
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "player_hand_entity",
+        joinColumns = @JoinColumn(name = "player_id", referencedColumnName = "id", nullable = false),
+        inverseJoinColumns = @JoinColumn(name = "pokemon_id", referencedColumnName = "pokemon_id", nullable = false))
+    public List<PokemonEntity> getHand() {
+        return hand;
+    }
+
+    public void setHand(List<PokemonEntity> hand) {
+        this.hand = hand;
+    }
+
+    @Column(nullable = false)
+    public Boolean isLock() {
+        return lock;
+    }
+
+    public void setLock(Boolean lock) {
+        this.lock = lock;
+    }
+
     @Column(nullable = false)
     public Integer getMoney() {
         return money;
@@ -91,6 +118,22 @@ public class PlayerEntity {
 
     public void setMoney(Integer money) {
         this.money = money;
+    }
+
+    public Boolean isLoading() {
+        return loading;
+    }
+
+    public void setLoading(Boolean loading) {
+        this.loading = loading;
+    }
+
+    public Boolean isDisconnected() {
+        return disconnected;
+    }
+
+    public void setDisconnected(Boolean disconnected) {
+        this.disconnected = disconnected;
     }
 
     @Override
@@ -106,6 +149,6 @@ public class PlayerEntity {
     @Override
     public String toString() {
         return String.format(
-                "PlayerEntity [id=%s, user=%s, boardGame=%s, level=%s, experiencePoint=%s, lifePoint=%s, winCounter=%s, money=%s]", this.id, this.user, this.boardGame, this.level, this.experiencePoint, this.lifePoint, this.winCounter, this.money);
+                "PlayerEntity [id=%s, user=%s, boardGame=%s, level=%s, experiencePoint=%s, lifePoint=%s, winCounter=%s, hand=%s, lock=%s, money=%s, loading=%s, disconnected=%s]", this.id, this.user, this.boardGame, this.level, this.experiencePoint, this.lifePoint, this.winCounter, this.hand, this.lock, this.money, this.loading, this.disconnected);
     }
 }
